@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import SiteFooter from "@/app/_components/site-footer";
+import SiteHeader from "@/app/_components/site-header";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
 
-const geistSans = Geist({
+const geist = Geist({
+  subsets: ["latin"],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -25,12 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className='flex flex-col min-h-screen max-w-[1440px] mx-auto'>
-          <Header />
-          <main className='flex-1'>{children}</main>
-          <Footer />
+    <html lang="en" className={cn("font-sans", geist.variable)}>
+      <body className="antialiased">
+        <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col">
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
         </div>
       </body>
     </html>

@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function SiteFooter() {
   return (
     <footer className='border-black/10 border-t h-[40px] flex items-center justify-center px-5'>
       Footer

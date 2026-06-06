@@ -1,7 +1,7 @@
-export default function Home() {
+export default function BatteriesPage() {
   return (
     <div className='flex items-center justify-center bg-zinc-50 font-sans dark:bg-black'>
-      Here will be power banks
+      Here will be a lot of power batteries
     </div>
   );
 }
