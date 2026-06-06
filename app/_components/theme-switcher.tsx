@@ -1,63 +1,63 @@
 "use client";
 
-import { Monitor, Moon, Sun } from "lucide-react";
-import { useEffect, useMemo, useSyncExternalStore } from "react";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useSyncExternalStore } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type ThemePreference = "system" | "light" | "dark";
-type ResolvedTheme = "light" | "dark";
+type ThemePreference = "light" | "dark";
+type StoredThemePreference = ThemePreference | null;
 
-const THEME_STORAGE_KEY = "powerbase-theme";
-const themePreferences = ["system", "light", "dark"] as const;
+const THEME_STORAGE_KEY = "theme";
+const DARK_THEME_COLOR = "#09090b";
+const LIGHT_THEME_COLOR = "#ffffff";
 const themeListeners = new Set<() => void>();
-let currentPreference: ThemePreference = "system";
+let currentPreference: StoredThemePreference = null;
 
 const themeOptions: Array<{
-  icon: typeof Monitor;
+  icon: typeof Sun;
   label: string;
   value: ThemePreference;
 }> = [
-  { value: "system", label: "System", icon: Monitor },
   { value: "light", label: "Light", icon: Sun },
   { value: "dark", label: "Dark", icon: Moon },
 ];
 
 function isThemePreference(value: string | null): value is ThemePreference {
-  return themePreferences.some((theme) => theme === value);
+  return value === "light" || value === "dark";
 }
 
-function getStoredPreference(): ThemePreference {
-  if (typeof window === "undefined") {
-    return "system";
-  }
-
-  try {
-    const storedPreference = window.localStorage.getItem(THEME_STORAGE_KEY);
-    return isThemePreference(storedPreference) ? storedPreference : "system";
-  } catch {
-    return "system";
-  }
-}
-
-function getSystemTheme(): ResolvedTheme {
+function getSystemPreference(): ThemePreference {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
 }
 
-function resolveTheme(preference: ThemePreference): ResolvedTheme {
-  return preference === "system" ? getSystemTheme() : preference;
+function getStoredPreference(): StoredThemePreference {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const storedPreference = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return isThemePreference(storedPreference) ? storedPreference : null;
+  } catch {
+    return null;
+  }
 }
 
 function applyTheme(preference: ThemePreference) {
-  const resolvedTheme = resolveTheme(preference);
   const root = document.documentElement;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
 
-  root.classList.toggle("dark", resolvedTheme === "dark");
+  root.classList.toggle("dark", preference === "dark");
   root.dataset.theme = preference;
-  root.style.colorScheme = resolvedTheme;
+  root.style.colorScheme = preference;
+  themeColor?.setAttribute(
+    "content",
+    preference === "dark" ? DARK_THEME_COLOR : LIGHT_THEME_COLOR,
+  );
 }
 
 function emitThemeChange() {
@@ -71,12 +71,14 @@ function setCurrentPreference(nextPreference: ThemePreference) {
 
 function syncStoredPreference() {
   const storedPreference = getStoredPreference();
+  const resolvedPreference = storedPreference ?? getSystemPreference();
 
   if (storedPreference !== currentPreference) {
-    setCurrentPreference(storedPreference);
+    currentPreference = storedPreference;
+    emitThemeChange();
   }
 
-  applyTheme(storedPreference);
+  applyTheme(resolvedPreference);
 }
 
 function subscribeToThemePreference(listener: () => void) {
@@ -88,12 +90,12 @@ function subscribeToThemePreference(listener: () => void) {
   };
 }
 
-function getThemePreferenceSnapshot() {
+function getThemePreferenceSnapshot(): StoredThemePreference {
   return currentPreference;
 }
 
-function getServerThemePreferenceSnapshot() {
-  return "system" satisfies ThemePreference;
+function getServerThemePreferenceSnapshot(): StoredThemePreference {
+  return null;
 }
 
 export default function ThemeSwitcher() {
@@ -104,26 +106,21 @@ export default function ThemeSwitcher() {
   );
 
   useEffect(() => {
-    if (preference !== "system") {
-      return;
-    }
-
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => applyTheme("system");
+    const handleChange = () => {
+      if (getStoredPreference()) {
+        return;
+      }
+
+      applyTheme(getSystemPreference());
+    };
 
     mediaQuery.addEventListener("change", handleChange);
 
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, [preference]);
-
-  const activeLabel = useMemo(
-    () =>
-      themeOptions.find((option) => option.value === preference)?.label ??
-      "System",
-    [preference],
-  );
+  }, []);
 
   function updatePreference(nextPreference: ThemePreference) {
     setCurrentPreference(nextPreference);
@@ -139,7 +136,7 @@ export default function ThemeSwitcher() {
 
   return (
     <div
-      aria-label={`Theme: ${activeLabel}`}
+      aria-label="Theme"
       className="inline-flex items-center rounded-lg border border-border bg-background p-0.5"
       role="group"
     >

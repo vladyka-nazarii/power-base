@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import SiteFooter from "@/app/_components/site-footer";
 import SiteHeader from "@/app/_components/site-header";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,26 +10,24 @@ export const metadata: Metadata = {
 
 const themeScript = `
 (() => {
-  const storageKey = "powerbase-theme";
-  const validThemes = new Set(["system", "light", "dark"]);
+  const darkThemeColor = "#09090b";
+  const lightThemeColor = "#ffffff";
 
-  const getPreference = () => {
-    try {
-      const storedTheme = window.localStorage.getItem(storageKey);
-      return validThemes.has(storedTheme) ? storedTheme : "system";
-    } catch {
-      return "system";
+  try {
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isSystemTheme = storedTheme !== "light" && storedTheme !== "dark";
+    const isDark = storedTheme === "dark" || (isSystemTheme && prefersDark);
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.dataset.theme = isDark ? "dark" : "light";
+    document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+
+    if (themeColor) {
+      themeColor.setAttribute("content", isDark ? darkThemeColor : lightThemeColor);
     }
-  };
-
-  const preference = getPreference();
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const resolvedTheme = preference === "system" ? (prefersDark ? "dark" : "light") : preference;
-  const root = document.documentElement;
-
-  root.classList.toggle("dark", resolvedTheme === "dark");
-  root.dataset.theme = preference;
-  root.style.colorScheme = resolvedTheme;
+  } catch (_) {}
 })();
 `;
 
@@ -50,14 +40,16 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("font-sans", geist.variable)}
+      className="font-sans"
     >
-      <body className="antialiased">
-        <Script
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+        <script
           id="powerbase-theme"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
+      </head>
+      <body className="antialiased">
         <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>
