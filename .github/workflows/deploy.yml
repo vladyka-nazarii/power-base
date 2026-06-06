@@ -43,4 +43,4 @@ jobs:
       - name: Trigger Watchtower Update
         run: |
           curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" \
-               https://hook.energy.vladyka.dev/v1/update
+               https://hook.vladyka.dev/v1/update
