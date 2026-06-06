@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PowerBase
 
-## Getting Started
+PowerBase is a full-stack web application for cataloging, comparing, and managing alternative energy equipment such as inverters, batteries, solar panels, portable power stations, and related system components.
 
-First, run the development server:
+It is designed to turn fragmented manufacturer PDFs, manuals, and product pages into a structured database that supports search, side-by-side comparison, compatibility checks, and practical alternative-energy system planning.
+
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Bun
+- PostgreSQL 15
+- Drizzle ORM
+- Redis with `ioredis`
+- Docker and Docker Compose
+- GitHub Actions, GHCR, Cloudflare Tunnel, and Watchtower for deployment
+
+## Development
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start local database and cache services:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker compose -f docker-compose.dev.yml up -d
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Start the app:
 
-## Learn More
+```bash
+bun run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Verification
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+bun run lint
+bun run build
+```
 
-## Deploy on Vercel
+## Agentic Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This repository includes project guidance for Codex and other AI agents:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `AGENTS.md`: primary project instructions and non-negotiables.
+- `.codex/skills/powerbase-development/SKILL.md`: implementation workflow for PowerBase.
+- `.codex/skills/equipment-data-modeling/SKILL.md`: equipment catalog and specification modeling workflow.
+- `.agents/skills/`: repo-local skills installed from `skills.sh`.
+- `docs/AGENT_SKILLS.md`: installed skill inventory and precedence rules.
+- `docs/`: product, architecture, development, environment, and deployment docs.
+
+Agents should read `AGENTS.md` before making changes.
+
+## Documentation
+
+- `docs/PROJECT_BRIEF.md`
+- `docs/ARCHITECTURE.md`
+- `docs/DEVELOPMENT.md`
+- `docs/ENVIRONMENT.md`
+- `docs/DEPLOYMENT.md`
+- `docs/AGENT_SKILLS.md`
+
+## Deployment Model
+
+Production is intended for a self-hosted Synology NAS using a zero-trust network model:
+
+- no public inbound port forwarding
+- Cloudflare Tunnel for public ingress
+- internal Docker networking for `web`, `postgres`, `redis`, media serving, and deployment automation
+- uploaded files stored on a persistent NAS-mounted volume and served by a dedicated media host
+- GitHub Actions builds and pushes the image to GHCR
+- Watchtower pulls and restarts the web container after an authenticated webhook
+- Drizzle migrations run before the Next.js server accepts traffic
