@@ -97,7 +97,6 @@ function ProductCard({
   ui: (typeof catalogUiCopy)[Locale];
 }) {
   const specs = [
-    product.capacityWh ? `${product.capacityWh.toLocaleString()} Wh` : null,
     product.continuousPowerW
       ? `${product.continuousPowerW.toLocaleString()} W`
       : null,
@@ -105,10 +104,18 @@ function ProductCard({
     product.chemistryLabel,
   ].filter(Boolean);
   const detailSpecs = productDetailSpecs(product);
+  const detailHref = localizeHref(
+    locale,
+    `/${product.categorySlug}/${product.slug}`,
+  );
 
   return (
     <article className="group overflow-hidden rounded-lg border border-black/10 bg-white transition hover:-translate-y-0.5 hover:border-black/20 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-black dark:hover:border-white/20 dark:hover:shadow-white/5">
-      <div className="relative flex aspect-[4/3] items-center justify-center border-b border-black/10 bg-zinc-50 p-8 dark:border-white/10 dark:bg-zinc-950">
+      <Link
+        href={detailHref}
+        prefetch={false}
+        className="focus-visible:outline-ring relative flex aspect-[4/3] items-center justify-center border-b border-black/10 bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-[-2px] dark:border-white/10 dark:bg-zinc-950"
+      >
         <Image
           src={product.imagePath}
           alt={`${product.manufacturer} ${product.model}`}
@@ -117,7 +124,7 @@ function ProductCard({
           unoptimized
           className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]"
         />
-      </div>
+      </Link>
 
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
@@ -126,7 +133,13 @@ function ProductCard({
               {product.manufacturer}
             </p>
             <h2 className="mt-1 text-lg font-semibold text-black dark:text-white">
-              {product.model}
+              <Link
+                href={detailHref}
+                prefetch={false}
+                className="focus-visible:outline-ring rounded-sm transition hover:text-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-300"
+              >
+                {product.model}
+              </Link>
             </h2>
           </div>
           <div className="shrink-0 text-right text-lg font-semibold text-black dark:text-white">

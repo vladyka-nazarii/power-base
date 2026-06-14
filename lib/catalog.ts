@@ -41,6 +41,8 @@ export type CatalogFilters = {
   sort: CatalogSort;
 };
 
+export type CatalogProductSpecifications = Record<string, unknown>;
+
 export const catalogPageCopy: Record<
   Locale,
   Record<
@@ -204,6 +206,106 @@ export const catalogUiCopy: Record<
   },
 };
 
+export const productDetailCopy: Record<
+  Locale,
+  {
+    backToCatalog: string;
+    databaseUnavailable: string;
+    offlineDescription: string;
+    overview: string;
+    electrical: string;
+    physical: string;
+    lifecycle: string;
+    source: string;
+    additionalSpecifications: string;
+    manufacturer: string;
+    category: string;
+    model: string;
+    productCode: string;
+    price: string;
+    nominalVoltage: string;
+    capacity: string;
+    continuousPower: string;
+    peakPower: string;
+    maxPvVoltage: string;
+    maxChargeCurrent: string;
+    chemistry: string;
+    communicationProtocols: string;
+    weight: string;
+    warranty: string;
+    lifecycleCycles: string;
+    updatedAt: string;
+    notAvailable: string;
+    yearShort: string;
+    cycles: string;
+  }
+> = {
+  en: {
+    backToCatalog: "Back to catalog",
+    databaseUnavailable: "Catalog database is unavailable",
+    offlineDescription:
+      "Start local Postgres, run the migration and seed commands, then refresh this page.",
+    overview: "Overview",
+    electrical: "Electrical",
+    physical: "Physical",
+    lifecycle: "Lifecycle",
+    source: "Source",
+    additionalSpecifications: "Additional specifications",
+    manufacturer: "Manufacturer",
+    category: "Category",
+    model: "Model",
+    productCode: "Product code",
+    price: "Price",
+    nominalVoltage: "Nominal voltage",
+    capacity: "Capacity",
+    continuousPower: "Continuous power",
+    peakPower: "Peak power",
+    maxPvVoltage: "Max PV voltage",
+    maxChargeCurrent: "Max charge current",
+    chemistry: "Chemistry",
+    communicationProtocols: "Communication",
+    weight: "Weight",
+    warranty: "Warranty",
+    lifecycleCycles: "Lifecycle",
+    updatedAt: "Updated",
+    notAvailable: "n/a",
+    yearShort: "yr",
+    cycles: "cycles",
+  },
+  uk: {
+    backToCatalog: "Назад до каталогу",
+    databaseUnavailable: "База каталогу недоступна",
+    offlineDescription:
+      "Запустіть локальний Postgres, виконайте міграцію та seed-команду, а потім оновіть сторінку.",
+    overview: "Огляд",
+    electrical: "Електричні параметри",
+    physical: "Фізичні параметри",
+    lifecycle: "Ресурс",
+    source: "Джерело",
+    additionalSpecifications: "Додаткові характеристики",
+    manufacturer: "Виробник",
+    category: "Категорія",
+    model: "Модель",
+    productCode: "Код продукту",
+    price: "Ціна",
+    nominalVoltage: "Номінальна напруга",
+    capacity: "Ємність",
+    continuousPower: "Постійна потужність",
+    peakPower: "Пікова потужність",
+    maxPvVoltage: "Макс. напруга PV",
+    maxChargeCurrent: "Макс. струм заряду",
+    chemistry: "Хімія",
+    communicationProtocols: "Комунікація",
+    weight: "Вага",
+    warranty: "Гарантія",
+    lifecycleCycles: "Життєвий цикл",
+    updatedAt: "Оновлено",
+    notAvailable: "н/д",
+    yearShort: "р.",
+    cycles: "циклів",
+  },
+};
+
 function sortExpression(sort: CatalogSort) {
   switch (sort) {
     case "price-asc":
@@ -267,6 +369,7 @@ export async function getCatalogPageData(
         specifications: equipment.specifications,
         manufacturer: manufacturers.name,
         categoryName: localizedCategoryName,
+        categorySlug: equipmentCategories.slug,
       })
       .from(equipment)
       .innerJoin(
@@ -331,6 +434,7 @@ export async function getCatalogPageData(
         specifications: equipment.specifications,
         manufacturer: manufacturers.name,
         categoryName: localizedCategoryName,
+        categorySlug: equipmentCategories.slug,
       })
       .from(equipment)
       .innerJoin(
@@ -399,6 +503,82 @@ export async function getCatalogPageData(
         maxCapacityWh: null,
         maxPowerW: null,
       },
+    };
+  }
+}
+
+export async function getProductDetailData({
+  categorySlug,
+  locale,
+  productSlug,
+}: {
+  categorySlug: CatalogCategorySlug;
+  locale: Locale;
+  productSlug: string;
+}) {
+  const localizedSummary =
+    locale === "uk" ? equipment.summaryUk : equipment.summary;
+  const localizedSourceLabel =
+    locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
+  const localizedChemistry =
+    locale === "uk" ? equipment.chemistryUk : equipment.chemistry;
+  const localizedCategoryName =
+    locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
+
+  try {
+    const [product] = await db
+      .select({
+        id: equipment.id,
+        model: equipment.model,
+        slug: equipment.slug,
+        summary: localizedSummary,
+        imagePath: equipment.imagePath,
+        priceCents: equipment.priceCents,
+        productCode: equipment.productCode,
+        nominalVoltageV: equipment.nominalVoltageV,
+        capacityWh: equipment.capacityWh,
+        continuousPowerW: equipment.continuousPowerW,
+        peakPowerW: equipment.peakPowerW,
+        maxPvVoltageV: equipment.maxPvVoltageV,
+        maxChargeCurrentA: equipment.maxChargeCurrentA,
+        chemistry: equipment.chemistry,
+        chemistryLabel: localizedChemistry,
+        communicationProtocols: equipment.communicationProtocols,
+        weightGrams: equipment.weightGrams,
+        warrantyYears: equipment.warrantyYears,
+        lifecycleCycles: equipment.lifecycleCycles,
+        sourceLabel: localizedSourceLabel,
+        sourceUrl: equipment.sourceUrl,
+        specifications: equipment.specifications,
+        updatedAt: equipment.updatedAt,
+        manufacturer: manufacturers.name,
+        categoryName: localizedCategoryName,
+        categorySlug: equipmentCategories.slug,
+      })
+      .from(equipment)
+      .innerJoin(
+        equipmentCategories,
+        eq(equipment.categoryId, equipmentCategories.id),
+      )
+      .innerJoin(manufacturers, eq(equipment.manufacturerId, manufacturers.id))
+      .where(
+        and(
+          eq(equipmentCategories.slug, categorySlug),
+          eq(equipment.slug, productSlug),
+        ),
+      )
+      .limit(1);
+
+    return {
+      product: product ?? null,
+      unavailable: false,
+    };
+  } catch (error) {
+    console.error("Product detail database read failed", error);
+
+    return {
+      product: null,
+      unavailable: true,
     };
   }
 }

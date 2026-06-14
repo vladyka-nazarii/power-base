@@ -92,7 +92,7 @@ const equipmentRows: SeedEquipment[] = [
     summaryUk:
       "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
     imagePath:
-      "https://i02.appmifile.com/835_operatorx_operatorx_opx/06/02/2026/39c0de98f9e4ab7d06e0660e3a34bd9a.png",
+      "https://media.vladyka.dev/power-bank/xiaomi/39c0de98f9e4ab7d06e0660e3a34bd9a.png",
     priceCents: null,
     productCode: "MDY-20-EB",
     nominalVoltageV: 5,
@@ -149,7 +149,7 @@ const equipmentRows: SeedEquipment[] = [
     summaryUk:
       "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
     imagePath:
-      "https://i02.appmifile.com/723_operatorx_operatorx_opx/15/09/2025/f857732c9d6f01ad11b20280c57783ea.png",
+      "https://media.vladyka.dev/power-bank/xiaomi/f857732c9d6f01ad11b20280c57783ea.png",
     priceCents: null,
     productCode: "WPB1007Z",
     nominalVoltageV: 5,
@@ -214,7 +214,7 @@ const equipmentRows: SeedEquipment[] = [
     summaryUk:
       "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
     imagePath:
-      "https://i02.appmifile.com/411_operatorx_operatorx_opx/10/09/2025/686a0afb4f10204d55178271808a738e.png",
+      "https://media.vladyka.dev/power-bank/xiaomi/686a0afb4f10204d55178271808a738e.png",
     priceCents: null,
     productCode: "PB1067",
     nominalVoltageV: 5,
@@ -270,7 +270,7 @@ const equipmentRows: SeedEquipment[] = [
     summaryUk:
       "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
     imagePath:
-      "https://i02.appmifile.com/11_operatorx_operatorx_opx/18/08/2025/78d1b5791d5ac17aee35cf143b53580d.png",
+      "https://media.vladyka.dev/power-bank/xiaomi/78d1b5791d5ac17aee35cf143b53580d.png",
     priceCents: null,
     productCode: "PB2067",
     nominalVoltageV: 5,
@@ -321,7 +321,7 @@ const equipmentRows: SeedEquipment[] = [
     summaryUk:
       "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
     imagePath:
-      "https://i02.appmifile.com/107_operatorx_operatorx_opx/15/07/2025/daad9ee33362ca155392459e09c9b996.png",
+      "https://media.vladyka.dev/power-bank/xiaomi/daad9ee33362ca155392459e09c9b996.png",
     priceCents: null,
     productCode: "WPB0507S",
     nominalVoltageV: 5,
