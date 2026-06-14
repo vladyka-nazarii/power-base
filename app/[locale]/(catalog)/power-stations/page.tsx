@@ -1,12 +1,16 @@
-import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { notFound } from "next/navigation";
+import CatalogPage from "@/app/[locale]/(catalog)/_components/catalog-page";
+import { isLocale, type Locale } from "@/lib/i18n";
+import { parseCatalogFilters } from "@/lib/catalog";
 
 type PowerStationsPageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function PowerStationsPage({
   params,
+  searchParams,
 }: PowerStationsPageProps) {
   const { locale: localeParam } = await params;
 
@@ -15,11 +19,9 @@ export default async function PowerStationsPage({
   }
 
   const locale: Locale = localeParam;
-  const dictionary = getDictionary(locale);
+  const filters = parseCatalogFilters(await searchParams);
 
   return (
-    <div className="flex items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      {dictionary.catalog.powerStations}
-    </div>
+    <CatalogPage category="power-stations" filters={filters} locale={locale} />
   );
 }
