@@ -1,18 +1,15 @@
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 import { db, postgresClient } from "@/lib/db";
-import {
-  equipment,
-  equipmentCategories,
-  manufacturers,
-} from "@/lib/db/schema";
+import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 
 const categories = [
   {
     slug: "power-banks",
     name: "Power Banks",
     nameUk: "Повербанки",
-    description: "Portable USB and DC battery packs for phones, laptops, and field kits.",
+    description:
+      "Portable USB and DC battery packs for phones, laptops, and field kits.",
     descriptionUk:
       "Портативні USB та DC акумулятори для телефонів, ноутбуків і польових комплектів.",
   },
@@ -20,7 +17,8 @@ const categories = [
     slug: "power-stations",
     name: "Power Stations",
     nameUk: "Портативні електростанції",
-    description: "Portable AC power stations for backup power, camping, and light jobsite use.",
+    description:
+      "Portable AC power stations for backup power, camping, and light jobsite use.",
     descriptionUk:
       "Портативні AC електростанції для резервного живлення, кемпінгу та легких робочих задач.",
   },
@@ -28,7 +26,8 @@ const categories = [
     slug: "batteries",
     name: "Batteries",
     nameUk: "Акумулятори",
-    description: "Standalone battery modules for off-grid, hybrid, and backup systems.",
+    description:
+      "Standalone battery modules for off-grid, hybrid, and backup systems.",
     descriptionUk:
       "Окремі акумуляторні модулі для автономних, гібридних і резервних систем.",
   },
@@ -51,6 +50,7 @@ const manufacturerRows = [
   { name: "Victron Energy", country: "Netherlands" },
   { name: "Pylontech", country: "China" },
   { name: "Zendure", country: "United States" },
+  { name: "Xiaomi", country: "China" },
 ] as const;
 
 type SeedEquipment = {
@@ -61,7 +61,8 @@ type SeedEquipment = {
   summary: string;
   summaryUk: string;
   imagePath: string;
-  priceCents: number;
+  priceCents?: number | null;
+  productCode?: string;
   nominalVoltageV?: number;
   capacityWh?: number;
   continuousPowerW?: number;
@@ -76,74 +77,288 @@ type SeedEquipment = {
   lifecycleCycles?: number;
   sourceLabel: string;
   sourceLabelUk: string;
+  sourceUrl?: string;
+  specifications?: Record<string, unknown>;
 };
 
 const equipmentRows: SeedEquipment[] = [
   {
     categorySlug: "power-banks",
-    manufacturer: "Anker",
-    model: "Prime 27K",
-    slug: "anker-prime-27k",
-    summary: "Travel-friendly USB-C power bank with high-output laptop charging.",
+    manufacturer: "Xiaomi",
+    model: "UltraThin Magnetic Power Bank 5000 15W",
+    slug: "xiaomi-ultrathin-magnetic-power-bank-5000-15w",
+    summary:
+      "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
     summaryUk:
-      "Зручний для подорожей USB-C повербанк з потужною зарядкою ноутбуків.",
-    imagePath: "/catalog/power-bank.svg",
-    priceCents: 17900,
+      "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
+    imagePath:
+      "https://i02.appmifile.com/835_operatorx_operatorx_opx/06/02/2026/39c0de98f9e4ab7d06e0660e3a34bd9a.png",
+    priceCents: null,
+    productCode: "MDY-20-EB",
     nominalVoltageV: 5,
-    capacityWh: 99,
-    peakPowerW: 250,
-    maxChargeCurrentA: 5,
-    chemistry: "Li-ion",
+    capacityWh: 19,
+    continuousPowerW: 23,
+    peakPowerW: 23,
+    maxChargeCurrentA: 3,
+    chemistry: "Lithium-ion",
     chemistryUk: "Літій-іонний",
-    weightGrams: 665,
-    warrantyYears: 2,
-    lifecycleCycles: 500,
-    sourceLabel: "Mock manufacturer datasheet",
-    sourceLabelUk: "Тестовий даташит виробника",
+    weightGrams: 98,
+    sourceLabel: "Xiaomi official specs",
+    sourceUrl:
+      "https://www.mi.com/global/product/xiaomi-ultrathin-magnetic-power-bank-5000-15w/specs/",
+    specifications: {
+      ratedCapacityMah: 3000,
+      ratedCapacityAt: "5V/2A",
+      ratedEnergyWh: 18.58,
+      typicalEnergyWh: 18.95,
+      typicalCapacityMah: 5000,
+      batteryVoltageV: 3.79,
+      maxOutputW: 22.5,
+      wirelessOutputW: 15,
+      iphoneWirelessOutputW: 7.5,
+      simultaneousOutput: "USB-C 5V/1.5A 7.5W max + wireless 5W max",
+      dimensionsMm: "98.5 x 71.5 x 6",
+      operatingFrequencyKhz: "120-147",
+      wirelessChargingMechanism: "Magnetic induction",
+      outputPorts: ["USB-C", "Wireless magnetic charging"],
+      features: [
+        "6 mm thin body",
+        "Aluminium alloy shell",
+        "Dual-NTC temperature control",
+        "Ten layers of safety protection",
+        "Air-travel suitable under 100 Wh",
+      ],
+      compatibleDeviceFamilies: [
+        "Xiaomi 12-15 series",
+        "iPhone 12-17 series",
+        "Samsung Galaxy S23-S25",
+        "Google Pixel 9-10",
+      ],
+      packageContents: ["Power bank", "User manual", "Warranty card"],
+      listPosition: 1,
+    },
+    sourceLabelUk: "Xiaomi official specs",
   },
   {
     categorySlug: "power-banks",
-    manufacturer: "Zendure",
-    model: "SuperTank Pro",
-    slug: "zendure-supertank-pro",
-    summary: "Four-port laptop bank with OLED status and pass-through charging.",
+    manufacturer: "Xiaomi",
+    model: "Magnetic Power Bank 10000 with Built-in Stand",
+    slug: "xiaomi-magnetic-power-bank-10000-with-built-in-stand",
+    summary:
+      "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
     summaryUk:
-      "Повербанк для ноутбуків із чотирма портами, OLED-індикатором і наскрізною зарядкою.",
-    imagePath: "/catalog/power-bank.svg",
-    priceCents: 22900,
+      "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
+    imagePath:
+      "https://i02.appmifile.com/723_operatorx_operatorx_opx/15/09/2025/f857732c9d6f01ad11b20280c57783ea.png",
+    priceCents: null,
+    productCode: "WPB1007Z",
     nominalVoltageV: 5,
-    capacityWh: 100,
-    peakPowerW: 138,
-    maxChargeCurrentA: 5,
-    chemistry: "Li-ion",
+    capacityWh: 37,
+    continuousPowerW: 33,
+    peakPowerW: 33,
+    maxChargeCurrentA: 3,
+    chemistry: "Lithium-ion",
     chemistryUk: "Літій-іонний",
-    weightGrams: 575,
-    warrantyYears: 2,
-    lifecycleCycles: 500,
-    sourceLabel: "Mock product page",
-    sourceLabelUk: "Тестова сторінка продукту",
+    weightGrams: 229,
+    communicationProtocols: "BC1.2, PD2.0, PD3.0 PPS, QC2.0, QC3.0, Apple 2.4A",
+    sourceLabel: "Xiaomi official specs",
+    sourceUrl:
+      "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-10000-with-built-in-stand/specs/",
+    specifications: {
+      ratedCapacityMah: 5900,
+      ratedCapacityAt: "5V/3A",
+      ratedEnergyWh: 37,
+      typicalCapacityMah: 10000,
+      batteryVoltageV: 7.4,
+      maxInputW: 30,
+      maxOutputW: 33,
+      wirelessOutputW: 15,
+      simultaneousOutput: "15W max wired and wireless",
+      dimensionsMm: "108.8 x 68.9 x 20.25",
+      inputPorts: ["Integrated USB-C cable", "USB-C"],
+      outputPorts: [
+        "Integrated USB-C cable",
+        "USB-C",
+        "Wireless magnetic charging",
+      ],
+      chargingProtocols: [
+        "BC1.2",
+        "PD2.0",
+        "PD3.0 PPS",
+        "QC2.0",
+        "QC3.0",
+        "Apple 2.4A",
+      ],
+      features: [
+        "Adjustable built-in stand opens to about 80 degrees",
+        "13N magnetic force",
+        "Digital display",
+        "Pass-through charging",
+        "Nine layers of safety protection",
+      ],
+      packageContents: [
+        "Xiaomi Magnetic Power Bank 10000 with Built-in Stand",
+        "User manual",
+      ],
+      listPosition: 2,
+    },
+    sourceLabelUk: "Xiaomi official specs",
   },
   {
     categorySlug: "power-banks",
-    manufacturer: "EcoFlow",
-    model: "Rapid 25K",
-    slug: "ecoflow-rapid-25k",
-    summary: "Slim USB-C pack for daily carry and quick top-ups.",
+    manufacturer: "Xiaomi",
+    model: "67W Power Bank 10000 (Integrated Cable)",
+    slug: "xiaomi-67w-power-bank-10000-integrated-cable",
+    summary:
+      "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
     summaryUk:
-      "Тонкий USB-C акумулятор для щоденного носіння та швидкого дозаряджання.",
-    imagePath: "/catalog/power-bank.svg",
-    priceCents: 14900,
+      "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
+    imagePath:
+      "https://i02.appmifile.com/411_operatorx_operatorx_opx/10/09/2025/686a0afb4f10204d55178271808a738e.png",
+    priceCents: null,
+    productCode: "PB1067",
     nominalVoltageV: 5,
-    capacityWh: 92,
-    peakPowerW: 170,
-    maxChargeCurrentA: 5,
-    chemistry: "Li-ion",
+    capacityWh: 39,
+    continuousPowerW: 67,
+    peakPowerW: 67,
+    maxChargeCurrentA: 3,
+    chemistry: "Lithium-ion",
     chemistryUk: "Літій-іонний",
-    weightGrams: 520,
-    warrantyYears: 2,
-    lifecycleCycles: 600,
-    sourceLabel: "Mock retail listing",
-    sourceLabelUk: "Тестова картка магазину",
+    weightGrams: 247,
+    sourceLabel: "Xiaomi official specs",
+    sourceUrl:
+      "https://www.mi.com/global/product/xiaomi-67w-power-bank-10000-integrated-cable/specs/",
+    specifications: {
+      ratedCapacityMah: 6000,
+      ratedCapacityAt: "5V/3A",
+      ratedEnergyWh: 39.48,
+      batteryCells: "Three 3400mAh cells",
+      batteryVoltageV: 11.61,
+      maxInputW: 65,
+      maxOutputW: 67,
+      dimensionsMm: "115 x 66 x 26 excluding integrated cable",
+      operatingTemperatureC: "5 to 35",
+      chargingTime: [
+        "Approx. 1.9h with 9V/3A charger",
+        "Approx. 1.3h with 20V/3.25A charger",
+      ],
+      inputPorts: ["Integrated USB-C cable", "USB-C"],
+      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
+      features: [
+        "Charge three devices simultaneously",
+        "Pass-through charging",
+        "Digital display",
+        "9 safety features",
+        "Air-travel suitable under 100 Wh",
+      ],
+      packageContents: [
+        "Xiaomi 67W Power Bank 10000 (Integrated Cable)",
+        "User manual",
+        "Warranty card",
+      ],
+      listPosition: 3,
+    },
+    sourceLabelUk: "Xiaomi official specs",
+  },
+  {
+    categorySlug: "power-banks",
+    manufacturer: "Xiaomi",
+    model: "67W Power Bank 20000 (Integrated Cable)",
+    slug: "xiaomi-67w-power-bank-20000-integrated-cable",
+    summary:
+      "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
+    summaryUk:
+      "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
+    imagePath:
+      "https://i02.appmifile.com/11_operatorx_operatorx_opx/18/08/2025/78d1b5791d5ac17aee35cf143b53580d.png",
+    priceCents: null,
+    productCode: "PB2067",
+    nominalVoltageV: 5,
+    capacityWh: 74,
+    continuousPowerW: 67,
+    peakPowerW: 67,
+    maxChargeCurrentA: 3,
+    chemistry: "Lithium-ion",
+    chemistryUk: "Lithium-ion",
+    weightGrams: 415,
+    sourceLabel: "Xiaomi official specs",
+    sourceLabelUk: "Xiaomi official specs",
+    sourceUrl:
+      "https://www.mi.com/global/product/xiaomi-67w-power-bank-20000-integrated-cable/specs/",
+    specifications: {
+      ratedCapacityMah: 12000,
+      ratedCapacityAt: "5V/3A",
+      ratedEnergyWh: 74.37,
+      batteryVoltageV: 11.1,
+      batteryCapacityMahAtVoltage: 6700,
+      typicalCapacityMah: 20000,
+      maxInputW: 65,
+      maxOutputW: 67,
+      dimensionsMm: "140 x 72 x 31.2",
+      inputPorts: ["Integrated USB-C cable", "USB-C"],
+      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
+      features: [
+        "67W max fast output",
+        "65W max high-speed self-charging",
+        "Integrated USB-C cable",
+        "Multi-port output",
+        "Air-travel suitable under 100 Wh",
+      ],
+      packageContents: [
+        "Xiaomi 67W Power Bank 20000 (Integrated Cable)",
+        "User manual",
+      ],
+      listPosition: 4,
+    },
+  },
+  {
+    categorySlug: "power-banks",
+    manufacturer: "Xiaomi",
+    model: "Super Slim Magnetic Power Bank 5000",
+    slug: "xiaomi-super-slim-magnetic-power-bank-5000",
+    summary:
+      "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
+    summaryUk:
+      "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
+    imagePath:
+      "https://i02.appmifile.com/107_operatorx_operatorx_opx/15/07/2025/daad9ee33362ca155392459e09c9b996.png",
+    priceCents: null,
+    productCode: "WPB0507S",
+    nominalVoltageV: 5,
+    capacityWh: 19,
+    continuousPowerW: 23,
+    peakPowerW: 23,
+    maxChargeCurrentA: 3,
+    chemistry: "Lithium-ion",
+    chemistryUk: "Lithium-ion",
+    weightGrams: 122,
+    sourceLabel: "Xiaomi official specs",
+    sourceLabelUk: "Xiaomi official specs",
+    sourceUrl:
+      "https://www.mi.com/global/product/xiaomi-super-slim-magnetic-power-bank-5000/specs/",
+    specifications: {
+      ratedCapacityMah: 3000,
+      ratedCapacityAt: "5V",
+      ratedEnergyWh: 19.35,
+      typicalCapacityMah: 5000,
+      batteryVoltageV: 3.87,
+      maxInputW: 20,
+      maxOutputW: 22.5,
+      dimensionsMm: "102 x 69.6 x 8.7",
+      inputPorts: ["USB-C"],
+      outputPorts: ["USB-C", "Wireless magnetic charging"],
+      features: [
+        "Approx. 8.7 mm thick",
+        "Meticulously crafted aluminium body",
+        "USB-C wired output up to 22.5W",
+      ],
+      packageContents: [
+        "Xiaomi Super Slim Magnetic Power Bank 5000",
+        "USB-C to USB-C charging cable",
+        "User manual",
+      ],
+      listPosition: 5,
+    },
   },
   {
     categorySlug: "inverters",
@@ -151,8 +366,7 @@ const equipmentRows: SeedEquipment[] = [
     model: "MultiPlus-II 48/5000",
     slug: "victron-multiplus-ii-48-5000",
     summary: "48 V inverter-charger for off-grid and ESS installations.",
-    summaryUk:
-      "Інвертор-зарядний пристрій 48 В для автономних систем і ESS.",
+    summaryUk: "Інвертор-зарядний пристрій 48 В для автономних систем і ESS.",
     imagePath: "/catalog/inverter.svg",
     priceCents: 141900,
     nominalVoltageV: 48,
@@ -256,8 +470,7 @@ const equipmentRows: SeedEquipment[] = [
     model: "SuperPack 25.6V 100Ah",
     slug: "victron-superpack-25v-100ah",
     summary: "Protected LFP module for compact low-voltage systems.",
-    summaryUk:
-      "Захищений LFP модуль для компактних низьковольтних систем.",
+    summaryUk: "Захищений LFP модуль для компактних низьковольтних систем.",
     imagePath: "/catalog/battery.svg",
     priceCents: 132500,
     nominalVoltageV: 24,
@@ -382,6 +595,13 @@ async function seedEquipment() {
   const manufacturerIds = new Map(
     manufacturerRecords.map((row) => [row.name, row.id]),
   );
+  const powerBankCategoryId = categoryIds.get("power-banks");
+
+  if (powerBankCategoryId) {
+    await db
+      .delete(equipment)
+      .where(eq(equipment.categoryId, powerBankCategoryId));
+  }
 
   for (const row of equipmentRows) {
     const categoryId = categoryIds.get(row.categorySlug);
@@ -401,7 +621,8 @@ async function seedEquipment() {
         summary: row.summary,
         summaryUk: row.summaryUk,
         imagePath: row.imagePath,
-        priceCents: row.priceCents,
+        priceCents: row.priceCents ?? null,
+        productCode: row.productCode ?? null,
         nominalVoltageV: row.nominalVoltageV ?? null,
         capacityWh: row.capacityWh ?? null,
         continuousPowerW: row.continuousPowerW ?? null,
@@ -416,6 +637,8 @@ async function seedEquipment() {
         lifecycleCycles: row.lifecycleCycles ?? null,
         sourceLabel: row.sourceLabel,
         sourceLabelUk: row.sourceLabelUk,
+        sourceUrl: row.sourceUrl ?? null,
+        specifications: row.specifications ?? null,
       })
       .onConflictDoUpdate({
         target: equipment.slug,
@@ -423,7 +646,8 @@ async function seedEquipment() {
           summary: row.summary,
           summaryUk: row.summaryUk,
           imagePath: row.imagePath,
-          priceCents: row.priceCents,
+          priceCents: row.priceCents ?? null,
+          productCode: row.productCode ?? null,
           nominalVoltageV: row.nominalVoltageV ?? null,
           capacityWh: row.capacityWh ?? null,
           continuousPowerW: row.continuousPowerW ?? null,
@@ -438,6 +662,8 @@ async function seedEquipment() {
           lifecycleCycles: row.lifecycleCycles ?? null,
           sourceLabel: row.sourceLabel,
           sourceLabelUk: row.sourceLabelUk,
+          sourceUrl: row.sourceUrl ?? null,
+          specifications: row.specifications ?? null,
           updatedAt: new Date(),
         },
       });
@@ -449,7 +675,9 @@ async function main() {
   await upsertManufacturers();
   await seedEquipment();
 
-  const [{ seededRows }] = await db.select({ seededRows: count() }).from(equipment);
+  const [{ seededRows }] = await db
+    .select({ seededRows: count() })
+    .from(equipment);
 
   console.log(`Seeded catalog mock data. Total product rows: ${seededRows}`);
 }

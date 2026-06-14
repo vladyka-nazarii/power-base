@@ -22,6 +22,16 @@ type CatalogPageProps = {
 
 type CatalogData = Awaited<ReturnType<typeof getCatalogPageData>>;
 type CatalogProduct = CatalogData["products"][number];
+type ProductSpecifications = {
+  maxInputW?: number;
+  maxOutputW?: number;
+  wirelessOutputW?: number;
+  ratedCapacityMah?: number;
+  typicalCapacityMah?: number;
+  ratedEnergyWh?: number;
+  dimensionsMm?: string;
+  features?: string[];
+};
 
 const sortOptions = [
   "recommended",
@@ -53,6 +63,30 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   ));
 }
 
+function productDetailSpecs(product: CatalogProduct) {
+  const specifications = product.specifications as ProductSpecifications | null;
+
+  return [
+    product.productCode ? `Code ${product.productCode}` : null,
+    specifications?.ratedCapacityMah
+      ? `${specifications.ratedCapacityMah.toLocaleString()} mAh rated`
+      : null,
+    specifications?.typicalCapacityMah
+      ? `${specifications.typicalCapacityMah.toLocaleString()} mAh typical`
+      : null,
+    specifications?.ratedEnergyWh ? `${specifications.ratedEnergyWh} Wh` : null,
+    specifications?.maxOutputW
+      ? `${specifications.maxOutputW} W max out`
+      : null,
+    specifications?.maxInputW ? `${specifications.maxInputW} W max in` : null,
+    specifications?.wirelessOutputW
+      ? `${specifications.wirelessOutputW} W wireless`
+      : null,
+    specifications?.dimensionsMm,
+    ...(specifications?.features?.slice(0, 2) ?? []),
+  ].filter(Boolean);
+}
+
 function ProductCard({
   locale,
   product,
@@ -70,6 +104,7 @@ function ProductCard({
     product.nominalVoltageV ? `${product.nominalVoltageV} V` : null,
     product.chemistryLabel,
   ].filter(Boolean);
+  const detailSpecs = productDetailSpecs(product);
 
   return (
     <article className="group overflow-hidden rounded-lg border border-black/10 bg-white transition hover:-translate-y-0.5 hover:border-black/20 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-black dark:hover:border-white/20 dark:hover:shadow-white/5">
@@ -104,7 +139,7 @@ function ProductCard({
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {specs.map((spec) => (
+          {[...specs, ...detailSpecs].slice(0, 8).map((spec) => (
             <span
               key={spec}
               className="rounded-md border border-black/10 px-2 py-1 text-xs text-zinc-700 dark:border-white/10 dark:text-zinc-300"
@@ -133,7 +168,18 @@ function ProductCard({
 
         <div className="mt-5 flex items-center gap-2 text-xs text-zinc-500">
           <Database className="size-3.5" aria-hidden="true" />
-          <span>{product.sourceLabel}</span>
+          {product.sourceUrl ? (
+            <a
+              href={product.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:text-black dark:hover:text-white"
+            >
+              {product.sourceLabel}
+            </a>
+          ) : (
+            <span>{product.sourceLabel}</span>
+          )}
         </div>
       </div>
     </article>
@@ -351,14 +397,10 @@ export default async function CatalogPage({
           ) : (
             <div className="rounded-lg border border-dashed border-black/15 px-6 py-16 text-center dark:border-white/15">
               <h2 className="text-xl font-semibold text-black dark:text-white">
-                {data.unavailable
-                  ? ui.catalogOffline
-                  : copy.emptyTitle}
+                {data.unavailable ? ui.catalogOffline : copy.emptyTitle}
               </h2>
               <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-zinc-500">
-                {data.unavailable
-                  ? ui.offlineDescription
-                  : ui.emptyDescription}
+                {data.unavailable ? ui.offlineDescription : ui.emptyDescription}
               </p>
             </div>
           )}

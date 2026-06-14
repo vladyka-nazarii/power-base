@@ -1,5 +1,6 @@
 import {
   integer,
+  jsonb,
   pgTable,
   serial,
   text,
@@ -51,8 +52,9 @@ export const equipment = pgTable(
     model: varchar("model", { length: 160 }).notNull(),
     summary: text("summary").notNull(),
     summaryUk: text("summary_uk"),
-    imagePath: varchar("image_path", { length: 240 }).notNull(),
-    priceCents: integer("price_cents").notNull(),
+    imagePath: varchar("image_path", { length: 400 }).notNull(),
+    priceCents: integer("price_cents"),
+    productCode: varchar("product_code", { length: 120 }),
     nominalVoltageV: integer("nominal_voltage_v"),
     capacityWh: integer("capacity_wh"),
     continuousPowerW: integer("continuous_power_w"),
@@ -67,6 +69,8 @@ export const equipment = pgTable(
     lifecycleCycles: integer("lifecycle_cycles"),
     sourceLabel: varchar("source_label", { length: 160 }).notNull(),
     sourceLabelUk: varchar("source_label_uk", { length: 160 }),
+    sourceUrl: varchar("source_url", { length: 400 }),
+    specifications: jsonb("specifications"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),

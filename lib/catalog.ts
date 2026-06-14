@@ -11,11 +11,7 @@ import {
 } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import {
-  equipment,
-  equipmentCategories,
-  manufacturers,
-} from "@/lib/db/schema";
+import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 import type { Locale } from "@/lib/i18n";
 
 export const catalogCategorySlugs = [
@@ -253,6 +249,7 @@ export async function getCatalogPageData(
         summary: localizedSummary,
         imagePath: equipment.imagePath,
         priceCents: equipment.priceCents,
+        productCode: equipment.productCode,
         nominalVoltageV: equipment.nominalVoltageV,
         capacityWh: equipment.capacityWh,
         continuousPowerW: equipment.continuousPowerW,
@@ -266,6 +263,8 @@ export async function getCatalogPageData(
         warrantyYears: equipment.warrantyYears,
         lifecycleCycles: equipment.lifecycleCycles,
         sourceLabel: localizedSourceLabel,
+        sourceUrl: equipment.sourceUrl,
+        specifications: equipment.specifications,
         manufacturer: manufacturers.name,
         categoryName: localizedCategoryName,
       })
@@ -283,7 +282,10 @@ export async function getCatalogPageData(
       filters.q
         ? or(
             ilike(equipment.model, `%${filters.q}%`),
-            ilike(locale === "uk" ? equipment.summaryUk : equipment.summary, `%${filters.q}%`),
+            ilike(
+              locale === "uk" ? equipment.summaryUk : equipment.summary,
+              `%${filters.q}%`,
+            ),
           )
         : undefined,
       filters.manufacturers.length > 0
@@ -311,6 +313,7 @@ export async function getCatalogPageData(
         summary: localizedSummary,
         imagePath: equipment.imagePath,
         priceCents: equipment.priceCents,
+        productCode: equipment.productCode,
         nominalVoltageV: equipment.nominalVoltageV,
         capacityWh: equipment.capacityWh,
         continuousPowerW: equipment.continuousPowerW,
@@ -324,6 +327,8 @@ export async function getCatalogPageData(
         warrantyYears: equipment.warrantyYears,
         lifecycleCycles: equipment.lifecycleCycles,
         sourceLabel: localizedSourceLabel,
+        sourceUrl: equipment.sourceUrl,
+        specifications: equipment.specifications,
         manufacturer: manufacturers.name,
         categoryName: localizedCategoryName,
       })
@@ -348,7 +353,9 @@ export async function getCatalogPageData(
       totalProducts: baseRows.length,
       unavailable: false,
       facets: {
-        manufacturers: [...new Set(baseRows.map((product) => product.manufacturer))],
+        manufacturers: [
+          ...new Set(baseRows.map((product) => product.manufacturer)),
+        ],
         voltages: [
           ...new Set(
             baseRows
@@ -435,7 +442,11 @@ export function parseCatalogFilters(
   };
 }
 
-export function formatPrice(priceCents: number, locale: Locale = "en") {
+export function formatPrice(priceCents: number | null, locale: Locale = "en") {
+  if (priceCents === null) {
+    return locale === "uk" ? "РЅ/Рґ" : "n/a";
+  }
+
   return new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-US", {
     style: "currency",
     currency: "USD",
@@ -443,14 +454,20 @@ export function formatPrice(priceCents: number, locale: Locale = "en") {
   }).format(priceCents / 100);
 }
 
-export function formatWeight(weightGrams: number | null, locale: Locale = "en") {
+export function formatWeight(
+  weightGrams: number | null,
+  locale: Locale = "en",
+) {
   if (!weightGrams) {
     return locale === "uk" ? "н/д" : "n/a";
   }
 
   return weightGrams >= 1000
-    ? `${(weightGrams / 1000).toLocaleString(locale === "uk" ? "uk-UA" : "en-US", {
-        maximumFractionDigits: 1,
-      })} ${locale === "uk" ? "кг" : "kg"}`
+    ? `${(weightGrams / 1000).toLocaleString(
+        locale === "uk" ? "uk-UA" : "en-US",
+        {
+          maximumFractionDigits: 1,
+        },
+      )} ${locale === "uk" ? "кг" : "kg"}`
     : `${weightGrams} ${locale === "uk" ? "г" : "g"}`;
 }

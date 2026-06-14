@@ -23,8 +23,9 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"model" varchar(160) NOT NULL,
 	"summary" text NOT NULL,
 	"summary_uk" text,
-	"image_path" varchar(240) NOT NULL,
-	"price_cents" integer NOT NULL,
+	"image_path" varchar(400) NOT NULL,
+	"price_cents" integer,
+	"product_code" varchar(120),
 	"nominal_voltage_v" integer,
 	"capacity_wh" integer,
 	"continuous_power_w" integer,
@@ -39,6 +40,8 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"lifecycle_cycles" integer,
 	"source_label" varchar(160) NOT NULL,
 	"source_label_uk" varchar(160),
+	"source_url" varchar(400),
+	"specifications" jsonb,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -64,3 +67,8 @@ ALTER TABLE "equipment_categories" ADD COLUMN IF NOT EXISTS "description_uk" tex
 ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "summary_uk" text;
 ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "chemistry_uk" varchar(80);
 ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "source_label_uk" varchar(160);
+ALTER TABLE "equipment" ALTER COLUMN "image_path" TYPE varchar(400);
+ALTER TABLE "equipment" ALTER COLUMN "price_cents" DROP NOT NULL;
+ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "product_code" varchar(120);
+ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "source_url" varchar(400);
+ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "specifications" jsonb;
