@@ -16,10 +16,12 @@ const themeScript = `
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const isSystemTheme = storedTheme !== "light" && storedTheme !== "dark";
     const isDark = storedTheme === "dark" || (isSystemTheme && prefersDark);
+    const themePreference = isSystemTheme ? "system" : storedTheme;
     const themeColor = document.querySelector('meta[name="theme-color"]');
 
     document.documentElement.classList.toggle("dark", isDark);
     document.documentElement.dataset.theme = isDark ? "dark" : "light";
+    document.documentElement.dataset.themePreference = themePreference;
     document.documentElement.style.colorScheme = isDark ? "dark" : "light";
 
     if (themeColor) {
