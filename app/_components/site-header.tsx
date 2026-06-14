@@ -14,7 +14,7 @@ type SiteHeaderProps = {
 export default function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
   return (
     <header className="flex h-10 items-center justify-between border-b border-black/10 px-5 dark:border-white/10">
-      <Link href={localizeHref(locale, "/")}>
+      <Link href={localizeHref(locale, "/")} prefetch={false}>
         <div>{dictionary.common.logo}</div>
       </Link>
       <div className="flex items-center gap-4">
@@ -22,7 +22,7 @@ export default function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
           <ul className="flex items-center gap-3">
             {mainNavigation.map((item) => (
               <li key={item.href}>
-                <Link href={localizeHref(locale, item.href)}>
+                <Link href={localizeHref(locale, item.href)} prefetch={false}>
                   {dictionary.navigation[item.labelKey]}
                 </Link>
               </li>

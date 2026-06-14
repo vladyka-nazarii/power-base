@@ -44,6 +44,7 @@ export default function LanguageSwitcher({
         <Link
           key={item}
           href={getLocalizedPath(pathname, item)}
+          prefetch={false}
           aria-current={item === locale ? "page" : undefined}
           className="text-sm aria-[current=page]:font-semibold"
           onClick={() => saveLocalePreference(item)}
