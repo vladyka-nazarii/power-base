@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"max_pv_voltage_v" integer,
 	"max_charge_current_a" integer,
 	"chemistry" varchar(80),
-	"chemistry_uk" varchar(80),
 	"communication_protocols" varchar(160),
 	"weight_grams" integer,
 	"warranty_years" integer,
@@ -65,7 +64,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS "equipment_slug_idx" ON "equipment" USING btre
 ALTER TABLE "equipment_categories" ADD COLUMN IF NOT EXISTS "name_uk" varchar(120);
 ALTER TABLE "equipment_categories" ADD COLUMN IF NOT EXISTS "description_uk" text;
 ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "summary_uk" text;
-ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "chemistry_uk" varchar(80);
 ALTER TABLE "equipment" ADD COLUMN IF NOT EXISTS "source_label_uk" varchar(160);
 ALTER TABLE "equipment" ALTER COLUMN "image_path" TYPE varchar(400);
 ALTER TABLE "equipment" ALTER COLUMN "price_cents" DROP NOT NULL;

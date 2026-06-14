@@ -62,7 +62,6 @@ export const equipment = pgTable(
     maxPvVoltageV: integer("max_pv_voltage_v"),
     maxChargeCurrentA: integer("max_charge_current_a"),
     chemistry: varchar("chemistry", { length: 80 }),
-    chemistryUk: varchar("chemistry_uk", { length: 80 }),
     communicationProtocols: varchar("communication_protocols", { length: 160 }),
     weightGrams: integer("weight_grams"),
     warrantyYears: integer("warranty_years"),

@@ -70,7 +70,6 @@ type SeedEquipment = {
   maxPvVoltageV?: number;
   maxChargeCurrentA?: number;
   chemistry?: string;
-  chemistryUk?: string;
   communicationProtocols?: string;
   weightGrams?: number;
   warrantyYears?: number;
@@ -101,7 +100,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 23,
     maxChargeCurrentA: 3,
     chemistry: "Lithium-ion",
-    chemistryUk: "Літій-іонний",
     weightGrams: 98,
     sourceLabel: "Xiaomi official specs",
     sourceUrl:
@@ -158,7 +156,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 33,
     maxChargeCurrentA: 3,
     chemistry: "Lithium-ion",
-    chemistryUk: "Літій-іонний",
     weightGrams: 229,
     communicationProtocols: "BC1.2, PD2.0, PD3.0 PPS, QC2.0, QC3.0, Apple 2.4A",
     sourceLabel: "Xiaomi official specs",
@@ -223,7 +220,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 67,
     maxChargeCurrentA: 3,
     chemistry: "Lithium-ion",
-    chemistryUk: "Літій-іонний",
     weightGrams: 247,
     sourceLabel: "Xiaomi official specs",
     sourceUrl:
@@ -279,7 +275,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 67,
     maxChargeCurrentA: 3,
     chemistry: "Lithium-ion",
-    chemistryUk: "Lithium-ion",
     weightGrams: 415,
     sourceLabel: "Xiaomi official specs",
     sourceLabelUk: "Xiaomi official specs",
@@ -330,7 +325,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 23,
     maxChargeCurrentA: 3,
     chemistry: "Lithium-ion",
-    chemistryUk: "Lithium-ion",
     weightGrams: 122,
     sourceLabel: "Xiaomi official specs",
     sourceLabelUk: "Xiaomi official specs",
@@ -434,7 +428,6 @@ const equipmentRows: SeedEquipment[] = [
     capacityWh: 4800,
     maxChargeCurrentA: 80,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     communicationProtocols: "CAN, RS485",
     weightGrams: 41000,
     warrantyYears: 10,
@@ -456,7 +449,6 @@ const equipmentRows: SeedEquipment[] = [
     capacityWh: 2560,
     maxChargeCurrentA: 100,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     communicationProtocols: "Bluetooth",
     weightGrams: 26300,
     warrantyYears: 5,
@@ -477,7 +469,6 @@ const equipmentRows: SeedEquipment[] = [
     capacityWh: 2560,
     maxChargeCurrentA: 100,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     communicationProtocols: "BMS port",
     weightGrams: 28000,
     warrantyYears: 3,
@@ -501,7 +492,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 4800,
     maxPvVoltageV: 60,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     weightGrams: 23000,
     warrantyYears: 5,
     lifecycleCycles: 3000,
@@ -524,7 +514,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 3600,
     maxPvVoltageV: 145,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     weightGrams: 28000,
     warrantyYears: 5,
     lifecycleCycles: 3000,
@@ -547,7 +536,6 @@ const equipmentRows: SeedEquipment[] = [
     peakPowerW: 3200,
     maxPvVoltageV: 60,
     chemistry: "LiFePO4",
-    chemistryUk: "LiFePO4",
     weightGrams: 30500,
     warrantyYears: 5,
     lifecycleCycles: 3000,
@@ -630,7 +618,6 @@ async function seedEquipment() {
         maxPvVoltageV: row.maxPvVoltageV ?? null,
         maxChargeCurrentA: row.maxChargeCurrentA ?? null,
         chemistry: row.chemistry ?? null,
-        chemistryUk: row.chemistryUk ?? null,
         communicationProtocols: row.communicationProtocols ?? null,
         weightGrams: row.weightGrams ?? null,
         warrantyYears: row.warrantyYears ?? null,
@@ -655,7 +642,6 @@ async function seedEquipment() {
           maxPvVoltageV: row.maxPvVoltageV ?? null,
           maxChargeCurrentA: row.maxChargeCurrentA ?? null,
           chemistry: row.chemistry ?? null,
-          chemistryUk: row.chemistryUk ?? null,
           communicationProtocols: row.communicationProtocols ?? null,
           weightGrams: row.weightGrams ?? null,
           warrantyYears: row.warrantyYears ?? null,

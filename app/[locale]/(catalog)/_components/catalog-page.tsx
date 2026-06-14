@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpDown, Database, Search, SlidersHorizontal } from "lucide-react";
 
 import AutoSubmitForm from "@/app/[locale]/(catalog)/_components/auto-submit-form";
+import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters-link";
 import {
   catalogPageCopy,
   catalogUiCopy,
@@ -67,18 +68,11 @@ function productDetailSpecs(product: CatalogProduct) {
   const specifications = product.specifications as ProductSpecifications | null;
 
   return [
-    product.productCode ? `Code ${product.productCode}` : null,
-    specifications?.ratedCapacityMah
-      ? `${specifications.ratedCapacityMah.toLocaleString()} mAh rated`
-      : null,
+    product.productCode ? product.productCode : null,
     specifications?.typicalCapacityMah
-      ? `${specifications.typicalCapacityMah.toLocaleString()} mAh typical`
+      ? `${specifications.typicalCapacityMah.toLocaleString()} mAh`
       : null,
     specifications?.ratedEnergyWh ? `${specifications.ratedEnergyWh} Wh` : null,
-    specifications?.maxOutputW
-      ? `${specifications.maxOutputW} W max out`
-      : null,
-    specifications?.maxInputW ? `${specifications.maxInputW} W max in` : null,
     specifications?.wirelessOutputW
       ? `${specifications.wirelessOutputW} W wireless`
       : null,
@@ -228,13 +222,13 @@ export default async function CatalogPage({
                   {ui.filters}
                 </h2>
               </div>
-              <Link
+              <ResetFiltersLink
                 href={clearHref}
                 prefetch={false}
                 className="text-sm text-zinc-500 transition hover:text-black dark:hover:text-white"
               >
                 {ui.reset}
-              </Link>
+              </ResetFiltersLink>
             </div>
 
             <label className="mt-4 block">

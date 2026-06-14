@@ -337,8 +337,7 @@ export async function getCatalogPageData(
     locale === "uk" ? equipment.summaryUk : equipment.summary;
   const localizedSourceLabel =
     locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
-  const localizedChemistry =
-    locale === "uk" ? equipment.chemistryUk : equipment.chemistry;
+  const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
     locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
 
@@ -520,8 +519,7 @@ export async function getProductDetailData({
     locale === "uk" ? equipment.summaryUk : equipment.summary;
   const localizedSourceLabel =
     locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
-  const localizedChemistry =
-    locale === "uk" ? equipment.chemistryUk : equipment.chemistry;
+  const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
     locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
 
