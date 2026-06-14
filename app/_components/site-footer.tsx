@@ -1,7 +1,13 @@
-export default function SiteFooter() {
+import { getDictionary } from "@/lib/i18n";
+
+type SiteFooterProps = {
+  dictionary: ReturnType<typeof getDictionary>;
+};
+
+export default function SiteFooter({ dictionary }: SiteFooterProps) {
   return (
-    <footer className='border-black/10 border-t h-[40px] flex items-center justify-center px-5'>
-      Footer
+    <footer className="flex h-[40px] items-center justify-center border-t border-black/10 px-5">
+      {dictionary.common.footer}
     </footer>
   );
 }

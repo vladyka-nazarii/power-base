@@ -8,12 +8,20 @@ import { cn } from "@/lib/utils";
 
 type ThemePreference = "light" | "dark";
 type StoredThemePreference = ThemePreference | null;
+type ThemeState = {
+  storedPreference: StoredThemePreference;
+  resolvedTheme: ThemePreference;
+};
 
 const THEME_STORAGE_KEY = "theme";
 const DARK_THEME_COLOR = "#09090b";
 const LIGHT_THEME_COLOR = "#ffffff";
+const DEFAULT_THEME_STATE: ThemeState = {
+  storedPreference: null,
+  resolvedTheme: "light",
+};
 const themeListeners = new Set<() => void>();
-let currentPreference: StoredThemePreference = null;
+let currentThemeState: ThemeState = DEFAULT_THEME_STATE;
 
 const themeOptions: Array<{
   icon: typeof Sun;
@@ -64,21 +72,24 @@ function emitThemeChange() {
   themeListeners.forEach((listener) => listener());
 }
 
-function setCurrentPreference(nextPreference: ThemePreference) {
-  currentPreference = nextPreference;
+function setCurrentThemeState(nextState: ThemeState) {
+  currentThemeState = nextState;
   emitThemeChange();
 }
 
 function syncStoredPreference() {
   const storedPreference = getStoredPreference();
-  const resolvedPreference = storedPreference ?? getSystemPreference();
+  const resolvedTheme = storedPreference ?? getSystemPreference();
 
-  if (storedPreference !== currentPreference) {
-    currentPreference = storedPreference;
+  if (
+    storedPreference !== currentThemeState.storedPreference ||
+    resolvedTheme !== currentThemeState.resolvedTheme
+  ) {
+    currentThemeState = { storedPreference, resolvedTheme };
     emitThemeChange();
   }
 
-  applyTheme(resolvedPreference);
+  applyTheme(resolvedTheme);
 }
 
 function subscribeToThemePreference(listener: () => void) {
@@ -90,16 +101,16 @@ function subscribeToThemePreference(listener: () => void) {
   };
 }
 
-function getThemePreferenceSnapshot(): StoredThemePreference {
-  return currentPreference;
+function getThemePreferenceSnapshot(): ThemeState {
+  return currentThemeState;
 }
 
-function getServerThemePreferenceSnapshot(): StoredThemePreference {
-  return null;
+function getServerThemePreferenceSnapshot(): ThemeState {
+  return DEFAULT_THEME_STATE;
 }
 
 export default function ThemeSwitcher() {
-  const preference = useSyncExternalStore(
+  const themeState = useSyncExternalStore(
     subscribeToThemePreference,
     getThemePreferenceSnapshot,
     getServerThemePreferenceSnapshot,
@@ -112,7 +123,13 @@ export default function ThemeSwitcher() {
         return;
       }
 
-      applyTheme(getSystemPreference());
+      const resolvedTheme = getSystemPreference();
+
+      setCurrentThemeState({
+        storedPreference: null,
+        resolvedTheme,
+      });
+      applyTheme(resolvedTheme);
     };
 
     mediaQuery.addEventListener("change", handleChange);
@@ -123,7 +140,10 @@ export default function ThemeSwitcher() {
   }, []);
 
   function updatePreference(nextPreference: ThemePreference) {
-    setCurrentPreference(nextPreference);
+    setCurrentThemeState({
+      storedPreference: nextPreference,
+      resolvedTheme: nextPreference,
+    });
 
     try {
       window.localStorage.setItem(THEME_STORAGE_KEY, nextPreference);
@@ -142,16 +162,16 @@ export default function ThemeSwitcher() {
     >
       {themeOptions.map((option) => {
         const Icon = option.icon;
-        const isActive = option.value === preference;
+        const isActive = option.value === themeState.resolvedTheme;
 
         return (
           <Button
             aria-label={`Use ${option.label.toLowerCase()} theme`}
             aria-pressed={isActive}
             className={cn(
-              "size-7 rounded-md text-muted-foreground",
-              isActive && "bg-muted text-foreground shadow-xs",
+              "theme-switcher-option size-7 rounded-md text-muted-foreground",
             )}
+            data-theme-option={option.value}
             key={option.value}
             onClick={() => updatePreference(option.value)}
             size="icon-sm"
