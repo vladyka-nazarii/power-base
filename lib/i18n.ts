@@ -150,7 +150,7 @@ export const dictionaries = {
       footer: "Каталог обладнання PowerBase",
       languages: {
         en: "EN",
-        uk: "UA",
+        uk: "UK",
       },
     },
     home: {
