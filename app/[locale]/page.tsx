@@ -1,6 +1,13 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Database, FileText, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Database,
+  FileText,
+  Zap,
+} from "lucide-react";
 import { notFound } from "next/navigation";
+import { PowerBaseLogoMark } from "@/app/_components/powerbase-logo";
 import { getDictionary, isLocale, localizeHref, type Locale } from "@/lib/i18n";
 
 type HomeProps = {
@@ -28,9 +35,12 @@ export default async function Home({ params }: HomeProps) {
             <span>{home.badge}</span>
           </div>
 
-          <h1 className="max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-normal text-black sm:text-6xl lg:text-7xl dark:text-white">
-            {home.title}
-          </h1>
+          <div className="flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-7">
+            <PowerBaseLogoMark className="size-24 text-black sm:size-32 lg:size-40 dark:text-white" />
+            <h1 className="max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-normal text-black sm:text-6xl lg:text-7xl dark:text-white">
+              {home.title}
+            </h1>
+          </div>
           <p className="mt-6 max-w-3xl text-balance text-xl leading-8 text-zinc-600 sm:text-2xl dark:text-zinc-400">
             {home.headline}
           </p>

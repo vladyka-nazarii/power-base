@@ -137,6 +137,22 @@
   color: var(--muted-foreground);
 }
 
+.powerbase-logo {
+  color: #000;
+}
+
+.dark .powerbase-logo {
+  color: #fff;
+}
+
+.powerbase-logo-mark {
+  fill: currentcolor;
+}
+
+.powerbase-logo-text {
+  color: currentcolor;
+}
+
 .theme-switcher-option:hover {
   background-color: color-mix(in oklch, var(--muted), transparent 55%);
 }

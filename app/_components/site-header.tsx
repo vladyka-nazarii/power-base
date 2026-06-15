@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AuthMenu from "@/app/_components/auth-menu";
 import LanguageSwitcher from "@/app/_components/language-switcher";
+import PowerBaseLogo from "@/app/_components/powerbase-logo";
 import SiteNavigation from "@/app/_components/site-navigation";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
 import { getCurrentSession } from "@/lib/favorites";
@@ -25,12 +26,10 @@ export default async function SiteHeader({
       <Link
         href={localizeHref(locale, "/")}
         prefetch={false}
-        className="flex items-center gap-2 text-sm font-semibold text-black dark:text-white"
+        className="flex items-center text-black dark:text-white"
+        aria-label={dictionary.common.logo}
       >
-        <span className="flex size-6 items-center justify-center rounded-full border border-black/15 text-xs dark:border-white/20">
-          PB
-        </span>
-        <span>{dictionary.common.logo}</span>
+        <PowerBaseLogo />
       </Link>
       <div className="flex min-w-0 items-center gap-3">
         <SiteNavigation
