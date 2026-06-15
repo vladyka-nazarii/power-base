@@ -11,6 +11,7 @@ import {
   Ruler,
 } from "lucide-react";
 
+import FavoriteButton from "@/app/_components/favorite-button";
 import {
   formatPrice,
   formatWeight,
@@ -19,6 +20,7 @@ import {
   type CatalogCategorySlug,
   type CatalogProductSpecifications,
 } from "@/lib/catalog";
+import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
 import { localizeHref, type Locale } from "@/lib/i18n";
 
 type ProductDetailPageProps = {
@@ -285,11 +287,14 @@ export default async function ProductDetailPage({
   productSlug,
 }: ProductDetailPageProps) {
   const copy = productDetailCopy[locale];
-  const { product, unavailable } = await getProductDetailData({
-    categorySlug: category,
-    locale,
-    productSlug,
-  });
+  const [{ product, unavailable }, session] = await Promise.all([
+    getProductDetailData({
+      categorySlug: category,
+      locale,
+      productSlug,
+    }),
+    getCurrentSession(),
+  ]);
   const catalogHref = localizeHref(locale, `/${category}`);
 
   if (unavailable) {
@@ -314,6 +319,8 @@ export default async function ProductDetailPage({
     product.specifications as CatalogProductSpecifications | null,
     locale,
   );
+  const favoriteEquipmentIds = await getFavoriteEquipmentIds(session?.user.id);
+  const isFavorite = favoriteEquipmentIds.has(product.id);
 
   return (
     <div className="bg-background text-foreground">
@@ -351,6 +358,14 @@ export default async function ProductDetailPage({
               <p className="mt-4 max-w-3xl text-base leading-7 text-zinc-600 dark:text-zinc-400">
                 {product.summary}
               </p>
+
+              <div className="mt-5">
+                <FavoriteButton
+                  equipmentId={product.id}
+                  isFavorite={isFavorite}
+                  label={isFavorite ? "Saved" : "Save"}
+                />
+              </div>
 
               <dl className="mt-6 grid gap-3 sm:grid-cols-2">
                 {productSummaryStats(product, locale, copy).map((item) => (

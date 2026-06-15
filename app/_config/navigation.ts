@@ -4,4 +4,5 @@ export const mainNavigation = [
   { href: "/power-stations", labelKey: "powerStations" },
   { href: "/batteries", labelKey: "batteries" },
   { href: "/inverters", labelKey: "inverters" },
+  { href: "/favorites", labelKey: "favorites" },
 ] as const;

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpDown, Database, Search, SlidersHorizontal } from "lucide-react";
 
 import AutoSubmitForm from "@/app/[locale]/(catalog)/_components/auto-submit-form";
+import FavoriteButton from "@/app/_components/favorite-button";
 import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters-link";
 import {
   catalogPageCopy,
@@ -13,6 +14,7 @@ import {
   type CatalogCategorySlug,
   type CatalogFilters,
 } from "@/lib/catalog";
+import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
 import { localizeHref, type Locale } from "@/lib/i18n";
 
 type CatalogPageProps = {
@@ -22,7 +24,7 @@ type CatalogPageProps = {
 };
 
 type CatalogData = Awaited<ReturnType<typeof getCatalogPageData>>;
-type CatalogProduct = CatalogData["products"][number];
+export type CatalogProduct = CatalogData["products"][number];
 type ProductSpecifications = {
   maxInputW?: number;
   maxOutputW?: number;
@@ -81,14 +83,16 @@ function productDetailSpecs(product: CatalogProduct) {
   ].filter(Boolean);
 }
 
-function ProductCard({
+export function ProductCard({
   locale,
   product,
   ui,
+  isFavorite,
 }: {
   locale: Locale;
   product: CatalogProduct;
   ui: (typeof catalogUiCopy)[Locale];
+  isFavorite: boolean;
 }) {
   const specs = [
     product.continuousPowerW
@@ -139,6 +143,14 @@ function ProductCard({
           <div className="shrink-0 text-right text-lg font-semibold text-black dark:text-white">
             {formatPrice(product.priceCents, locale)}
           </div>
+        </div>
+
+        <div className="mt-3">
+          <FavoriteButton
+            equipmentId={product.id}
+            isFavorite={isFavorite}
+            label={isFavorite ? "Saved" : "Save"}
+          />
         </div>
 
         <p className="mt-3 min-h-12 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
@@ -200,7 +212,11 @@ export default async function CatalogPage({
 }: CatalogPageProps) {
   const copy = catalogPageCopy[locale][category];
   const ui = catalogUiCopy[locale];
-  const data = await getCatalogPageData(category, filters, locale);
+  const [data, session] = await Promise.all([
+    getCatalogPageData(category, filters, locale),
+    getCurrentSession(),
+  ]);
+  const favoriteEquipmentIds = await getFavoriteEquipmentIds(session?.user.id);
   const clearHref = localizeHref(locale, `/${category}`);
   const paginationSummary = (
     <div className="rounded-lg border border-black/10 px-4 py-3 text-sm dark:border-white/10">
@@ -398,6 +414,7 @@ export default async function CatalogPage({
                   locale={locale}
                   product={product}
                   ui={ui}
+                  isFavorite={favoriteEquipmentIds.has(product.id)}
                 />
               ))}
             </div>

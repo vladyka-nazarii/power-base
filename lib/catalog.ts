@@ -88,10 +88,10 @@ export const catalogPageCopy: Record<
   uk: {
     "power-banks": {
       eyebrow: "Портативне DC живлення",
-      title: "Повербанки",
+      title: "Павербанки",
       description:
         "Компактні акумулятори для телефонів, ноутбуків, польових комплектів і щоденного носіння.",
-      emptyTitle: "Повербанки за цими фільтрами не знайдено",
+      emptyTitle: "Павербанки за цими фільтрами не знайдено",
     },
     "power-stations": {
       eyebrow: "Портативний AC резерв",

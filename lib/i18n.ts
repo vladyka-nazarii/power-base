@@ -142,6 +142,7 @@ export const dictionaries = {
       powerStations: "Power Stations",
       batteries: "Batteries",
       inverters: "Inverters",
+      favorites: "Favorites",
     },
   },
   uk: {
@@ -224,15 +225,16 @@ export const dictionaries = {
     catalog: {
       batteries: "Тут буде багато акумуляторів",
       inverters: "Тут будуть інвертори",
-      powerBanks: "Тут будуть повербанки",
+      powerBanks: "Тут будуть Павербанки",
       powerStations: "Тут будуть портативні електростанції",
     },
     navigation: {
       home: "Головна",
-      powerBanks: "Повербанки",
+      powerBanks: "Павербанки",
       powerStations: "Портативні станції",
       batteries: "Акумулятори",
       inverters: "Інвертори",
+      favorites: "Обране",
     },
   },
 } as const;

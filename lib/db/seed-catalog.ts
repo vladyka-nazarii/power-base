@@ -7,7 +7,7 @@ const categories = [
   {
     slug: "power-banks",
     name: "Power Banks",
-    nameUk: "Повербанки",
+    nameUk: "Павербанки",
     description:
       "Portable USB and DC battery packs for phones, laptops, and field kits.",
     descriptionUk:
