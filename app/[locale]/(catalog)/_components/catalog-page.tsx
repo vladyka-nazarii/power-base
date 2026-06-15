@@ -109,20 +109,27 @@ export function ProductCard({
 
   return (
     <article className="group overflow-hidden rounded-lg border border-black/10 bg-white transition hover:-translate-y-0.5 hover:border-black/20 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-black dark:hover:border-white/20 dark:hover:shadow-white/5">
-      <Link
-        href={detailHref}
-        prefetch={false}
-        className="focus-visible:outline-ring relative flex aspect-[4/3] items-center justify-center border-b border-black/10 bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-[-2px] dark:border-white/10 dark:bg-zinc-950"
-      >
-        <Image
-          src={product.imagePath}
-          alt={`${product.manufacturer} ${product.model}`}
-          width={360}
-          height={270}
-          unoptimized
-          className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]"
+      <div className="relative border-b border-black/10 dark:border-white/10">
+        <Link
+          href={detailHref}
+          prefetch={false}
+          className="focus-visible:outline-ring flex aspect-[4/3] items-center justify-center bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-[-2px] dark:bg-zinc-950"
+        >
+          <Image
+            src={product.imagePath}
+            alt={`${product.manufacturer} ${product.model}`}
+            width={360}
+            height={270}
+            unoptimized
+            className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]"
+          />
+        </Link>
+        <FavoriteButton
+          equipmentId={product.id}
+          isFavorite={isFavorite}
+          className="absolute top-3 right-3 z-10 shadow-sm"
         />
-      </Link>
+      </div>
 
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
@@ -143,14 +150,6 @@ export function ProductCard({
           <div className="shrink-0 text-right text-lg font-semibold text-black dark:text-white">
             {formatPrice(product.priceCents, locale)}
           </div>
-        </div>
-
-        <div className="mt-3">
-          <FavoriteButton
-            equipmentId={product.id}
-            isFavorite={isFavorite}
-            label={isFavorite ? "Saved" : "Save"}
-          />
         </div>
 
         <p className="mt-3 min-h-12 text-sm leading-6 text-zinc-600 dark:text-zinc-400">

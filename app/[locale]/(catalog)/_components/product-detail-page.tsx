@@ -346,6 +346,11 @@ export default async function ProductDetailPage({
                 unoptimized
                 className="h-full w-full object-contain"
               />
+              <FavoriteButton
+                equipmentId={product.id}
+                isFavorite={isFavorite}
+                className="absolute top-3 right-3 z-10 shadow-sm"
+              />
             </div>
 
             <div className="min-w-0">
@@ -358,14 +363,6 @@ export default async function ProductDetailPage({
               <p className="mt-4 max-w-3xl text-base leading-7 text-zinc-600 dark:text-zinc-400">
                 {product.summary}
               </p>
-
-              <div className="mt-5">
-                <FavoriteButton
-                  equipmentId={product.id}
-                  isFavorite={isFavorite}
-                  label={isFavorite ? "Saved" : "Save"}
-                />
-              </div>
 
               <dl className="mt-6 grid gap-3 sm:grid-cols-2">
                 {productSummaryStats(product, locale, copy).map((item) => (

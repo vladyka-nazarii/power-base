@@ -3,19 +3,35 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, LogOut, User } from "lucide-react";
+import { useEffect } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { authSessionChangedEvent } from "@/lib/auth-session-events";
 import { authClient } from "@/lib/auth-client";
 import { localizeHref, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export default function AuthMenu({ locale }: { locale: Locale }) {
   const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending, refetch } = authClient.useSession();
   const isAnonymous =
     session?.user && "isAnonymous" in session.user
       ? Boolean(session.user.isAnonymous)
       : false;
+
+  useEffect(() => {
+    const handleSessionChanged = () => {
+      void refetch().then(() => {
+        router.refresh();
+      });
+    };
+
+    window.addEventListener(authSessionChangedEvent, handleSessionChanged);
+
+    return () => {
+      window.removeEventListener(authSessionChangedEvent, handleSessionChanged);
+    };
+  }, [refetch, router]);
 
   if (isPending) {
     return (

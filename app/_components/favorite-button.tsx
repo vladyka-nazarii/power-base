@@ -1,25 +1,29 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
+import { authSessionChangedEvent } from "@/lib/auth-session-events";
 import { toggleFavorite } from "@/lib/favorite-actions";
 import { cn } from "@/lib/utils";
 
 type FavoriteButtonProps = {
   equipmentId: number;
   isFavorite: boolean;
+  className?: string;
   label?: string;
 };
 
 export default function FavoriteButton({
   equipmentId,
   isFavorite,
+  className,
   label,
 }: FavoriteButtonProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -27,6 +31,7 @@ export default function FavoriteButton({
       type="button"
       variant={isFavorite ? "default" : "outline"}
       size={label ? "sm" : "icon-sm"}
+      className={className}
       aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
       title={isFavorite ? "Remove from favorites" : "Add to favorites"}
       disabled={isPending}
@@ -37,6 +42,8 @@ export default function FavoriteButton({
             nextFavorite: !isFavorite,
             path: pathname,
           });
+          window.dispatchEvent(new Event(authSessionChangedEvent));
+          router.refresh();
         });
       }}
     >
