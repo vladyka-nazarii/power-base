@@ -70,6 +70,43 @@ export default function AuthMenu({ locale }: { locale: Locale }) {
     );
   }
 
+  if (isAnonymous) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="hidden items-center gap-1.5 text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
+          <User className="size-4 shrink-0" aria-hidden="true" />
+          {copy.guest}
+        </span>
+        <Link
+          href={localizeHref(locale, "/sign-in")}
+          prefetch={false}
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          <LogIn aria-hidden="true" />
+          {copy.signIn}
+        </Link>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={copy.signOut}
+          title={copy.signOut}
+          onClick={() => {
+            void authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.refresh();
+                },
+              },
+            });
+          }}
+        >
+          <LogOut aria-hidden="true" />
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center gap-2">
       <span className="hidden items-center gap-1.5 text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
@@ -85,7 +122,7 @@ export default function AuthMenu({ locale }: { locale: Locale }) {
         ) : (
           <User className="size-4 shrink-0" aria-hidden="true" />
         )}
-        {isAnonymous ? copy.guest : session.user.name}
+        {session.user.name}
       </span>
       <Button
         type="button"
