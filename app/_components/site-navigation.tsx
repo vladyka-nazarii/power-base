@@ -34,7 +34,7 @@ export default function SiteNavigation({
     : mainNavigation.filter((item) => item.href !== "/favorites");
 
   return (
-    <nav className="hidden min-w-0 md:block">
+    <nav className="hidden min-w-0 lg:block">
       <ul className="flex items-center gap-1">
         {navigationItems.map((item) => {
           const href = localizeHref(locale, item.href);

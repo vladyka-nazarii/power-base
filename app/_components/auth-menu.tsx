@@ -27,7 +27,15 @@ const authMenuCopy = {
   },
 } as const;
 
-export default function AuthMenu({ locale }: { locale: Locale }) {
+type AuthMenuProps = {
+  locale: Locale;
+  showIdentity?: boolean;
+};
+
+export default function AuthMenu({
+  locale,
+  showIdentity = false,
+}: AuthMenuProps) {
   const router = useRouter();
   const copy = authMenuCopy[locale];
   const { data: session, isPending, refetch } = authClient.useSession();
@@ -73,7 +81,12 @@ export default function AuthMenu({ locale }: { locale: Locale }) {
   if (isAnonymous) {
     return (
       <div className="flex items-center gap-2">
-        <span className="hidden items-center gap-1.5 text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
+        <span
+          className={cn(
+            "items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400",
+            showIdentity ? "inline-flex" : "hidden sm:inline-flex",
+          )}
+        >
           <User className="size-4 shrink-0" aria-hidden="true" />
           {copy.guest}
         </span>
@@ -109,7 +122,12 @@ export default function AuthMenu({ locale }: { locale: Locale }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="hidden items-center gap-1.5 text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
+      <span
+        className={cn(
+          "items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400",
+          showIdentity ? "inline-flex" : "hidden sm:inline-flex",
+        )}
+      >
         {userImage ? (
           <Image
             src={userImage}

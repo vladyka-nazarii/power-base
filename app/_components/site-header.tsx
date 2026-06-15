@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AuthMenu from "@/app/_components/auth-menu";
 import LanguageSwitcher from "@/app/_components/language-switcher";
+import MobileHeaderMenu from "@/app/_components/mobile-header-menu";
 import PowerBaseLogo from "@/app/_components/powerbase-logo";
 import SiteNavigation from "@/app/_components/site-navigation";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
@@ -26,7 +27,7 @@ export default async function SiteHeader({
       <Link
         href={localizeHref(locale, "/")}
         prefetch={false}
-        className="flex items-center text-black dark:text-white"
+        className="flex min-w-0 items-center text-black dark:text-white"
         aria-label={dictionary.common.logo}
       >
         <PowerBaseLogo />
@@ -37,12 +38,20 @@ export default async function SiteHeader({
           locale={locale}
           showFavorites={showFavorites}
         />
-        <LanguageSwitcher
+        <div className="hidden items-center gap-3 lg:flex">
+          <LanguageSwitcher
+            locale={locale}
+            labels={dictionary.common.languages}
+          />
+          <ThemeSwitcher />
+          <AuthMenu locale={locale} />
+        </div>
+        <MobileHeaderMenu
+          labels={dictionary.navigation}
+          languageLabels={dictionary.common.languages}
           locale={locale}
-          labels={dictionary.common.languages}
+          showFavorites={showFavorites}
         />
-        <ThemeSwitcher />
-        <AuthMenu locale={locale} />
       </div>
     </header>
   );
