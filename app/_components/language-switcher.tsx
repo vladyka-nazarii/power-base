@@ -39,19 +39,23 @@ export default function LanguageSwitcher({
   }, [locale]);
 
   return (
-    <div className="flex items-center gap-2">
+    <nav
+      aria-label="Language"
+      className="flex items-center rounded-full border border-black/10 bg-black/[0.03] p-0.5 text-xs font-medium dark:border-white/15 dark:bg-white/10"
+    >
       {locales.map((item) => (
         <Link
           key={item}
           href={getLocalizedPath(pathname, item)}
           prefetch={false}
           aria-current={item === locale ? "page" : undefined}
-          className="text-sm aria-[current=page]:font-semibold"
+          aria-label={`Switch language to ${labels[item]}`}
+          className="rounded-full px-2.5 py-1 text-black/60 transition-colors hover:text-black aria-[current=page]:bg-black aria-[current=page]:text-white aria-[current=page]:shadow-sm aria-[current=page]:ring-1 aria-[current=page]:ring-black/10 dark:text-white/65 dark:hover:text-white dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-black dark:aria-[current=page]:ring-white/20"
           onClick={() => saveLocalePreference(item)}
         >
           {labels[item]}
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }

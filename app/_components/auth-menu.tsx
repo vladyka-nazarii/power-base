@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { LogIn, LogOut, User } from "lucide-react";
 import { useEffect } from "react";
@@ -11,13 +12,30 @@ import { authClient } from "@/lib/auth-client";
 import { localizeHref, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+const authMenuCopy = {
+  en: {
+    signIn: "Sign in",
+    guest: "Guest",
+    userAvatar: "User avatar",
+    signOut: "Sign out",
+  },
+  uk: {
+    signIn: "Увійти",
+    guest: "Гість",
+    userAvatar: "Аватар користувача",
+    signOut: "Вийти",
+  },
+} as const;
+
 export default function AuthMenu({ locale }: { locale: Locale }) {
   const router = useRouter();
+  const copy = authMenuCopy[locale];
   const { data: session, isPending, refetch } = authClient.useSession();
   const isAnonymous =
     session?.user && "isAnonymous" in session.user
       ? Boolean(session.user.isAnonymous)
       : false;
+  const userImage = !isAnonymous ? session?.user.image : null;
 
   useEffect(() => {
     const handleSessionChanged = () => {
@@ -47,23 +65,34 @@ export default function AuthMenu({ locale }: { locale: Locale }) {
         className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
       >
         <LogIn aria-hidden="true" />
-        Sign in
+        {copy.signIn}
       </Link>
     );
   }
 
   return (
     <div className="flex items-center gap-2">
-      <span className="hidden max-w-32 items-center gap-1.5 truncate text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
-        <User className="size-4" aria-hidden="true" />
-        {isAnonymous ? "Guest" : session.user.name}
+      <span className="hidden items-center gap-1.5 text-sm text-zinc-600 sm:inline-flex dark:text-zinc-400">
+        {userImage ? (
+          <Image
+            src={userImage}
+            alt={copy.userAvatar}
+            width={28}
+            height={28}
+            className="size-7 shrink-0 rounded-full object-cover"
+            aria-hidden="true"
+          />
+        ) : (
+          <User className="size-4 shrink-0" aria-hidden="true" />
+        )}
+        {isAnonymous ? copy.guest : session.user.name}
       </span>
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
-        aria-label="Sign out"
-        title="Sign out"
+        aria-label={copy.signOut}
+        title={copy.signOut}
         onClick={() => {
           void authClient.signOut({
             fetchOptions: {

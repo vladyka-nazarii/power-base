@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+    ],
+  },
   async headers() {
     return [
       {

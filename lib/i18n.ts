@@ -60,7 +60,7 @@ export const dictionaries = {
       footer: "PowerBase equipment catalog",
       languages: {
         en: "EN",
-        uk: "UK",
+        uk: "УКР",
       },
     },
     home: {
@@ -151,7 +151,7 @@ export const dictionaries = {
       footer: "Каталог обладнання PowerBase",
       languages: {
         en: "EN",
-        uk: "UK",
+        uk: "УКР",
       },
     },
     home: {
