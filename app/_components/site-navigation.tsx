@@ -41,7 +41,7 @@ export default function SiteNavigation({
           const isActive = isActivePath(pathname, href);
 
           return (
-            <li key={item.href}>
+            <li className="flex text-center" key={item.href}>
               <Link
                 aria-current={isActive ? "page" : undefined}
                 aria-label={labels[item.labelKey]}
