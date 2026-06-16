@@ -35,7 +35,8 @@ export async function GET() {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Redis health check failed.",
+        error:
+          error instanceof Error ? error.message : "Redis health check failed.",
         latencyMs: Date.now() - startedAt,
       },
       { status: 503 },

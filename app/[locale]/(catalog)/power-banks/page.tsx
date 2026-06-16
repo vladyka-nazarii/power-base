@@ -21,5 +21,7 @@ export default async function PowerBanksPage({
   const locale: Locale = localeParam;
   const filters = parseCatalogFilters(await searchParams);
 
-  return <CatalogPage category="power-banks" filters={filters} locale={locale} />;
+  return (
+    <CatalogPage category="power-banks" filters={filters} locale={locale} />
+  );
 }

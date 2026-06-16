@@ -37,14 +37,14 @@ export default async function Home({ params }: HomeProps) {
 
           <div className="flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-7">
             <PowerBaseLogoMark className="size-24 text-black sm:size-32 lg:size-40 dark:text-white" />
-            <h1 className="max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-normal text-black sm:text-6xl lg:text-7xl dark:text-white">
+            <h1 className="max-w-4xl text-5xl leading-[1.05] font-semibold tracking-normal text-balance text-black sm:text-6xl lg:text-7xl dark:text-white">
               {home.title}
             </h1>
           </div>
-          <p className="mt-6 max-w-3xl text-balance text-xl leading-8 text-zinc-600 sm:text-2xl dark:text-zinc-400">
+          <p className="mt-6 max-w-3xl text-xl leading-8 text-balance text-zinc-600 sm:text-2xl dark:text-zinc-400">
             {home.headline}
           </p>
-          <p className="mt-5 max-w-3xl text-pretty text-base leading-8 text-zinc-600 sm:text-lg dark:text-zinc-400">
+          <p className="mt-5 max-w-3xl text-base leading-8 text-pretty text-zinc-600 sm:text-lg dark:text-zinc-400">
             {home.description}
           </p>
 
@@ -113,7 +113,7 @@ export default async function Home({ params }: HomeProps) {
             {home.features.map((feature) => (
               <article
                 key={feature.title}
-                className="min-h-56 border-b border-black/10 p-6 sm:[&:nth-child(odd)]:border-r lg:border-r lg:[&:nth-child(3n)]:border-r-0 lg:[&:nth-last-child(-n+3)]:border-b-0 dark:border-white/10"
+                className="min-h-56 border-b border-black/10 p-6 lg:border-r dark:border-white/10 lg:[&:nth-child(3n)]:border-r-0 sm:[&:nth-child(odd)]:border-r lg:[&:nth-last-child(-n+3)]:border-b-0"
               >
                 <Database className="mb-8 size-5 text-black dark:text-white" />
                 <h3 className="text-base font-semibold text-black dark:text-white">

@@ -18,9 +18,7 @@ type SiteBreadcrumbsProps = {
 const navigationLabelsByHref: ReadonlyMap<
   string,
   (typeof mainNavigation)[number]["labelKey"]
-> = new Map(
-  mainNavigation.map((item) => [item.href, item.labelKey] as const),
-);
+> = new Map(mainNavigation.map((item) => [item.href, item.labelKey] as const));
 
 function formatSegmentLabel(segment: string) {
   return decodeURIComponent(segment)
@@ -84,7 +82,7 @@ export default function SiteBreadcrumbs({
                 <Link
                   href={item.href}
                   prefetch={false}
-                  className="rounded-sm transition hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring dark:hover:text-zinc-100"
+                  className="focus-visible:outline-ring rounded-sm transition hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-100"
                 >
                   {item.label}
                 </Link>

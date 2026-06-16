@@ -6,7 +6,8 @@ declare global {
   var powerBaseRedis: Redis | undefined;
 }
 
-const redisUrl = process.env.REDIS_URL ?? "redis://:dev_password@localhost:6379/0";
+const redisUrl =
+  process.env.REDIS_URL ?? "redis://:dev_password@localhost:6379/0";
 
 function createRedisClient() {
   return new Redis(redisUrl, {

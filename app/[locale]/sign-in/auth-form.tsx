@@ -286,9 +286,7 @@ export default function AuthForm({ locale }: AuthFormProps) {
           setMode(mode === "sign-in" ? "sign-up" : "sign-in");
         }}
       >
-        {mode === "sign-in"
-          ? copy.toggle.signUp
-          : copy.toggle.signIn}
+        {mode === "sign-in" ? copy.toggle.signUp : copy.toggle.signIn}
       </Button>
     </div>
   );

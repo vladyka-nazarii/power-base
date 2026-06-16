@@ -21,7 +21,9 @@ export default function AutoSubmitForm({
   const pathname = usePathname();
   const router = useRouter();
   const focusTarget = useRef<FocusTarget | null>(null);
-  const searchSubmitTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchSubmitTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   useEffect(() => {
     return () => {
@@ -50,8 +52,7 @@ export default function AutoSubmitForm({
     const restore = () => {
       const element = [...document.getElementsByName(target.name)].find(
         (node) =>
-          node instanceof HTMLInputElement ||
-          node instanceof HTMLSelectElement
+          node instanceof HTMLInputElement || node instanceof HTMLSelectElement
             ? target.value === undefined || node.value === target.value
             : false,
       );
@@ -100,7 +101,10 @@ export default function AutoSubmitForm({
     const target = event.target;
 
     if (
-      !(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)
+      !(
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLSelectElement
+      )
     ) {
       return;
     }
