@@ -12,6 +12,7 @@ import {
   formatPrice,
   formatWeight,
   getCatalogPageData,
+  powerBankNumberFilterGroups,
   type CatalogCategorySlug,
   type CatalogFilters,
 } from "@/lib/catalog";
@@ -71,25 +72,45 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   add("minCapacityWh", filters.minCapacityWh);
   add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
+  filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
   filters.batteryChemistries.forEach((value) => add("batteryChemistry", value));
   filters.supportedOutputProtocols.forEach((value) =>
     add("supportedOutputProtocols", value),
   );
   add("maxInputPower", filters.maxInputPower);
+  filters.maxInputPowerRanges.forEach((value) =>
+    add("maxInputPowerRange", value),
+  );
   add("maxOutputPower", filters.maxOutputPower);
+  filters.maxOutputPowerRanges.forEach((value) =>
+    add("maxOutputPowerRange", value),
+  );
   add(
     "passthroughCharging",
     filters.passthroughCharging === true ? "true" : undefined,
   );
   add("gravimetricDensity", filters.gravimetricDensity);
+  filters.gravimetricDensityRanges.forEach((value) =>
+    add("gravimetricDensityRange", value),
+  );
   add("length", filters.dimensionLength);
+  filters.dimensionLengthRanges.forEach((value) => add("lengthRange", value));
   add("width", filters.dimensionWidth);
+  filters.dimensionWidthRanges.forEach((value) => add("widthRange", value));
   add("thickness", filters.dimensionThickness);
+  filters.dimensionThicknessRanges.forEach((value) =>
+    add("thicknessRange", value),
+  );
   add("weight", filters.weight);
+  filters.weightRanges.forEach((value) => add("weightRange", value));
   filters.displayTypes.forEach((value) => add("displayType", value));
   add("price", filters.price);
+  filters.priceRanges.forEach((value) => add("priceRange", value));
   filters.builtInCables.forEach((value) => add("builtInCable", value));
   add("wirelessChargingMaxPower", filters.wirelessChargingMaxPower);
+  filters.wirelessChargingMaxPowerRanges.forEach((value) =>
+    add("wirelessChargingMaxPowerRange", value),
+  );
   add("sort", filters.sort);
 
   return inputs.map(([name, value]) => (
@@ -172,6 +193,39 @@ function NumberFilter({
   );
 }
 
+function NumberRangeFilter({
+  title,
+  param,
+  options,
+  selected,
+}: {
+  title: string;
+  param: string;
+  options: readonly { count?: number; label: string; value: string }[];
+  selected: string[];
+}) {
+  return (
+    <fieldset>
+      <legend className="text-sm font-medium text-black dark:text-white">
+        {title}
+      </legend>
+      <div className="mt-3 space-y-2">
+        {options.map((option) => (
+          <CheckboxOption
+            key={option.value}
+            name={param}
+            value={option.value}
+            count={option.count}
+            checked={selected.includes(option.value)}
+          >
+            {option.label}
+          </CheckboxOption>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 function PowerBankFilters({
   data,
   filters,
@@ -197,6 +251,18 @@ function PowerBankFilters({
     data.facets.powerBanks.builtInCables.length > 0
       ? data.facets.powerBanks.builtInCables
       : powerBankBuiltInCableOptions.map((value) => ({ value, count: 0 }));
+  const numberRangeOptions =
+    data.facets.powerBanks.numberRanges ??
+    Object.fromEntries(
+      Object.entries(powerBankNumberFilterGroups).map(([key, group]) => [
+        key,
+        group.options.map((option) => ({
+          ...option,
+          value: option.id,
+          count: 0,
+        })),
+      ]),
+    );
 
   return (
     <>
@@ -278,33 +344,41 @@ function PowerBankFilters({
         </div>
       </fieldset>
 
-      <div className="mt-6 grid gap-4">
-        <NumberFilter
-          label={ui.minCapacity}
-          name="capacityWh"
-          value={filters.capacityWh}
+      <div className="mt-6 grid gap-6">
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.capacityWh}
+          options={numberRangeOptions.capacityWh}
+          selected={filters.capacityWhRanges}
         />
-        <NumberFilter
-          label={ui.maxInputPower}
-          name="maxInputPower"
-          value={filters.maxInputPower}
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.maxInputPower}
+          options={numberRangeOptions.maxInputPower}
+          selected={filters.maxInputPowerRanges}
         />
-        <NumberFilter
-          label={ui.maxOutputPower}
-          name="maxOutputPower"
-          value={filters.maxOutputPower}
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.maxOutputPower}
+          options={numberRangeOptions.maxOutputPower}
+          selected={filters.maxOutputPowerRanges}
         />
-        <NumberFilter
-          label={ui.minGravimetricDensity}
-          name="gravimetricDensity"
-          value={filters.gravimetricDensity}
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.gravimetricDensity}
+          options={numberRangeOptions.gravimetricDensity}
+          selected={filters.gravimetricDensityRanges}
         />
-        <NumberFilter label={ui.maxWeight} name="weight" value={filters.weight} />
-        <NumberFilter label={ui.maxPrice} name="price" value={filters.price} />
-        <NumberFilter
-          label={ui.minWirelessChargingPower}
-          name="wirelessChargingMaxPower"
-          value={filters.wirelessChargingMaxPower}
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.weight}
+          options={numberRangeOptions.weight}
+          selected={filters.weightRanges}
+        />
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.price}
+          options={numberRangeOptions.price}
+          selected={filters.priceRanges}
+        />
+        <NumberRangeFilter
+          {...powerBankNumberFilterGroups.wirelessChargingMaxPower}
+          options={numberRangeOptions.wirelessChargingMaxPower}
+          selected={filters.wirelessChargingMaxPowerRanges}
         />
       </div>
 
@@ -312,21 +386,24 @@ function PowerBankFilters({
         <legend className="text-sm font-medium text-black dark:text-white">
           {ui.maxDimensions}
         </legend>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          <NumberFilter
-            label={ui.length}
-            name="length"
-            value={filters.dimensionLength}
+        <div className="mt-3 grid gap-6">
+          <NumberRangeFilter
+            {...powerBankNumberFilterGroups.dimensionLength}
+            title={ui.length}
+            options={numberRangeOptions.dimensionLength}
+            selected={filters.dimensionLengthRanges}
           />
-          <NumberFilter
-            label={ui.width}
-            name="width"
-            value={filters.dimensionWidth}
+          <NumberRangeFilter
+            {...powerBankNumberFilterGroups.dimensionWidth}
+            title={ui.width}
+            options={numberRangeOptions.dimensionWidth}
+            selected={filters.dimensionWidthRanges}
           />
-          <NumberFilter
-            label={ui.thickness}
-            name="thickness"
-            value={filters.dimensionThickness}
+          <NumberRangeFilter
+            {...powerBankNumberFilterGroups.dimensionThickness}
+            title={ui.thickness}
+            options={numberRangeOptions.dimensionThickness}
+            selected={filters.dimensionThicknessRanges}
           />
         </div>
       </fieldset>
@@ -489,9 +566,9 @@ export default async function CatalogPage({
 
   return (
     <div className="bg-background text-foreground">
-      <section className="mx-auto grid max-w-[1840px] gap-8 px-5 py-8 lg:grid-cols-[280px_minmax(0,1fr)] 3xl:grid-cols-[320px_minmax(0,1fr)]">
+      <section className="3xl:grid-cols-[320px_minmax(0,1fr)] mx-auto grid max-w-[1840px] gap-8 px-5 py-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="lg:sticky lg:top-20 lg:self-start">
-          <AutoSubmitForm className="rounded-lg border border-black/10 bg-white p-4 dark:border-white/10 dark:bg-black">
+          <AutoSubmitForm className="rounded-lg border border-black/10 bg-white p-4 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-3 dark:border-white/10 dark:bg-black">
             <div className="flex items-center justify-between border-b border-black/10 pb-4 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="size-4" aria-hidden="true" />
@@ -631,20 +708,30 @@ export default async function CatalogPage({
               "minCapacityWh",
               "minPowerW",
               "capacityWh",
+              "capacityWhRange",
               "batteryChemistry",
               "supportedOutputProtocols",
               "maxInputPower",
+              "maxInputPowerRange",
               "maxOutputPower",
+              "maxOutputPowerRange",
               "passthroughCharging",
               "gravimetricDensity",
+              "gravimetricDensityRange",
               "length",
+              "lengthRange",
               "width",
+              "widthRange",
               "thickness",
+              "thicknessRange",
               "weight",
+              "weightRange",
               "displayType",
               "price",
+              "priceRange",
               "builtInCable",
               "wirelessChargingMaxPower",
+              "wirelessChargingMaxPowerRange",
             ])}
           </AutoSubmitForm>
         </aside>
@@ -678,7 +765,7 @@ export default async function CatalogPage({
           </div>
 
           {data.products.length > 0 ? (
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
+            <div className="3xl:grid-cols-4 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {data.products.map((product) => (
                 <ProductCard
                   key={product.id}

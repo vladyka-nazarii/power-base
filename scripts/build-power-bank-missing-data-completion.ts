@@ -1,3 +1,5 @@
+import { writeFile } from "node:fs/promises";
+
 import { ankerPowerBankRows } from "@/lib/db/anker-power-bank-seed";
 import { baseusPowerBankRows } from "@/lib/db/baseus-power-bank-seed";
 import { ugreenPowerBankRows } from "@/lib/db/ugreen-power-bank-seed";
@@ -90,7 +92,10 @@ function textBag(...values: unknown[]) {
 
 function normalizeChemistry(row: SeedRow): PowerBankChemistry | null {
   const specifications = row.specifications ?? {};
-  const text = textBag(row.chemistry, specifications.batteryCells).toLowerCase();
+  const text = textBag(
+    row.chemistry,
+    specifications.batteryCells,
+  ).toLowerCase();
 
   if (text.includes("lifepo4") || text.includes("lfp")) {
     return "LiFePO4 (LFP)";
@@ -170,8 +175,12 @@ function inferPassthrough(row: SeedRow) {
 
 function parseInchDimensionsFromText(text: string): PowerBankDimensions | null {
   const match =
-    text.match(/(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*in(?:ch|ches)?/i) ??
-    text.match(/(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*in(?:ch|ches)?/i);
+    text.match(
+      /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*in(?:ch|ches)?/i,
+    ) ??
+    text.match(
+      /(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*×\s*(\d+(?:\.\d+)?)\s*in(?:ch|ches)?/i,
+    );
 
   if (!match) {
     return null;
@@ -267,7 +276,9 @@ function inferBuiltInCable(row: SeedRow): PowerBankBuiltInCable | null {
   const hasUsbC = text.includes("usb-c") || text.includes("type-c");
   const hasLightning = text.includes("lightning");
   const hasMicroUsb = text.includes("micro-usb") || text.includes("micro usb");
-  const cableTypes = [hasUsbC, hasLightning, hasMicroUsb].filter(Boolean).length;
+  const cableTypes = [hasUsbC, hasLightning, hasMicroUsb].filter(
+    Boolean,
+  ).length;
 
   if (cableTypes > 1) {
     return "Multiple";
@@ -384,7 +395,11 @@ function normalizePrice(row: SeedRow, rates: CurrencyRates) {
 }
 
 function sourceUrl(row: SeedRow) {
-  return row.sourceUrl ?? row.specifications?.collectionUrl ?? "";
+  const collectionUrl = row.specifications?.collectionUrl;
+
+  return (
+    row.sourceUrl ?? (typeof collectionUrl === "string" ? collectionUrl : "")
+  );
 }
 
 function addSource(
@@ -477,7 +492,12 @@ function buildCompletionRow(row: SeedRow, rates: CurrencyRates): CompletionRow {
     if (completion[field] === null) {
       completion.missingReason[field] = missingReason(field, row);
     } else {
-      addSource(completion.sources, row, field, field === "price" ? price.note : null);
+      addSource(
+        completion.sources,
+        row,
+        field,
+        field === "price" ? price.note : null,
+      );
     }
   }
 
@@ -527,7 +547,7 @@ async function main() {
     ]),
   );
 
-  await Bun.write(outputPath, `${JSON.stringify(completion, null, 2)}\n`);
+  await writeFile(outputPath, `${JSON.stringify(completion, null, 2)}\n`);
 
   console.log(`Wrote ${completion.length} rows to ${outputPath}`);
   console.log(JSON.stringify(missingCounts, null, 2));

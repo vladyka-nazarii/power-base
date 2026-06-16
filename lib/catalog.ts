@@ -43,24 +43,136 @@ export type CatalogFilters = {
   minCapacityWh?: number;
   minPowerW?: number;
   capacityWh?: number;
+  capacityWhRanges: string[];
   batteryChemistries: string[];
   supportedOutputProtocols: string[];
   maxInputPower?: number;
+  maxInputPowerRanges: string[];
   maxOutputPower?: number;
+  maxOutputPowerRanges: string[];
   passthroughCharging?: boolean;
   gravimetricDensity?: number;
+  gravimetricDensityRanges: string[];
   dimensionLength?: number;
+  dimensionLengthRanges: string[];
   dimensionWidth?: number;
+  dimensionWidthRanges: string[];
   dimensionThickness?: number;
+  dimensionThicknessRanges: string[];
   weight?: number;
+  weightRanges: string[];
   displayTypes: string[];
   price?: number;
+  priceRanges: string[];
   builtInCables: string[];
   wirelessChargingMaxPower?: number;
+  wirelessChargingMaxPowerRanges: string[];
   sort: CatalogSort;
 };
 
 export type CatalogProductSpecifications = Record<string, unknown>;
+
+export type NumberRangeFilterOption = {
+  id: string;
+  label: string;
+  min?: number;
+  max?: number;
+  includeMissingAsZero?: boolean;
+};
+
+export const powerBankNumberFilterGroups = {
+  capacityWh: {
+    title: "Capacity",
+    param: "capacityWhRange",
+    options: [
+      { id: "lt-20", label: "< 20 Wh", max: 20 },
+      { id: "20-50", label: "20-50 Wh", min: 20, max: 50 },
+      { id: "gt-50", label: "> 50 Wh", min: 50 },
+    ],
+  },
+  maxInputPower: {
+    title: "Input power",
+    param: "maxInputPowerRange",
+    options: [
+      { id: "lt-20", label: "< 20 W", max: 20 },
+      { id: "20-45", label: "20-45 W", min: 20, max: 45 },
+      { id: "gt-45", label: "> 45 W", min: 45 },
+    ],
+  },
+  maxOutputPower: {
+    title: "Output power",
+    param: "maxOutputPowerRange",
+    options: [
+      { id: "lt-20", label: "< 20 W", max: 20 },
+      { id: "20-65", label: "20-65 W", min: 20, max: 65 },
+      { id: "gt-65", label: "> 65 W", min: 65 },
+    ],
+  },
+  gravimetricDensity: {
+    title: "Density",
+    param: "gravimetricDensityRange",
+    options: [
+      { id: "lt-150", label: "< 150 Wh/kg", max: 150 },
+      { id: "150-200", label: "150-200 Wh/kg", min: 150, max: 200 },
+      { id: "gt-200", label: "> 200 Wh/kg", min: 200 },
+    ],
+  },
+  weight: {
+    title: "Weight",
+    param: "weightRange",
+    options: [
+      { id: "lt-200", label: "< 200 g", max: 200 },
+      { id: "200-400", label: "200-400 g", min: 200, max: 400 },
+      { id: "gt-400", label: "> 400 g", min: 400 },
+    ],
+  },
+  price: {
+    title: "Price",
+    param: "priceRange",
+    options: [
+      { id: "lt-30", label: "< $30", max: 30 },
+      { id: "30-70", label: "$30-$70", min: 30, max: 70 },
+      { id: "gt-70", label: "> $70", min: 70 },
+    ],
+  },
+  wirelessChargingMaxPower: {
+    title: "Wireless charging",
+    param: "wirelessChargingMaxPowerRange",
+    options: [
+      { id: "none", label: "None", max: 0, includeMissingAsZero: true },
+      { id: "lt-10", label: "< 10 W", min: 0, max: 10 },
+      { id: "10-15", label: "10-15 W", min: 10, max: 15 },
+      { id: "gt-15", label: "> 15 W", min: 15 },
+    ],
+  },
+  dimensionLength: {
+    title: "Length",
+    param: "lengthRange",
+    options: [
+      { id: "lt-100", label: "< 100 mm", max: 100 },
+      { id: "100-150", label: "100-150 mm", min: 100, max: 150 },
+      { id: "gt-150", label: "> 150 mm", min: 150 },
+    ],
+  },
+  dimensionWidth: {
+    title: "Width",
+    param: "widthRange",
+    options: [
+      { id: "lt-65", label: "< 65 mm", max: 65 },
+      { id: "65-80", label: "65-80 mm", min: 65, max: 80 },
+      { id: "gt-80", label: "> 80 mm", min: 80 },
+    ],
+  },
+  dimensionThickness: {
+    title: "Thickness",
+    param: "thicknessRange",
+    options: [
+      { id: "lt-15", label: "< 15 mm", max: 15 },
+      { id: "15-25", label: "15-25 mm", min: 15, max: 25 },
+      { id: "gt-25", label: "> 25 mm", min: 25 },
+    ],
+  },
+} as const;
 
 export const catalogPageCopy: Record<
   Locale,
@@ -389,6 +501,39 @@ function compactConditions(conditions: Array<SQL | undefined>) {
   return conditions.filter(Boolean) as SQL[];
 }
 
+function matchesNumberRangeOption(
+  rawValue: number | undefined,
+  option: NumberRangeFilterOption,
+) {
+  const value =
+    rawValue === undefined && option.includeMissingAsZero ? 0 : rawValue;
+
+  if (value === undefined) {
+    return false;
+  }
+
+  return (
+    (option.min === undefined || value >= option.min) &&
+    (option.max === undefined || value < option.max)
+  );
+}
+
+function matchesNumberRangeFilter(
+  value: number | undefined,
+  selectedIds: string[],
+  options: readonly NumberRangeFilterOption[],
+) {
+  if (selectedIds.length === 0) {
+    return true;
+  }
+
+  return options.some(
+    (option) =>
+      selectedIds.includes(option.id) &&
+      matchesNumberRangeOption(value, option),
+  );
+}
+
 type CatalogProductRow = {
   model: string;
   manufacturer: string;
@@ -405,6 +550,10 @@ type CatalogProductRow = {
 type CountedFacet = {
   value: string;
   count: number;
+};
+
+type CountedNumberRangeFacet = CountedFacet & {
+  label: string;
 };
 
 function powerBankSpecs(product: CatalogProductRow): PowerBankSpecifications {
@@ -436,6 +585,12 @@ function matchesPowerBankFilters(
     exclude === "manufacturer" ||
       filters.manufacturers.length === 0 ||
       filters.manufacturers.includes(product.manufacturer),
+    exclude === "capacityWhRange" ||
+      matchesNumberRangeFilter(
+        specifications.capacityWh,
+        filters.capacityWhRanges,
+        powerBankNumberFilterGroups.capacityWh.options,
+      ),
     filters.capacityWh === undefined ||
       (specifications.capacityWh ?? 0) >= filters.capacityWh,
     exclude === "batteryChemistry" ||
@@ -445,38 +600,90 @@ function matchesPowerBankFilters(
     exclude === "supportedOutputProtocols" ||
       filters.supportedOutputProtocols.length === 0 ||
       filters.supportedOutputProtocols.some((protocol) =>
-        specifications.supportedOutputProtocols?.includes(
-          protocol as never,
-        ),
+        specifications.supportedOutputProtocols?.includes(protocol as never),
+      ),
+    exclude === "maxInputPowerRange" ||
+      matchesNumberRangeFilter(
+        specifications.maxInputPower,
+        filters.maxInputPowerRanges,
+        powerBankNumberFilterGroups.maxInputPower.options,
       ),
     filters.maxInputPower === undefined ||
       (specifications.maxInputPower ?? 0) >= filters.maxInputPower,
+    exclude === "maxOutputPowerRange" ||
+      matchesNumberRangeFilter(
+        specifications.maxOutputPower,
+        filters.maxOutputPowerRanges,
+        powerBankNumberFilterGroups.maxOutputPower.options,
+      ),
     filters.maxOutputPower === undefined ||
       (specifications.maxOutputPower ?? 0) >= filters.maxOutputPower,
     filters.passthroughCharging !== true ||
       specifications.passthroughCharging === true,
+    exclude === "gravimetricDensityRange" ||
+      matchesNumberRangeFilter(
+        specifications.gravimetricDensity,
+        filters.gravimetricDensityRanges,
+        powerBankNumberFilterGroups.gravimetricDensity.options,
+      ),
     filters.gravimetricDensity === undefined ||
       (specifications.gravimetricDensity ?? 0) >= filters.gravimetricDensity,
+    exclude === "lengthRange" ||
+      matchesNumberRangeFilter(
+        dimensions?.length,
+        filters.dimensionLengthRanges,
+        powerBankNumberFilterGroups.dimensionLength.options,
+      ),
     filters.dimensionLength === undefined ||
       (dimensions?.length ?? Number.POSITIVE_INFINITY) <=
         filters.dimensionLength,
+    exclude === "widthRange" ||
+      matchesNumberRangeFilter(
+        dimensions?.width,
+        filters.dimensionWidthRanges,
+        powerBankNumberFilterGroups.dimensionWidth.options,
+      ),
     filters.dimensionWidth === undefined ||
       (dimensions?.width ?? Number.POSITIVE_INFINITY) <= filters.dimensionWidth,
+    exclude === "thicknessRange" ||
+      matchesNumberRangeFilter(
+        dimensions?.thickness,
+        filters.dimensionThicknessRanges,
+        powerBankNumberFilterGroups.dimensionThickness.options,
+      ),
     filters.dimensionThickness === undefined ||
       (dimensions?.thickness ?? Number.POSITIVE_INFINITY) <=
         filters.dimensionThickness,
+    exclude === "weightRange" ||
+      matchesNumberRangeFilter(
+        specifications.weight,
+        filters.weightRanges,
+        powerBankNumberFilterGroups.weight.options,
+      ),
     filters.weight === undefined ||
       (specifications.weight ?? Number.POSITIVE_INFINITY) <= filters.weight,
     exclude === "displayType" ||
       filters.displayTypes.length === 0 ||
       (specifications.displayType !== undefined &&
         filters.displayTypes.includes(specifications.displayType)),
+    exclude === "priceRange" ||
+      matchesNumberRangeFilter(
+        specifications.price,
+        filters.priceRanges,
+        powerBankNumberFilterGroups.price.options,
+      ),
     filters.price === undefined ||
       (specifications.price ?? Number.POSITIVE_INFINITY) <= filters.price,
     exclude === "builtInCable" ||
       filters.builtInCables.length === 0 ||
       (specifications.builtInCable !== undefined &&
         filters.builtInCables.includes(specifications.builtInCable)),
+    exclude === "wirelessChargingMaxPowerRange" ||
+      matchesNumberRangeFilter(
+        specifications.wirelessChargingMaxPower,
+        filters.wirelessChargingMaxPowerRanges,
+        powerBankNumberFilterGroups.wirelessChargingMaxPower.options,
+      ),
     filters.wirelessChargingMaxPower === undefined ||
       (specifications.wirelessChargingMaxPower ?? 0) >=
         filters.wirelessChargingMaxPower,
@@ -484,7 +691,9 @@ function matchesPowerBankFilters(
 }
 
 function uniqueDefined<T>(values: Array<T | undefined>) {
-  return [...new Set(values.filter((value): value is T => value !== undefined))];
+  return [
+    ...new Set(values.filter((value): value is T => value !== undefined)),
+  ];
 }
 
 function countByOption<T extends string>(
@@ -498,7 +707,26 @@ function countByOption<T extends string>(
   }));
 }
 
-function filterRowsForSearch(rows: CatalogProductRow[], filters: CatalogFilters) {
+function countByNumberRangeOption(
+  options: readonly NumberRangeFilterOption[],
+  rows: CatalogProductRow[],
+  valueForRow: (row: CatalogProductRow) => number | undefined,
+  matches: (row: CatalogProductRow) => boolean,
+): CountedNumberRangeFacet[] {
+  return options.map((option) => ({
+    value: option.id,
+    label: option.label,
+    count: rows.filter(
+      (row) =>
+        matchesNumberRangeOption(valueForRow(row), option) && matches(row),
+    ).length,
+  }));
+}
+
+function filterRowsForSearch(
+  rows: CatalogProductRow[],
+  filters: CatalogFilters,
+) {
   if (!filters.q) {
     return rows;
   }
@@ -630,7 +858,9 @@ export async function getCatalogPageData(
 
     const filteredProducts =
       categorySlug === "power-banks"
-        ? products.filter((product) => matchesPowerBankFilters(product, filters))
+        ? products.filter((product) =>
+            matchesPowerBankFilters(product, filters),
+          )
         : products;
     const powerBankBaseSpecs =
       categorySlug === "power-banks" ? baseRows.map(powerBankSpecs) : [];
@@ -640,9 +870,12 @@ export async function getCatalogPageData(
     ];
     const manufacturerFacets =
       categorySlug === "power-banks"
-        ? countByOption(manufacturerOptions, searchableBaseRows, (row, option) =>
-            row.manufacturer === option &&
-            matchesPowerBankFilters(row, filters, "manufacturer"),
+        ? countByOption(
+            manufacturerOptions,
+            searchableBaseRows,
+            (row, option) =>
+              row.manufacturer === option &&
+              matchesPowerBankFilters(row, filters, "manufacturer"),
           )
         : countByOption(
             manufacturerOptions,
@@ -661,6 +894,83 @@ export async function getCatalogPageData(
     const powerBankBuiltInCableOptions = uniqueDefined(
       powerBankBaseSpecs.map((spec) => spec.builtInCable),
     );
+    const powerBankNumberRangeFacets =
+      categorySlug === "power-banks"
+        ? {
+            capacityWh: countByNumberRangeOption(
+              powerBankNumberFilterGroups.capacityWh.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).capacityWh,
+              (row) => matchesPowerBankFilters(row, filters, "capacityWhRange"),
+            ),
+            maxInputPower: countByNumberRangeOption(
+              powerBankNumberFilterGroups.maxInputPower.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).maxInputPower,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "maxInputPowerRange"),
+            ),
+            maxOutputPower: countByNumberRangeOption(
+              powerBankNumberFilterGroups.maxOutputPower.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).maxOutputPower,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "maxOutputPowerRange"),
+            ),
+            gravimetricDensity: countByNumberRangeOption(
+              powerBankNumberFilterGroups.gravimetricDensity.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).gravimetricDensity,
+              (row) =>
+                matchesPowerBankFilters(
+                  row,
+                  filters,
+                  "gravimetricDensityRange",
+                ),
+            ),
+            weight: countByNumberRangeOption(
+              powerBankNumberFilterGroups.weight.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).weight,
+              (row) => matchesPowerBankFilters(row, filters, "weightRange"),
+            ),
+            price: countByNumberRangeOption(
+              powerBankNumberFilterGroups.price.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).price,
+              (row) => matchesPowerBankFilters(row, filters, "priceRange"),
+            ),
+            wirelessChargingMaxPower: countByNumberRangeOption(
+              powerBankNumberFilterGroups.wirelessChargingMaxPower.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).wirelessChargingMaxPower,
+              (row) =>
+                matchesPowerBankFilters(
+                  row,
+                  filters,
+                  "wirelessChargingMaxPowerRange",
+                ),
+            ),
+            dimensionLength: countByNumberRangeOption(
+              powerBankNumberFilterGroups.dimensionLength.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).dimensions?.length,
+              (row) => matchesPowerBankFilters(row, filters, "lengthRange"),
+            ),
+            dimensionWidth: countByNumberRangeOption(
+              powerBankNumberFilterGroups.dimensionWidth.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).dimensions?.width,
+              (row) => matchesPowerBankFilters(row, filters, "widthRange"),
+            ),
+            dimensionThickness: countByNumberRangeOption(
+              powerBankNumberFilterGroups.dimensionThickness.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).dimensions?.thickness,
+              (row) => matchesPowerBankFilters(row, filters, "thicknessRange"),
+            ),
+          }
+        : null;
     const capacities = baseRows
       .map((product) => product.capacityWh)
       .filter((value): value is number => value !== null);
@@ -713,9 +1023,7 @@ export async function getCatalogPageData(
             powerBankProtocolOptions,
             searchableBaseRows,
             (row, option) =>
-              (powerBankSpecs(row).supportedOutputProtocols?.includes(
-                option,
-              ) ??
+              (powerBankSpecs(row).supportedOutputProtocols?.includes(option) ??
                 false) &&
               matchesPowerBankFilters(row, filters, "supportedOutputProtocols"),
           ),
@@ -733,6 +1041,7 @@ export async function getCatalogPageData(
               powerBankSpecs(row).builtInCable === option &&
               matchesPowerBankFilters(row, filters, "builtInCable"),
           ),
+          numberRanges: powerBankNumberRangeFacets,
         },
       },
     };
@@ -754,6 +1063,7 @@ export async function getCatalogPageData(
           supportedOutputProtocols: [],
           displayTypes: [],
           builtInCables: [],
+          numberRanges: null,
         },
       },
     };
@@ -869,20 +1179,30 @@ export function parseCatalogFilters(
     minCapacityWh: numberValue("minCapacityWh"),
     minPowerW: numberValue("minPowerW"),
     capacityWh: numberValue("capacityWh") ?? numberValue("minCapacityWh"),
+    capacityWhRanges: values("capacityWhRange"),
     batteryChemistries: values("batteryChemistry"),
     supportedOutputProtocols: values("supportedOutputProtocols"),
     maxInputPower: numberValue("maxInputPower"),
+    maxInputPowerRanges: values("maxInputPowerRange"),
     maxOutputPower: numberValue("maxOutputPower") ?? numberValue("minPowerW"),
+    maxOutputPowerRanges: values("maxOutputPowerRange"),
     passthroughCharging: values("passthroughCharging").includes("true"),
     gravimetricDensity: numberValue("gravimetricDensity"),
+    gravimetricDensityRanges: values("gravimetricDensityRange"),
     dimensionLength: numberValue("length"),
+    dimensionLengthRanges: values("lengthRange"),
     dimensionWidth: numberValue("width"),
+    dimensionWidthRanges: values("widthRange"),
     dimensionThickness: numberValue("thickness"),
+    dimensionThicknessRanges: values("thicknessRange"),
     weight: numberValue("weight"),
+    weightRanges: values("weightRange"),
     displayTypes: values("displayType"),
     price: numberValue("price"),
+    priceRanges: values("priceRange"),
     builtInCables: values("builtInCable"),
     wirelessChargingMaxPower: numberValue("wirelessChargingMaxPower"),
+    wirelessChargingMaxPowerRanges: values("wirelessChargingMaxPowerRange"),
     sort: sorts.includes(sortValue as CatalogSort)
       ? (sortValue as CatalogSort)
       : "recommended",

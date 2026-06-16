@@ -13,6 +13,7 @@ export const powerBankFilterDefinitions = [
     type: "enum",
     options: [
       "Li-Po",
+      "Li-ion",
       "Li-ion (18650)",
       "Li-ion (21700)",
       "LiFePO4 (LFP)",
@@ -42,8 +43,7 @@ export const powerBankFilterDefinitions = [
     name: "Max Input Power",
     type: "number",
     unit: "W",
-    description:
-      "Maximum wattage the power bank can accept for self-charging.",
+    description: "Maximum wattage the power bank can accept for self-charging.",
   },
   {
     id: "maxOutputPower",
@@ -120,6 +120,7 @@ export const powerBankFilterDefinitions = [
 
 export const powerBankChemistryOptions = [
   "Li-Po",
+  "Li-ion",
   "Li-ion (18650)",
   "Li-ion (21700)",
   "LiFePO4 (LFP)",
@@ -227,7 +228,11 @@ function normalizeChemistry(
     return "LiFePO4 (LFP)";
   }
 
-  if (text.includes("li-po") || text.includes("lipo") || text.includes("polymer")) {
+  if (
+    text.includes("li-po") ||
+    text.includes("lipo") ||
+    text.includes("polymer")
+  ) {
     return "Li-Po";
   }
 
@@ -237,6 +242,17 @@ function normalizeChemistry(
 
   if (text.includes("18650")) {
     return "Li-ion (18650)";
+  }
+
+  if (
+    text.includes("li-ion") ||
+    text.includes("li ion") ||
+    text.includes("lithium-ion") ||
+    text.includes("lithium ion") ||
+    text.includes("lithium cell") ||
+    text.includes("lithium-cell")
+  ) {
+    return "Li-ion";
   }
 
   return undefined;
@@ -365,13 +381,15 @@ function inferBuiltInCable(
     !text.includes("integrated") &&
     !text.includes("retractable")
   ) {
-    return undefined;
+    return "None";
   }
 
   const hasUsbC = text.includes("usb-c") || text.includes("type-c");
   const hasLightning = text.includes("lightning");
   const hasMicroUsb = text.includes("micro-usb") || text.includes("micro usb");
-  const cableTypes = [hasUsbC, hasLightning, hasMicroUsb].filter(Boolean).length;
+  const cableTypes = [hasUsbC, hasLightning, hasMicroUsb].filter(
+    Boolean,
+  ).length;
 
   if (cableTypes > 1) {
     return "Multiple";
@@ -423,7 +441,9 @@ export function normalizePowerBankSpecifications(
   return {
     ...(capacityWh !== undefined ? { capacityWh } : {}),
     ...(normalizeChemistry(input.chemistry, specifications)
-      ? { batteryChemistry: normalizeChemistry(input.chemistry, specifications) }
+      ? {
+          batteryChemistry: normalizeChemistry(input.chemistry, specifications),
+        }
       : {}),
     ...(protocols.length > 0 ? { supportedOutputProtocols: protocols } : {}),
     ...(maxInputPower !== undefined ? { maxInputPower } : {}),
@@ -432,7 +452,9 @@ export function normalizePowerBankSpecifications(
       ? { passthroughCharging: inferPassthroughCharging(specifications) }
       : {}),
     ...(capacityWh !== undefined && weight !== undefined && weight > 0
-      ? { gravimetricDensity: Number((capacityWh / (weight / 1000)).toFixed(1)) }
+      ? {
+          gravimetricDensity: Number((capacityWh / (weight / 1000)).toFixed(1)),
+        }
       : {}),
     ...(parseDimensionsMm(specifications.dimensionsMm)
       ? { dimensions: parseDimensionsMm(specifications.dimensionsMm) }
@@ -453,9 +475,9 @@ export function normalizePowerBankSpecifications(
   };
 }
 
-export function mergePowerBankSpecifications<T extends PowerBankSpecificationInput>(
-  input: T,
-) {
+export function mergePowerBankSpecifications<
+  T extends PowerBankSpecificationInput,
+>(input: T) {
   return {
     ...(input.specifications ?? {}),
     ...normalizePowerBankSpecifications(input),

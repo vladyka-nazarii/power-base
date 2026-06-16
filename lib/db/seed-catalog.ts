@@ -65,29 +65,29 @@ const manufacturerRows = [
 ] as const;
 
 type SeedEquipment = {
-  categorySlug: (typeof categories)[number]["slug"];
-  manufacturer: (typeof manufacturerRows)[number]["name"];
+  categorySlug: string;
+  manufacturer: string;
   model: string;
   slug: string;
   summary: string;
   summaryUk: string;
   imagePath: string;
   priceCents?: number | null;
-  productCode?: string;
-  nominalVoltageV?: number;
-  capacityWh?: number;
-  continuousPowerW?: number;
-  peakPowerW?: number;
-  maxPvVoltageV?: number;
-  maxChargeCurrentA?: number;
-  chemistry?: string;
-  communicationProtocols?: string;
-  weightGrams?: number;
-  warrantyYears?: number;
-  lifecycleCycles?: number;
+  productCode?: string | null;
+  nominalVoltageV?: number | null;
+  capacityWh?: number | null;
+  continuousPowerW?: number | null;
+  peakPowerW?: number | null;
+  maxPvVoltageV?: number | null;
+  maxChargeCurrentA?: number | null;
+  chemistry?: string | null;
+  communicationProtocols?: string | null;
+  weightGrams?: number | null;
+  warrantyYears?: number | null;
+  lifecycleCycles?: number | null;
   sourceLabel: string;
   sourceLabelUk: string;
-  sourceUrl?: string;
+  sourceUrl?: string | null;
   specifications?: Record<string, unknown>;
 };
 
@@ -111,7 +111,7 @@ type PowerBankCompletionRow = {
     fields: string[];
     note?: string;
   }>;
-  missingReason: Record<string, string>;
+  missingReason: Partial<Record<string, string>>;
 };
 
 const powerBankCompletionBySlug = new Map(
