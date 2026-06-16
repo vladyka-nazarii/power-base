@@ -324,7 +324,7 @@ export default async function ProductDetailPage({
 
   return (
     <div className="bg-background text-foreground">
-      <section className="mx-auto grid max-w-7xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <section className="mx-auto grid max-w-[1840px] gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_360px] 3xl:grid-cols-[minmax(0,1fr)_400px]">
         <div className="min-w-0">
           <Link
             href={catalogHref}
@@ -335,7 +335,7 @@ export default async function ProductDetailPage({
             {copy.backToCatalog}
           </Link>
 
-          <div className="mt-6 grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)]">
+          <div className="mt-6 grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)] 3xl:grid-cols-[420px_minmax(0,1fr)]">
             <div className="relative flex aspect-[4/3] items-center justify-center rounded-lg border border-black/10 bg-zinc-50 p-8 dark:border-white/10 dark:bg-zinc-950">
               <Image
                 src={product.imagePath}

@@ -1,0 +1,3062 @@
+[
+  {
+    "slug": "anker-maggo-power-bank-10k-slim",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 30,
+    "passthroughCharging": null,
+    "gravimetricDensity": 91.4,
+    "dimensions": {
+      "length": 103.9,
+      "width": 70.6,
+      "thickness": 14.7
+    },
+    "weight": 405,
+    "displayType": null,
+    "price": 54.38,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1664-maggo-10000mah-power-bank?variant=44551602307262&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1664-maggo-10000mah-power-bank?variant=44551602307262&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "anker-maggo-power-bank-10k",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 15,
+    "passthroughCharging": null,
+    "gravimetricDensity": 82.2,
+    "dimensions": null,
+    "weight": 450,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": 56.67,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1654-maggo-10000mah-qi2-power-bank-magsafe-compatible?variant=43596722766014&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1654-maggo-10000mah-qi2-power-bank-magsafe-compatible?variant=43596722766014&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "anker-maggo-power-bank-10k-35w-for-apple-watch",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 35,
+    "passthroughCharging": null,
+    "gravimetricDensity": 117.5,
+    "dimensions": {
+      "length": 94,
+      "width": 50.8,
+      "thickness": 33
+    },
+    "weight": 315,
+    "displayType": null,
+    "price": 56.09,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1657-maggo-10000mah-power-bank?variant=44551601881278&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1657-maggo-10000mah-power-bank?variant=44551601881278&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-737-power-bank-powercore-24k",
+    "capacityWh": 89,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": [
+      "PD 3.1"
+    ],
+    "maxInputPower": null,
+    "maxOutputPower": 140,
+    "passthroughCharging": null,
+    "gravimetricDensity": 98.6,
+    "dimensions": null,
+    "weight": 903,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": 80.5,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1289?variant=42109767549118&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "supportedOutputProtocols",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1289?variant=42109767549118&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-prime-20-000mah-power-bank-200w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 200,
+    "passthroughCharging": null,
+    "gravimetricDensity": 108.8,
+    "dimensions": {
+      "length": 124.5,
+      "width": 53.3,
+      "thickness": 48.3
+    },
+    "weight": 680,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": 85.8,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1336-20000mah-power-bank?variant=42948669309118&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1336-20000mah-power-bank?variant=42948669309118&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-nano-power-bank-22-5w-built-in-usb-c-connector",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 130.1,
+    "dimensions": null,
+    "weight": 146,
+    "displayType": null,
+    "price": 21.45,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1653-usb-c-portable-charger-5000mah?variant=43398823936190&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1653-usb-c-portable-charger-5000mah?variant=43398823936190&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-633-magnetic-battery",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": 133.1,
+    "dimensions": null,
+    "weight": 278,
+    "displayType": null,
+    "price": 69.55,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1641?variant=41510196740286&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1641?variant=41510196740286&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-100w-charging-base-for-anker-prime-power-bank",
+    "capacityWh": 89,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 100,
+    "passthroughCharging": null,
+    "gravimetricDensity": 116.8,
+    "dimensions": null,
+    "weight": 762,
+    "displayType": "LED Indicators (Dots)",
+    "price": 86.94,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1902-100w-power-bank-charging-station?variant=42948696375486&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1902-100w-power-bank-charging-station?variant=42948696375486&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-nano-power-bank-30w-built-in-usb-c-cable",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 30,
+    "passthroughCharging": null,
+    "gravimetricDensity": 137.5,
+    "dimensions": {
+      "length": 103.9,
+      "width": 52.3,
+      "thickness": 25.9
+    },
+    "weight": 269,
+    "displayType": null,
+    "price": 37.1,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1259-built-in-cable-power-bank-10000mah?variant=43398799687870&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1259-built-in-cable-power-bank-10000mah?variant=43398799687870&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-621-magnetic-battery-maggo",
+    "capacityWh": null,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": null,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": 182,
+    "displayType": null,
+    "price": 46.36,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1610?variant=42364656844990&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1610?variant=42364656844990&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "capacityWh": "Source page and seeded source data do not expose this field with enough specificity.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "maxOutputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-nano-power-bank-12w-built-in-lightning-connector",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 12,
+    "passthroughCharging": null,
+    "gravimetricDensity": 124.2,
+    "dimensions": null,
+    "weight": 153,
+    "displayType": null,
+    "price": 42.89,
+    "builtInCable": "Multiple",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1645?variant=42794785538238&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1645?variant=42794785538238&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-prime-27-650mah-power-bank-250w",
+    "capacityWh": 102,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": [
+      "PD 3.1"
+    ],
+    "maxInputPower": null,
+    "maxOutputPower": 250,
+    "passthroughCharging": null,
+    "gravimetricDensity": 94.4,
+    "dimensions": null,
+    "weight": 1081,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1340-250w-power-bank?variant=43763112476862&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "supportedOutputProtocols",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-525-power-bank-powercore-20k",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": 184.5,
+    "dimensions": null,
+    "weight": 401,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1287?variant=41510197362878&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-maggo-power-bank-6-6k",
+    "capacityWh": 24,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 15,
+    "passthroughCharging": null,
+    "gravimetricDensity": 52.7,
+    "dimensions": null,
+    "weight": 455,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1643-maggo-6600mah-qi2-power-bank-magsafe-compatible?variant=43596564922558&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "anker-prime-12-000mah-power-bank-130w",
+    "capacityWh": 44,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 130,
+    "passthroughCharging": null,
+    "gravimetricDensity": 68.6,
+    "dimensions": {
+      "length": 134.4,
+      "width": 55.1,
+      "thickness": 34.5
+    },
+    "weight": 641,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1335-12000mah-power-bank?variant=42948695556286&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-548-power-bank-powercore-reserve-192wh",
+    "capacityWh": 192,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 192,
+    "passthroughCharging": null,
+    "gravimetricDensity": 80.4,
+    "dimensions": null,
+    "weight": 2387,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1294?variant=42809390137534&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-533-wireless-power-bank-powercore-10k",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 533,
+    "passthroughCharging": true,
+    "gravimetricDensity": 124.6,
+    "dimensions": null,
+    "weight": 297,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1617?variant=41510215745726&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "passthroughCharging",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "anker-325-power-bank-powercore-20k",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 10,
+    "passthroughCharging": null,
+    "gravimetricDensity": 167,
+    "dimensions": null,
+    "weight": 443,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.anker.com/eu-en/products/a1268?variant=41510216335550&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-ultra-slim-qi2-magnetic-power-bank-10000mah",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 27,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 52.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-ultra-slim-qi2-magnetic-power-bank-10000mah",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower",
+          "wirelessChargingMaxPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-ultra-slim-qi2-magnetic-power-bank-10000mah",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am31-mini-magnetic-power-bank-with-stand-20w-5000mah",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 49.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am31-mini-magnetic-power-bank-with-stand-20w-5000mah",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am31-mini-magnetic-power-bank-with-stand-20w-5000mah",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-ultra-slim-magnetic-power-bank-5000mah",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": true,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 32.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-ultra-slim-magnetic-power-bank-5000mah",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower",
+          "passthroughCharging"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-ultra-slim-magnetic-power-bank-5000mah",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am61-qi2-2-magnetic-power-bank-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 69.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am61-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am61-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am52-qi2-2-magnetic-power-bank-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": 189.7,
+    "dimensions": null,
+    "weight": 195,
+    "displayType": null,
+    "price": 59.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 25,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am52-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am52-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "baseus-enerfill-fm12-qi2-magnetic-power-bank-22-5w-10000mah",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 39.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/enerfill-fm12-qi2-magnetic-power-bank-22-5w-10000mah",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fm12-qi2-magnetic-power-bank-22-5w-10000mah",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-enerfill-fc41-digital-display-power-bank-20000mah-100w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 100,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": "Digital Display (%)",
+    "price": 59.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/enerfill-fc41-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fc41-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am41-magnetic-power-bank-with-built-in-usb-c-cable-10000mah-27w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 27,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 49.99,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am41-magnetic-power-bank-with-built-in-usb-c-cable-10000mah-27w",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am41-magnetic-power-bank-with-built-in-usb-c-cable-10000mah-27w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-enercore-cr11-power-bank-with-retractable-cable-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": "Digital Display (%)",
+    "price": 29.99,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/enercore-cr11-power-bank-with-retractable-cable-10000mah-45w",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "displayType",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/enercore-cr11-power-bank-with-retractable-cable-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-ac22-ultra-mini-power-bank-with-built-in-usb-c-cable-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": true,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 39.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-ac22-ultra-mini-power-bank-with-built-in-usb-c-cable-10000mah-45w",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower",
+          "passthroughCharging"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-ac22-ultra-mini-power-bank-with-built-in-usb-c-cable-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am52-qi2-2-magnetic-power-bank-with-built-in-cable-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 69.99,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": 25,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am52-qi2-2-magnetic-power-bank-with-built-in-cable-10000mah-45w",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower",
+          "wirelessChargingMaxPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am52-qi2-2-magnetic-power-bank-with-built-in-cable-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity."
+    }
+  },
+  {
+    "slug": "baseus-enerfill-fc11-power-bank-with-dual-built-in-usb-c-cables-20000mah-45w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 39.99,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/enerfill-fc11-power-bank-with-dual-built-in-usb-c-cables-20000mah-45w",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fc11-power-bank-with-dual-built-in-usb-c-cables-20000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-ac22-ultra-mini-power-bank-with-built-in-cable-20000mah-45w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": true,
+    "gravimetricDensity": 208.5,
+    "dimensions": null,
+    "weight": 355,
+    "displayType": null,
+    "price": 69.99,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-ac22-ultra-mini-power-bank-with-built-in-cable-20000mah-45w",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "passthroughCharging",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-ac22-ultra-mini-power-bank-with-built-in-cable-20000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-am31-mini-magnetic-power-bank-5000mah-20w",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": true,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 49.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-am31-mini-magnetic-power-bank-5000mah-20w",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower",
+          "passthroughCharging"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-am31-mini-magnetic-power-bank-5000mah-20w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-picogo-power-bank-45w-10000mah-with-built-in-cable",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": 370,
+    "dimensions": null,
+    "weight": 100,
+    "displayType": null,
+    "price": 39.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/picogo-power-bank-45w-10000mah-with-built-in-cable",
+        "fields": [
+          "capacityWh",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-power-bank-45w-10000mah-with-built-in-cable",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-blade-h1-digital-display-power-bank-20000mah-100w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 100,
+    "passthroughCharging": true,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": "Digital Display (%)",
+    "price": 89.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/blade-h1-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "capacityWh",
+          "displayType",
+          "maxOutputPower",
+          "passthroughCharging"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/blade-h1-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "baseus-enerfill-fm21-qi2-2-magnetic-power-bank-10000mah-45w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 45,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 69.99,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.baseus.com/products/enerfill-fm21-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fm21-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price is USD."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-s-magnetic-wireless-power-bank-10000mah-20w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 20.97,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25919",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25919",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-25000mah-165w-with-built-in-usb-c-cable",
+    "capacityWh": 93,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 165,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55995b",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-20000mah-67w-with-built-in-usb-c-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 67,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 35.13,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55996b",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55996b",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-20000mah-100w-with-built-in-usb-c-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 100,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 19.61,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55988b",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55988b",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-20000mah-100w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 100,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 23.42,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25188",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25188",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-mini-5000mah-20w-2c",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35338",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-uno-magnetic-wireless-power-bank-10000mah-15w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 15,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 26.14,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-45329",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-45329",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-uno-magnetic-wireless-power-bank-10000mah-20w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-45327",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-uno-power-bank-10000mah-30w",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 30,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35603",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-power-bank-20000mah-165w-with-retractable-usb-c-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 165,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55987",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-pro-power-bank-20000mah-200w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 200,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": 37.85,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35525",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35525",
+        "fields": [
+          "price"
+        ],
+        "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "ugreen-nexode-pro-power-bank-20000mah-130w",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 130,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35524",
+        "fields": [
+          "capacityWh",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "UGREEN source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-ultrathin-magnetic-power-bank-5000-15w",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 193.9,
+    "dimensions": {
+      "length": 98.5,
+      "width": 71.5,
+      "thickness": 6
+    },
+    "weight": 98,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-ultrathin-magnetic-power-bank-5000-15w/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "xiaomi-magnetic-power-bank-10000-with-built-in-stand",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "PPS",
+      "QC 3.0"
+    ],
+    "maxInputPower": 30,
+    "maxOutputPower": 33,
+    "passthroughCharging": true,
+    "gravimetricDensity": 161.6,
+    "dimensions": {
+      "length": 108.8,
+      "width": 68.9,
+      "thickness": 20.25
+    },
+    "weight": 229,
+    "displayType": "Digital Display (%)",
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-10000-with-built-in-stand/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "passthroughCharging",
+          "supportedOutputProtocols",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD."
+    }
+  },
+  {
+    "slug": "xiaomi-67w-power-bank-10000-integrated-cable",
+    "capacityWh": 39,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 65,
+    "maxOutputPower": 67,
+    "passthroughCharging": true,
+    "gravimetricDensity": 157.9,
+    "dimensions": {
+      "length": 115,
+      "width": 66,
+      "thickness": 26
+    },
+    "weight": 247,
+    "displayType": "Digital Display (%)",
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-67w-power-bank-10000-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "passthroughCharging",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-67w-power-bank-20000-integrated-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 65,
+    "maxOutputPower": 67,
+    "passthroughCharging": null,
+    "gravimetricDensity": 178.3,
+    "dimensions": {
+      "length": 140,
+      "width": 72,
+      "thickness": 31.2
+    },
+    "weight": 415,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-67w-power-bank-20000-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-super-slim-magnetic-power-bank-5000",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 20,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 155.7,
+    "dimensions": {
+      "length": 102,
+      "width": 69.6,
+      "thickness": 8.7
+    },
+    "weight": 122,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-super-slim-magnetic-power-bank-5000/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-33w-magnetic-power-bank-10000-integrated-cable",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 30,
+    "maxOutputPower": 33,
+    "passthroughCharging": null,
+    "gravimetricDensity": 155.5,
+    "dimensions": {
+      "length": 109,
+      "width": 68.5,
+      "thickness": 19.8
+    },
+    "weight": 238,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": 7.5,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-33w-magnetic-power-bank-10000-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD."
+    }
+  },
+  {
+    "slug": "xiaomi-power-bank-20000-integrated-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 216.4,
+    "dimensions": {
+      "length": 128,
+      "width": 73,
+      "thickness": 32
+    },
+    "weight": 342,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-power-bank-20000/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-212w-hypercharge-power-bank-24500",
+    "capacityWh": 89,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 100,
+    "maxOutputPower": 212,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": {
+      "length": 55.4,
+      "width": 55.4,
+      "thickness": 160
+    },
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-24500/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-212w-hypercharge-power-bank-25000",
+    "capacityWh": 89,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 100,
+    "maxOutputPower": 212,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": {
+      "length": 55.4,
+      "width": 55.4,
+      "thickness": 160
+    },
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-25000/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-165w-power-bank-10000-integrated-cable",
+    "capacityWh": 36,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 90,
+    "maxOutputPower": 165,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": {
+      "length": 143,
+      "width": 48,
+      "thickness": 36
+    },
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-165w-power-bank-10000-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-33w-power-bank-10000-integrated-cable",
+    "capacityWh": 36,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 30,
+    "maxOutputPower": 33,
+    "passthroughCharging": null,
+    "gravimetricDensity": 171.4,
+    "dimensions": {
+      "length": 105.2,
+      "width": 65.2,
+      "thickness": 26.9
+    },
+    "weight": 210,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-33w-power-bank-10000-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-magnetic-power-bank-5000",
+    "capacityWh": 18,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 18,
+    "maxOutputPower": 18,
+    "passthroughCharging": null,
+    "gravimetricDensity": 129.5,
+    "dimensions": {
+      "length": 103.7,
+      "width": 68.3,
+      "thickness": 12
+    },
+    "weight": 139,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 10,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-5000/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "xiaomi-ultra-slim-power-bank-5000mah",
+    "capacityWh": 19,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 18,
+    "maxOutputPower": 20,
+    "passthroughCharging": null,
+    "gravimetricDensity": 204.3,
+    "dimensions": {
+      "length": 113,
+      "width": 53,
+      "thickness": 10
+    },
+    "weight": 93,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-ultra-slim-power-bank-5000mah/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-power-bank-10000mah-22w-lite",
+    "capacityWh": 37,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 163,
+    "dimensions": {
+      "length": 148.4,
+      "width": 73,
+      "thickness": 15
+    },
+    "weight": 227,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-power-bank-10000mah-22w-lite/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-33w-power-bank-20000mah-integrated-cable",
+    "capacityWh": 74,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 30,
+    "maxOutputPower": 33,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": {
+      "length": 127,
+      "width": 70.5,
+      "thickness": 30.5
+    },
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-33w-power-bank-20000mah-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-18w-power-bank-30000mah",
+    "capacityWh": 111,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 24,
+    "maxOutputPower": 18,
+    "passthroughCharging": null,
+    "gravimetricDensity": 168.9,
+    "dimensions": {
+      "length": 154.5,
+      "width": 72.3,
+      "thickness": 38.9
+    },
+    "weight": 657,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-18w-power-bank-30000mah/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-power-bank-10000mah-integrated-cable",
+    "capacityWh": 37,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 148,
+    "dimensions": {
+      "length": 105.2,
+      "width": 65.2,
+      "thickness": 26.9
+    },
+    "weight": 250,
+    "displayType": null,
+    "price": null,
+    "builtInCable": "USB-C",
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-power-bank-10000mah-integrated-cable/specs/",
+        "fields": [
+          "builtInCable",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-magnetic-power-bank-6000mah",
+    "capacityWh": 22,
+    "batteryChemistry": null,
+    "supportedOutputProtocols": null,
+    "maxInputPower": 18,
+    "maxOutputPower": 20,
+    "passthroughCharging": true,
+    "gravimetricDensity": 148.6,
+    "dimensions": {
+      "length": 103.7,
+      "width": 68.3,
+      "thickness": 15.2
+    },
+    "weight": 148,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 15,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-6000mah/specs/",
+        "fields": [
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "passthroughCharging",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "xiaomi-33w-power-bank-10000mah-pocket-edition-pro",
+    "capacityWh": 37,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 33,
+    "passthroughCharging": null,
+    "gravimetricDensity": 174.5,
+    "dimensions": {
+      "length": 105,
+      "width": 55.8,
+      "thickness": 25.5
+    },
+    "weight": 212,
+    "displayType": "Smart Screen (TFT/OLED with V/A stats)",
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-33w-power-bank-10000mah-pocket-edition-pro/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "displayType",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "10000mah-mi-wireless-power-bank-essential",
+    "capacityWh": 37,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 18,
+    "maxOutputPower": 18,
+    "passthroughCharging": null,
+    "gravimetricDensity": 154.2,
+    "dimensions": {
+      "length": 147.9,
+      "width": 70.6,
+      "thickness": 16.6
+    },
+    "weight": 240,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 10,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/10000mah-mi-wireless-power-bank-essential/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "10000mah-mi-power-bank-3-ultra-compact",
+    "capacityWh": 37,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": null,
+    "gravimetricDensity": 185,
+    "dimensions": {
+      "length": 90,
+      "width": 63.9,
+      "thickness": 24.4
+    },
+    "weight": 200,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/10000mah-mi-power-bank-3-ultra-compact/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "weight"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "mi-50w-power-bank-20000",
+    "capacityWh": 74,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 45,
+    "maxOutputPower": 50,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/mi-50w-power-bank-20000/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "xiaomi-10w-wireless-power-bank-10000",
+    "capacityWh": 36,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 22.5,
+    "maxOutputPower": 22.5,
+    "passthroughCharging": true,
+    "gravimetricDensity": 150,
+    "dimensions": {
+      "length": 147.9,
+      "width": 70.6,
+      "thickness": 16.6
+    },
+    "weight": 240,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": 10,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-10w-wireless-power-bank-10000/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "gravimetricDensity",
+          "maxInputPower",
+          "maxOutputPower",
+          "passthroughCharging",
+          "weight",
+          "wirelessChargingMaxPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."
+    }
+  },
+  {
+    "slug": "20000mah-redmi-fast-charge-power-bank",
+    "capacityWh": 74,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": null,
+    "maxOutputPower": 18,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": {
+      "length": 154,
+      "width": 73.6,
+      "thickness": 27.3
+    },
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/product/20000mah-redmi-fast-charge-power-bank/specs/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "dimensions",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  },
+  {
+    "slug": "10000mah-mi-18w-fast-charge-power-bank-3",
+    "capacityWh": 37,
+    "batteryChemistry": "Li-Po",
+    "supportedOutputProtocols": null,
+    "maxInputPower": 18,
+    "maxOutputPower": 18,
+    "passthroughCharging": null,
+    "gravimetricDensity": null,
+    "dimensions": null,
+    "weight": null,
+    "displayType": null,
+    "price": null,
+    "builtInCable": null,
+    "wirelessChargingMaxPower": null,
+    "sources": [
+      {
+        "url": "https://www.mi.com/global/10000mAh-mi-18w-fast-charge-power-bank-3/",
+        "fields": [
+          "batteryChemistry",
+          "capacityWh",
+          "maxInputPower",
+          "maxOutputPower"
+        ]
+      }
+    ],
+    "missingReason": {
+      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
+      "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
+      "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
+      "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
+      "weight": "Source page and seeded source data do not expose this field with enough specificity.",
+      "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
+      "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
+      "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
+      "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
+    }
+  }
+]

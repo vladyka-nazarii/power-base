@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, type ReactNode, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type AutoSubmitFormProps = {
   children: ReactNode;
@@ -20,7 +20,9 @@ export default function AutoSubmitForm({
 }: AutoSubmitFormProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const focusTarget = useRef<FocusTarget | null>(null);
+  const latestSearch = useRef<string | null>(null);
   const searchSubmitTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -32,6 +34,12 @@ export default function AutoSubmitForm({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const query = searchParams.toString();
+
+    latestSearch.current = query ? `?${query}` : "";
+  }, [searchParams]);
 
   function rememberFocus(target: HTMLInputElement | HTMLSelectElement) {
     focusTarget.current = {
@@ -80,6 +88,16 @@ export default function AutoSubmitForm({
     window.setTimeout(restore, 120);
   }
 
+  function submitParams(params: URLSearchParams) {
+    const query = params.toString();
+
+    latestSearch.current = query ? `?${query}` : "";
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
+    restoreFocus();
+  }
+
   function submitForm(form: HTMLFormElement) {
     const params = new URLSearchParams();
 
@@ -89,12 +107,28 @@ export default function AutoSubmitForm({
       }
     }
 
-    const query = params.toString();
+    submitParams(params);
+  }
 
-    router.replace(query ? `${pathname}?${query}` : pathname, {
-      scroll: false,
-    });
-    restoreFocus();
+  function submitCheckboxChange(target: HTMLInputElement) {
+    const params = new URLSearchParams(
+      latestSearch.current ?? window.location.search,
+    );
+    const existingValues = params.getAll(target.name);
+
+    params.delete(target.name);
+
+    for (const value of existingValues) {
+      if (value !== target.value) {
+        params.append(target.name, value);
+      }
+    }
+
+    if (target.checked && !existingValues.includes(target.value)) {
+      params.append(target.name, target.value);
+    }
+
+    submitParams(params);
   }
 
   function submitOnChoiceChange(event: FormEvent<HTMLFormElement>) {
@@ -116,6 +150,12 @@ export default function AutoSubmitForm({
 
     if (isChoiceControl) {
       rememberFocus(target);
+
+      if (target instanceof HTMLInputElement && target.type === "checkbox") {
+        submitCheckboxChange(target);
+        return;
+      }
+
       submitForm(event.currentTarget);
     }
   }

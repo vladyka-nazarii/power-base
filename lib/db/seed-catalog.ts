@@ -2,8 +2,12 @@ import { count, eq } from "drizzle-orm";
 
 import { db, postgresClient } from "@/lib/db";
 import { ankerPowerBankRows } from "@/lib/db/anker-power-bank-seed";
+import { baseusPowerBankRows } from "@/lib/db/baseus-power-bank-seed";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 import { ugreenPowerBankRows } from "@/lib/db/ugreen-power-bank-seed";
+import { xiaomiPowerBankRows } from "@/lib/db/xiaomi-power-bank-seed";
+import powerBankMissingDataCompletion from "@/docs/POWER_BANK_MISSING_DATA_COMPLETION.json";
+import { mergePowerBankSpecifications } from "@/lib/power-bank-specs";
 
 const categories = [
   {
@@ -57,6 +61,7 @@ const manufacturerRows = [
   { name: "EVE", country: "China" },
   { name: "REPT", country: "China" },
   { name: "UGREEN", country: "China" },
+  { name: "Baseus", country: "China" },
 ] as const;
 
 type SeedEquipment = {
@@ -86,1361 +91,119 @@ type SeedEquipment = {
   specifications?: Record<string, unknown>;
 };
 
+type PowerBankCompletionRow = {
+  slug: string;
+  capacityWh: number | null;
+  batteryChemistry: string | null;
+  supportedOutputProtocols: string[] | null;
+  maxInputPower: number | null;
+  maxOutputPower: number | null;
+  passthroughCharging: boolean | null;
+  gravimetricDensity: number | null;
+  dimensions: Record<string, number> | null;
+  weight: number | null;
+  displayType: string | null;
+  price: number | null;
+  builtInCable: string | null;
+  wirelessChargingMaxPower: number | null;
+  sources: Array<{
+    url: string;
+    fields: string[];
+    note?: string;
+  }>;
+  missingReason: Record<string, string>;
+};
+
+const powerBankCompletionBySlug = new Map(
+  (powerBankMissingDataCompletion as PowerBankCompletionRow[]).map((row) => [
+    row.slug,
+    row,
+  ]),
+);
+
+function valueOrUndefined<T>(value: T | null | undefined) {
+  return value === null || value === undefined ? undefined : value;
+}
+
+function mergePowerBankCompletion(row: SeedEquipment): SeedEquipment {
+  if (row.categorySlug !== "power-banks") {
+    return row;
+  }
+
+  const completion = powerBankCompletionBySlug.get(row.slug);
+
+  if (!completion) {
+    return row;
+  }
+
+  const completionSpecs = {
+    ...(valueOrUndefined(completion.capacityWh) !== undefined
+      ? { capacityWh: completion.capacityWh }
+      : {}),
+    ...(valueOrUndefined(completion.batteryChemistry) !== undefined
+      ? { batteryChemistry: completion.batteryChemistry }
+      : {}),
+    ...(valueOrUndefined(completion.supportedOutputProtocols) !== undefined
+      ? { supportedOutputProtocols: completion.supportedOutputProtocols }
+      : {}),
+    ...(valueOrUndefined(completion.maxInputPower) !== undefined
+      ? {
+          maxInputPower: completion.maxInputPower,
+          maxInputW: completion.maxInputPower,
+        }
+      : {}),
+    ...(valueOrUndefined(completion.maxOutputPower) !== undefined
+      ? {
+          maxOutputPower: completion.maxOutputPower,
+          maxOutputW: completion.maxOutputPower,
+        }
+      : {}),
+    ...(valueOrUndefined(completion.passthroughCharging) !== undefined
+      ? { passthroughCharging: completion.passthroughCharging }
+      : {}),
+    ...(valueOrUndefined(completion.gravimetricDensity) !== undefined
+      ? { gravimetricDensity: completion.gravimetricDensity }
+      : {}),
+    ...(valueOrUndefined(completion.dimensions) !== undefined
+      ? { dimensions: completion.dimensions }
+      : {}),
+    ...(valueOrUndefined(completion.weight) !== undefined
+      ? { weight: completion.weight }
+      : {}),
+    ...(valueOrUndefined(completion.displayType) !== undefined
+      ? { displayType: completion.displayType }
+      : {}),
+    ...(valueOrUndefined(completion.price) !== undefined
+      ? { price: completion.price }
+      : {}),
+    ...(valueOrUndefined(completion.builtInCable) !== undefined
+      ? { builtInCable: completion.builtInCable }
+      : {}),
+    ...(valueOrUndefined(completion.wirelessChargingMaxPower) !== undefined
+      ? { wirelessChargingMaxPower: completion.wirelessChargingMaxPower }
+      : {}),
+    powerBankDataCompletion: {
+      sources: completion.sources,
+      missingReason: completion.missingReason,
+    },
+  };
+
+  return {
+    ...row,
+    capacityWh: valueOrUndefined(completion.capacityWh) ?? row.capacityWh,
+    weightGrams: valueOrUndefined(completion.weight) ?? row.weightGrams,
+    priceCents:
+      completion.price !== null
+        ? Math.round(completion.price * 100)
+        : row.priceCents,
+    specifications: {
+      ...(row.specifications ?? {}),
+      ...completionSpecs,
+    },
+  };
+}
+
 const equipmentRows: SeedEquipment[] = [
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "UltraThin Magnetic Power Bank 5000 15W",
-    slug: "xiaomi-ultrathin-magnetic-power-bank-5000-15w",
-    summary:
-      "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
-    summaryUk:
-      "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
-    imagePath:
-      "https://media.vladyka.dev/power-bank/xiaomi/39c0de98f9e4ab7d06e0660e3a34bd9a.png",
-    priceCents: null,
-    productCode: "MDY-20-EB",
-    nominalVoltageV: 5,
-    capacityWh: 19,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 98,
-    sourceLabel: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-ultrathin-magnetic-power-bank-5000-15w/specs/",
-    specifications: {
-      ratedCapacityMah: 3000,
-      ratedCapacityAt: "5V/2A",
-      ratedEnergyWh: 18.58,
-      typicalEnergyWh: 18.95,
-      typicalCapacityMah: 5000,
-      batteryVoltageV: 3.79,
-      maxOutputW: 22.5,
-      wirelessOutputW: 15,
-      iphoneWirelessOutputW: 7.5,
-      simultaneousOutput: "USB-C 5V/1.5A 7.5W max + wireless 5W max",
-      dimensionsMm: "98.5 x 71.5 x 6",
-      operatingFrequencyKhz: "120-147",
-      wirelessChargingMechanism: "Magnetic induction",
-      outputPorts: ["USB-C", "Wireless magnetic charging"],
-      features: [
-        "6 mm thin body",
-        "Aluminium alloy shell",
-        "Dual-NTC temperature control",
-        "Ten layers of safety protection",
-        "Air-travel suitable under 100 Wh",
-      ],
-      compatibleDeviceFamilies: [
-        "Xiaomi 12-15 series",
-        "iPhone 12-17 series",
-        "Samsung Galaxy S23-S25",
-        "Google Pixel 9-10",
-      ],
-      packageContents: ["Power bank", "User manual", "Warranty card"],
-      listPosition: 1,
-    },
-    sourceLabelUk: "Xiaomi official specs",
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Magnetic Power Bank 10000 with Built-in Stand",
-    slug: "xiaomi-magnetic-power-bank-10000-with-built-in-stand",
-    summary:
-      "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
-    summaryUk:
-      "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
-    imagePath:
-      "https://media.vladyka.dev/power-bank/xiaomi/f857732c9d6f01ad11b20280c57783ea.png",
-    priceCents: null,
-    productCode: "WPB1007Z",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 33,
-    peakPowerW: 33,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 229,
-    communicationProtocols: "BC1.2, PD2.0, PD3.0 PPS, QC2.0, QC3.0, Apple 2.4A",
-    sourceLabel: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-10000-with-built-in-stand/specs/",
-    specifications: {
-      ratedCapacityMah: 5900,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      batteryVoltageV: 7.4,
-      maxInputW: 30,
-      maxOutputW: 33,
-      wirelessOutputW: 15,
-      simultaneousOutput: "15W max wired and wireless",
-      dimensionsMm: "108.8 x 68.9 x 20.25",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: [
-        "Integrated USB-C cable",
-        "USB-C",
-        "Wireless magnetic charging",
-      ],
-      chargingProtocols: [
-        "BC1.2",
-        "PD2.0",
-        "PD3.0 PPS",
-        "QC2.0",
-        "QC3.0",
-        "Apple 2.4A",
-      ],
-      features: [
-        "Adjustable built-in stand opens to about 80 degrees",
-        "13N magnetic force",
-        "Digital display",
-        "Pass-through charging",
-        "Nine layers of safety protection",
-      ],
-      packageContents: [
-        "Xiaomi Magnetic Power Bank 10000 with Built-in Stand",
-        "User manual",
-      ],
-      listPosition: 2,
-    },
-    sourceLabelUk: "Xiaomi official specs",
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "67W Power Bank 10000 (Integrated Cable)",
-    slug: "xiaomi-67w-power-bank-10000-integrated-cable",
-    summary:
-      "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
-    summaryUk:
-      "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
-    imagePath:
-      "https://media.vladyka.dev/power-bank/xiaomi/686a0afb4f10204d55178271808a738e.png",
-    priceCents: null,
-    productCode: "PB1067",
-    nominalVoltageV: 5,
-    capacityWh: 39,
-    continuousPowerW: 67,
-    peakPowerW: 67,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 247,
-    sourceLabel: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-67w-power-bank-10000-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 6000,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 39.48,
-      batteryCells: "Three 3400mAh cells",
-      batteryVoltageV: 11.61,
-      maxInputW: 65,
-      maxOutputW: 67,
-      dimensionsMm: "115 x 66 x 26 excluding integrated cable",
-      operatingTemperatureC: "5 to 35",
-      chargingTime: [
-        "Approx. 1.9h with 9V/3A charger",
-        "Approx. 1.3h with 20V/3.25A charger",
-      ],
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
-      features: [
-        "Charge three devices simultaneously",
-        "Pass-through charging",
-        "Digital display",
-        "9 safety features",
-        "Air-travel suitable under 100 Wh",
-      ],
-      packageContents: [
-        "Xiaomi 67W Power Bank 10000 (Integrated Cable)",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 3,
-    },
-    sourceLabelUk: "Xiaomi official specs",
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "67W Power Bank 20000 (Integrated Cable)",
-    slug: "xiaomi-67w-power-bank-20000-integrated-cable",
-    summary:
-      "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
-    summaryUk:
-      "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
-    imagePath:
-      "https://media.vladyka.dev/power-bank/xiaomi/78d1b5791d5ac17aee35cf143b53580d.png",
-    priceCents: null,
-    productCode: "PB2067",
-    nominalVoltageV: 5,
-    capacityWh: 74,
-    continuousPowerW: 67,
-    peakPowerW: 67,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 415,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-67w-power-bank-20000-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 12000,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 74.37,
-      batteryVoltageV: 11.1,
-      batteryCapacityMahAtVoltage: 6700,
-      typicalCapacityMah: 20000,
-      maxInputW: 65,
-      maxOutputW: 67,
-      dimensionsMm: "140 x 72 x 31.2",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
-      features: [
-        "67W max fast output",
-        "65W max high-speed self-charging",
-        "Integrated USB-C cable",
-        "Multi-port output",
-        "Air-travel suitable under 100 Wh",
-      ],
-      packageContents: [
-        "Xiaomi 67W Power Bank 20000 (Integrated Cable)",
-        "User manual",
-      ],
-      listPosition: 4,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Super Slim Magnetic Power Bank 5000",
-    slug: "xiaomi-super-slim-magnetic-power-bank-5000",
-    summary:
-      "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
-    summaryUk:
-      "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
-    imagePath:
-      "https://media.vladyka.dev/power-bank/xiaomi/daad9ee33362ca155392459e09c9b996.png",
-    priceCents: null,
-    productCode: "WPB0507S",
-    nominalVoltageV: 5,
-    capacityWh: 19,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 122,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-super-slim-magnetic-power-bank-5000/specs/",
-    specifications: {
-      ratedCapacityMah: 3000,
-      ratedCapacityAt: "5V",
-      ratedEnergyWh: 19.35,
-      typicalCapacityMah: 5000,
-      batteryVoltageV: 3.87,
-      maxInputW: 20,
-      maxOutputW: 22.5,
-      dimensionsMm: "102 x 69.6 x 8.7",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "Wireless magnetic charging"],
-      features: [
-        "Approx. 8.7 mm thick",
-        "Meticulously crafted aluminium body",
-        "USB-C wired output up to 22.5W",
-      ],
-      packageContents: [
-        "Xiaomi Super Slim Magnetic Power Bank 5000",
-        "USB-C to USB-C charging cable",
-        "User manual",
-      ],
-      listPosition: 5,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "33W Magnetic Power Bank 10000 (Integrated Cable)",
-    slug: "xiaomi-33w-magnetic-power-bank-10000-integrated-cable",
-    summary:
-      "Magnetic 10,000 mAh-class power bank with integrated USB-C cable, 33 W wired output, 7.5 W wireless output, and dual USB-C charging.",
-    summaryUk:
-      "Magnetic 10,000 mAh-class power bank with integrated USB-C cable, 33 W wired output, 7.5 W wireless output, and dual USB-C charging.",
-    imagePath:
-      "https://i02.appmifile.com/962_operatorx_operatorx_opx/28/04/2025/f24a4499d06863897ff5fba58a39eeab.png",
-    priceCents: null,
-    productCode: "WPB1007MI",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 33,
-    peakPowerW: 33,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 238,
-    communicationProtocols: "USB-C PD, magnetic wireless charging",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-33w-magnetic-power-bank-10000-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 5900,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 37,
-      batteryCells: "Two 5000mAh batteries",
-      maxInputW: 30,
-      maxOutputW: 33,
-      wirelessOutputW: 7.5,
-      multiPortOutput: "5V/3A 15W max",
-      dimensionsMm: "109 x 68.5 x 19.8",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 12V/2.5A",
-        "USB-C: 5V/3A, 9V/3A, 12V/2.5A",
-      ],
-      outputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 11V/3A, 12V/2.5A, 15V/2A, 33W max",
-        "USB-C: 5V/3A, 9V/3A, 11V/3A, 12V/2.5A, 15V/2A, 33W max",
-      ],
-      packageContents: [
-        "Xiaomi 33W Magnetic Power Bank 10000 (Integrated Cable)",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 6,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Power Bank 20000 (Integrated Cable)",
-    slug: "xiaomi-power-bank-20000-integrated-cable",
-    summary:
-      "20,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W multi-port output.",
-    summaryUk:
-      "20,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W multi-port output.",
-    imagePath:
-      "https://i02.appmifile.com/914_operatorx_operatorx_opx/25/04/2025/677c16b0f8e1a8553c1657f16f4d6037.png",
-    priceCents: null,
-    productCode: "PB2020MI",
-    nominalVoltageV: 5,
-    capacityWh: 74,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 342,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-power-bank-20000/specs/",
-    specifications: {
-      ratedCapacityMah: 13000,
-      ratedCapacityAt: "5V",
-      ratedEnergyWh: 74,
-      typicalCapacityMah: 20000,
-      batteryVoltageV: 3.7,
-      ratedCapacitiesByVoltage: {
-        "5V": "13Ah",
-        "9V": "7.5Ah",
-        "10V": "6.7Ah",
-        "12V": "5.6Ah",
-      },
-      maxInputW: 22.5,
-      maxOutputW: 22.5,
-      multiPortOutput: "5V/3A 22.5W max",
-      dimensionsMm: "128 x 73 x 32",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/2.5A",
-        "USB-C: 5V/3A, 9V/2.5A",
-      ],
-      outputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-        "USB-C: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-        "USB-A: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-      ],
-      packageContents: ["Power bank", "User manual", "Warranty card"],
-      listPosition: 7,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "212W HyperCharge Power Bank 24500",
-    slug: "xiaomi-212w-hypercharge-power-bank-24500",
-    summary:
-      "High-output USB-C/USB-A power bank with 212 W max multi-port output and up to 140 W single-port USB-C output.",
-    summaryUk:
-      "High-output USB-C/USB-A power bank with 212 W max multi-port output and up to 140 W single-port USB-C output.",
-    imagePath:
-      "https://i02.appmifile.com/473_operatorx_operatorx_opx/26/02/2025/d1539e9f06cf8bb36a91e1cc61c888bc.png",
-    priceCents: null,
-    productCode: "P03MI",
-    nominalVoltageV: 5,
-    capacityWh: 89,
-    continuousPowerW: 212,
-    peakPowerW: 212,
-    maxChargeCurrentA: 6,
-    chemistry: "Lithium-ion",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-24500/specs/",
-    specifications: {
-      ratedCapacityMah: 14000,
-      ratedCapacityAt: "5V/6A",
-      ratedEnergyWh: 89,
-      typicalCapacityMah: 24500,
-      batteryVoltageV: 3.63,
-      maxInputW: 100,
-      maxOutputW: 212,
-      singlePortMaxOutputW: 140,
-      dimensionsMm: "55.4 x 55.4 x 160",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "USB-A"],
-      inputParameters: [
-        "USB-C C1: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/3.25A, 20V/5A",
-        "USB-C C2: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/2.25A",
-      ],
-      outputParameters: [
-        "USB-C C1: up to 28V/5A, 140W max",
-        "USB-C C2: up to 20V/2.25A, 45W max",
-        "USB-A: up to 20V/6A, 120W max",
-      ],
-      multiPortOutput:
-        "C1 + C2 + A: up to 65W + 27W + 120W, or 120W + 27W + 2.5W depending on cable",
-      packageContents: [
-        "Power bank",
-        "Charging cable",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 8,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "212W HyperCharge Power Bank 25000",
-    slug: "xiaomi-212w-hypercharge-power-bank-25000",
-    summary:
-      "25,000 mAh-class HyperCharge power bank with 212 W max output, 89 Wh rated energy, and 90.8 Wh typical energy.",
-    summaryUk:
-      "25,000 mAh-class HyperCharge power bank with 212 W max output, 89 Wh rated energy, and 90.8 Wh typical energy.",
-    imagePath:
-      "https://i02.appmifile.com/213_operatorx_operatorx_opx/26/02/2025/a0d26c9bb8a234d6b3cde4aced24c1db.png",
-    priceCents: null,
-    productCode: "P03MI",
-    nominalVoltageV: 5,
-    capacityWh: 89,
-    continuousPowerW: 212,
-    peakPowerW: 212,
-    maxChargeCurrentA: 6,
-    chemistry: "Lithium-ion",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-25000/specs/",
-    specifications: {
-      ratedCapacityMah: 14000,
-      ratedCapacityAt: "5V/6A",
-      ratedEnergyWh: 89,
-      typicalEnergyWh: 90.8,
-      typicalCapacityMah: 25000,
-      batteryVoltageV: 3.63,
-      maxInputW: 100,
-      maxOutputW: 212,
-      singlePortMaxOutputW: 140,
-      dimensionsMm: "55.4 x 55.4 x 160",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "USB-A"],
-      inputParameters: [
-        "USB-C C1: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/3.25A, 20V/5A",
-        "USB-C C2: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/2.25A",
-      ],
-      outputParameters: [
-        "USB-C C1: up to 28V/5A, 140W max",
-        "USB-C C2: up to 20V/2.25A, 45W max",
-        "USB-A: up to 20V/6A, 120W max",
-      ],
-      multiPortOutput:
-        "C1 + C2 + A: up to 65W + 27W + 120W, or 120W + 27W + 2.5W depending on cable",
-      packageContents: ["Power bank", "Charging cable", "User manual"],
-      listPosition: 9,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "165W Power Bank 10000 (Integrated Cable)",
-    slug: "xiaomi-165w-power-bank-10000-integrated-cable",
-    summary:
-      "Compact dual USB-C power bank with integrated cable, 165 W max dual-port output, and up to 90 W self-charging.",
-    summaryUk:
-      "Compact dual USB-C power bank with integrated cable, 165 W max dual-port output, and up to 90 W self-charging.",
-    imagePath:
-      "https://i02.appmifile.com/278_operatorx_operatorx_opx/10/01/2025/ea9ce14d10f12f60b9ee6f472bd84ed9.png",
-    priceCents: null,
-    productCode: "PB1165MI",
-    nominalVoltageV: 5,
-    capacityWh: 36,
-    continuousPowerW: 165,
-    peakPowerW: 165,
-    maxChargeCurrentA: 8,
-    chemistry: "Lithium-ion",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-165w-power-bank-10000-integrated-cable/specs/",
-    specifications: {
-      rawProductModel: "PB1165M|",
-      ratedCapacityMah: 5500,
-      ratedCapacityAt: "5V/4A",
-      ratedEnergyWh: 36,
-      batteryCells: "Four 2500mAh batteries",
-      typicalCapacityMah: 10000,
-      maxInputW: 90,
-      maxOutputW: 165,
-      dualPortOutput: "120W integrated USB-C cable + 45W USB-C",
-      dimensionsMm: "143 x 48 x 36",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/4.5A",
-        "USB-C: 5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/2.25A",
-      ],
-      outputParameters: [
-        "Dual-port: 5V/4A, 9V/6A, 12V/6A, 15V/6A, 20V/8.25A",
-        "Integrated USB-C cable: up to 20V/6A",
-        "USB-C: up to 20V/2.25A",
-      ],
-      packageContents: [
-        "Xiaomi 165W Power Bank 10000 (Integrated Cable)",
-        "User manual",
-      ],
-      listPosition: 10,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "33W Power Bank 10000 (Integrated Cable)",
-    slug: "xiaomi-33w-power-bank-10000-integrated-cable",
-    summary:
-      "Compact 10,000 mAh-class power bank with integrated USB-C cable, 33 W max output, and two-device charging.",
-    summaryUk:
-      "Compact 10,000 mAh-class power bank with integrated USB-C cable, 33 W max output, and two-device charging.",
-    imagePath:
-      "https://i02.appmifile.com/244_operatorx_operatorx_opx/10/01/2025/f3d54398c5f2c7a1e4e3140ab0154b73.png",
-    priceCents: null,
-    productCode: "PB1033MI",
-    nominalVoltageV: 5,
-    capacityWh: 36,
-    continuousPowerW: 33,
-    peakPowerW: 33,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 210,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-33w-power-bank-10000-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 5500,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 36,
-      typicalCapacityMah: 10000,
-      maxInputW: 30,
-      maxOutputW: 33,
-      multiPortOutput: "5V/3A 15W max",
-      dimensionsMm: "105.2 x 65.2 x 26.9",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 12V/2.5A",
-        "USB-C: 5V/3A, 9V/3A, 12V/2.5A",
-      ],
-      outputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 11V/3A, 12V/2.5A, 15V/2A, 33W max",
-        "USB-C: 5V/3A, 9V/3A, 11V/3A, 12V/2.5A, 15V/2A, 33W max",
-      ],
-      features: [
-        "Built-in USB-C cable",
-        "Two-way fast charging",
-        "Charge two devices simultaneously",
-      ],
-      packageContents: [
-        "Xiaomi 33W Power Bank 10000 (Integrated Cable)",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 11,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Magnetic Power Bank 5000",
-    slug: "xiaomi-magnetic-power-bank-5000",
-    summary:
-      "Magnetic 5,000 mAh-class power bank with USB-C input/output and wireless magnetic charging for phones.",
-    summaryUk:
-      "Magnetic 5,000 mAh-class power bank with USB-C input/output and wireless magnetic charging for phones.",
-    imagePath:
-      "https://i02.appmifile.com/312_operatorx_operatorx_opx/20/11/2024/54b0f17b3578347ebe95b38db34fb111.png",
-    priceCents: null,
-    productCode: "WPB0502MI",
-    nominalVoltageV: 5,
-    capacityWh: 18,
-    continuousPowerW: 18,
-    peakPowerW: 18,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 139,
-    communicationProtocols: "Magnetic wireless charging",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-5000/specs/",
-    specifications: {
-      ratedCapacityMah: 2800,
-      ratedCapacityAt: "5V/2.4A",
-      ratedEnergyWh: 18.5,
-      typicalCapacityMah: 5000,
-      batteryVoltageV: 3.7,
-      maxInputW: 18,
-      maxOutputW: 18,
-      wirelessOutputW: 10,
-      dimensionsMm: "103.7 x 68.3 x 12",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "Wireless magnetic charging"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2A"],
-      outputParameters: ["USB-C: 5V/2.4A, 9V/2A, 12V/1.5A"],
-      features: [
-        "Magnetic wireless charging",
-        "USB-C wired charging",
-        "Compact 5000mAh-class pack",
-      ],
-      packageContents: [
-        "Xiaomi Magnetic Power Bank 5000",
-        "USB-C cable",
-        "User manual",
-      ],
-      listPosition: 12,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Ultra Slim Power Bank 5000mAh",
-    slug: "xiaomi-ultra-slim-power-bank-5000mah",
-    summary:
-      "Ultra-slim 5,000 mAh-class power bank with USB-C input/output, 20 W max output, and 10 mm-class body.",
-    summaryUk:
-      "Ultra-slim 5,000 mAh-class power bank with USB-C input/output, 20 W max output, and 10 mm-class body.",
-    imagePath:
-      "https://i02.appmifile.com/758_operatorx_operatorx_opx/15/11/2024/deb170b6ea40d2f3eedbbac31eafab64.png",
-    priceCents: null,
-    productCode: "PB0520MI",
-    nominalVoltageV: 5,
-    capacityWh: 19,
-    continuousPowerW: 20,
-    peakPowerW: 20,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 93,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-ultra-slim-power-bank-5000mah/specs/",
-    specifications: {
-      ratedCapacityMah: 2700,
-      ratedCapacityAt: "5V/2.4A",
-      ratedEnergyWh: 19.25,
-      typicalCapacityMah: 5000,
-      batteryVoltageV: 3.85,
-      maxInputW: 18,
-      maxOutputW: 20,
-      dimensionsMm: "113 x 53 x 10",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2A"],
-      outputParameters: ["USB-C: 5V/2.4A, 9V/2.22A, 12V/1.67A"],
-      features: [
-        "Ultra-slim body",
-        "USB-C two-way fast charging",
-        "Pocket-friendly form factor",
-      ],
-      packageContents: [
-        "Xiaomi Ultra Slim Power Bank 5000mAh",
-        "USB-C cable",
-        "User manual",
-      ],
-      listPosition: 13,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Power Bank 10000mAh 22.5W Lite",
-    slug: "xiaomi-power-bank-10000mah-22w-lite",
-    summary:
-      "Lightweight 10,000 mAh-class power bank with 22.5 W max output, dual USB-A output, and USB-C input.",
-    summaryUk:
-      "Lightweight 10,000 mAh-class power bank with 22.5 W max output, dual USB-A output, and USB-C input.",
-    imagePath:
-      "https://i02.appmifile.com/893_operatorx_operatorx_opx/15/10/2024/b5689c87df54d26aacf0b5df488ead2b.png",
-    priceCents: null,
-    productCode: "PB100LZM",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 227,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-power-bank-10000mah-22w-lite/specs/",
-    specifications: {
-      ratedCapacityMah: 5500,
-      ratedCapacityAt: "5.1V/2.6A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      batteryVoltageV: 3.7,
-      maxInputW: 22.5,
-      maxOutputW: 22.5,
-      dimensionsMm: "148.4 x 73 x 15",
-      inputPorts: ["USB-C", "Micro-USB"],
-      outputPorts: ["USB-A", "USB-A"],
-      inputParameters: [
-        "USB-C: 5V/3A, 9V/2.5A",
-        "Micro-USB: 5V/2A, 9V/2A, 12V/1.5A",
-      ],
-      outputParameters: [
-        "Single USB-A: 5.1V/2.4A, 9V/2.5A, 12V/1.85A",
-        "Dual USB-A: 5.1V/2.6A",
-      ],
-      features: [
-        "22.5W max power",
-        "Multiple device compatibility",
-        "Dual USB-A output",
-      ],
-      packageContents: [
-        "Power bank",
-        "USB-C cable",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 14,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "33W Power Bank 20000mAh (Integrated Cable)",
-    slug: "xiaomi-33w-power-bank-20000mah-integrated-cable",
-    summary:
-      "20,000 mAh-class power bank with integrated USB-C cable, 33 W max output, USB-C/USB-A ports, and 30 W input.",
-    summaryUk:
-      "20,000 mAh-class power bank with integrated USB-C cable, 33 W max output, USB-C/USB-A ports, and 30 W input.",
-    imagePath:
-      "https://i02.appmifile.com/79_operatorx_operatorx_opx/13/04/2025/0d012e501987fffd60b485f91a7f91d7.png",
-    priceCents: null,
-    productCode: "PB2033MI",
-    nominalVoltageV: 5,
-    capacityWh: 74,
-    continuousPowerW: 33,
-    peakPowerW: 33,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-33w-power-bank-20000mah-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 12000,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 74,
-      typicalCapacityMah: 20000,
-      maxInputW: 30,
-      maxOutputW: 33,
-      multiPortOutput: "5V/3A 15W max",
-      dimensionsMm: "127 x 70.5 x 30.5",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/3A, 12V/2.5A",
-        "USB-C: 5V/3A, 9V/3A, 12V/2.5A",
-      ],
-      outputParameters: [
-        "Integrated USB-C cable: up to 33W max",
-        "USB-C: up to 33W max",
-        "USB-A: up to 22.5W max",
-      ],
-      features: [
-        "Integrated USB-C cable",
-        "Compatible with multiple devices",
-        "Ultra-large battery capacity",
-      ],
-      packageContents: [
-        "Xiaomi 33W Power Bank 20000mAh (Integrated Cable)",
-        "User manual",
-      ],
-      listPosition: 15,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "18W Power Bank 30000mAh",
-    slug: "xiaomi-18w-power-bank-30000mah",
-    summary:
-      "High-capacity 30,000 mAh-class power bank with 18 W fast charging, USB-C/Micro-USB input, and dual USB-A output.",
-    summaryUk:
-      "High-capacity 30,000 mAh-class power bank with 18 W fast charging, USB-C/Micro-USB input, and dual USB-A output.",
-    imagePath:
-      "https://i02.appmifile.com/883_operatorx_operatorx_opx/30/07/2024/8d78ecb0ee81a0b009c98463492a0407.jpg",
-    priceCents: null,
-    productCode: "PB3018ZM",
-    nominalVoltageV: 5,
-    capacityWh: 111,
-    continuousPowerW: 18,
-    peakPowerW: 18,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 657,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-18w-power-bank-30000mah/specs/",
-    specifications: {
-      ratedCapacityMah: 18000,
-      ratedCapacityAt: "5.1V/3.6A",
-      ratedEnergyWh: 111,
-      typicalCapacityMah: 30000,
-      batteryVoltageV: 3.7,
-      maxInputW: 24,
-      maxOutputW: 18,
-      dimensionsMm: "154.5 x 72.3 x 38.9",
-      inputPorts: ["USB-C", "Micro-USB"],
-      outputPorts: ["USB-A", "USB-A"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2.6A", "Micro-USB: 5V/2A, 9V/2A"],
-      outputParameters: [
-        "Single USB-A: 5.1V/2.4A, 9V/2A, 12V/1.5A",
-        "Dual USB-A: 5.1V/3.6A",
-      ],
-      features: [
-        "High-capacity charging",
-        "High-quality battery cell",
-        "Smart fast charging",
-      ],
-      packageContents: ["Power bank", "USB-C cable", "User manual"],
-      listPosition: 16,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Power Bank 10000mAh (Integrated Cable)",
-    slug: "xiaomi-power-bank-10000mah-integrated-cable",
-    summary:
-      "10,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W max output.",
-    summaryUk:
-      "10,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W max output.",
-    imagePath:
-      "https://i02.appmifile.com/670_operatorx_operatorx_opx/02/06/2026/04a07ae36ee548daea58c0bd511e9939.png",
-    priceCents: null,
-    productCode: "PB1022MI",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 250,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-power-bank-10000mah-integrated-cable/specs/",
-    specifications: {
-      ratedCapacityMah: 5500,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      maxInputW: 22.5,
-      maxOutputW: 22.5,
-      multiPortOutput: "5V/3A 15W max",
-      dimensionsMm: "105.2 x 65.2 x 26.9",
-      inputPorts: ["Integrated USB-C cable", "USB-C"],
-      outputPorts: ["Integrated USB-C cable", "USB-C", "USB-A"],
-      inputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/2.5A",
-        "USB-C: 5V/3A, 9V/2.5A",
-      ],
-      outputParameters: [
-        "Integrated USB-C cable: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-        "USB-C: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-        "USB-A: 5V/3A, 9V/2.23A, 10V/2.25A, 12V/1.67A",
-      ],
-      features: [
-        "Integrated power cable",
-        "Compatible with multiple devices",
-        "22.5W max power",
-      ],
-      packageContents: ["Power bank", "User manual", "Warranty card"],
-      listPosition: 17,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Magnetic Power Bank 6000mAh",
-    slug: "xiaomi-magnetic-power-bank-6000mah",
-    summary:
-      "Qi2 magnetic 6,000 mAh-class power bank with 15 W wireless charging and USB-C wired input/output.",
-    summaryUk:
-      "Qi2 magnetic 6,000 mAh-class power bank with 15 W wireless charging and USB-C wired input/output.",
-    imagePath:
-      "https://i02.appmifile.com/532_operatorx_operatorx_opx/30/07/2024/c875b3b2dca15897f703b22429440b51.png",
-    priceCents: null,
-    productCode: "WPB0620MI",
-    nominalVoltageV: 5,
-    capacityWh: 22,
-    continuousPowerW: 20,
-    peakPowerW: 20,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion",
-    weightGrams: 148,
-    communicationProtocols: "Qi2 wireless charging",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-magnetic-power-bank-6000mah/specs/",
-    specifications: {
-      ratedCapacityMah: 3600,
-      ratedCapacityAt: "5V/2.4A",
-      ratedEnergyWh: 22.2,
-      typicalCapacityMah: 6000,
-      batteryVoltageV: 3.7,
-      maxInputW: 18,
-      maxOutputW: 20,
-      wirelessOutputW: 15,
-      dimensionsMm: "103.7 x 68.3 x 15.2",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "Wireless magnetic charging"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2A"],
-      outputParameters: ["USB-C: 5V/2.4A, 9V/2.22A, 12V/1.67A"],
-      features: [
-        "15W super-fast wireless charging",
-        "Charge and use simultaneously",
-        "Suitable for Qi2 Apple devices",
-      ],
-      packageContents: [
-        "Xiaomi Magnetic Power Bank 6000mAh",
-        "USB-C cable",
-        "User manual",
-      ],
-      listPosition: 18,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "33W Power Bank 10000mAh Pocket Edition Pro",
-    slug: "xiaomi-33w-power-bank-10000mah-pocket-edition-pro",
-    summary:
-      "Pocket-format 10,000 mAh-class power bank with 33 W max output, USB-C input/output, and dual USB-A output.",
-    summaryUk:
-      "Pocket-format 10,000 mAh-class power bank with 33 W max output, USB-C input/output, and dual USB-A output.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1678936383.60097709.png",
-    priceCents: null,
-    productCode: "PB1030ZM",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 33,
-    peakPowerW: 33,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 212,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-33w-power-bank-10000mah-pocket-edition-pro/specs/",
-    specifications: {
-      ratedCapacityMah: 5600,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      batteryVoltageV: 3.7,
-      maxInputW: 22.5,
-      maxOutputW: 33,
-      dimensionsMm: "105 x 55.8 x 25.5",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-C", "USB-A", "USB-A"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2.5A"],
-      outputParameters: [
-        "USB-C: 5V/3A, 9V/3A, 11V/3A, 12V/2.25A",
-        "USB-A: 5V/3A, 9V/2.23A, 12V/1.67A, 10V/2.25A",
-      ],
-      features: [
-        "Pocket Edition Pro form factor",
-        "33W max output",
-        "USB-C and dual USB-A output",
-      ],
-      packageContents: [
-        "Power bank",
-        "USB-C cable",
-        "User manual",
-        "Warranty card",
-      ],
-      listPosition: 19,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "10000 mAh Mi Wireless Power Bank",
-    slug: "10000mah-mi-wireless-power-bank-essential",
-    summary:
-      "10,000 mAh-class wireless power bank with USB-C/Micro-USB input, USB-A output, and 10 W wireless charging.",
-    summaryUk:
-      "10,000 mAh-class wireless power bank with USB-C/Micro-USB input, USB-A output, and 10 W wireless charging.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872499.8469504.png",
-    priceCents: null,
-    productCode: "WPB15ZM",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 18,
-    peakPowerW: 18,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 240,
-    communicationProtocols: "Qi wireless charging",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/10000mah-mi-wireless-power-bank-essential/specs/",
-    specifications: {
-      ratedCapacityMah: 5800,
-      ratedCapacityAt: "5.1V/2.6A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      batteryVoltageV: 3.7,
-      maxInputW: 18,
-      maxOutputW: 18,
-      wirelessOutputW: 10,
-      dimensionsMm: "147.9 x 70.6 x 16.6",
-      inputPorts: ["USB-C", "Micro-USB"],
-      outputPorts: ["USB-A", "Wireless charging"],
-      inputParameters: [
-        "USB-C: 5V/2.4A, 9V/2A, 12V/1.5A",
-        "Micro-USB: 5V/2A, 9V/2A, 12V/1.5A",
-      ],
-      outputParameters: [
-        "USB-A: 5.1V/2.4A, 9V/2A, 12V/1.5A",
-        "Wireless: 10W max",
-      ],
-      features: [
-        "Wireless charging",
-        "USB-C and Micro-USB input",
-        "USB-A wired output",
-      ],
-      packageContents: [
-        "Mi Wireless Power Bank Essential",
-        "USB-C cable",
-        "User manual",
-      ],
-      listPosition: 20,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "10000mAh Mi Power Bank 3 Ultra Compact",
-    slug: "10000mah-mi-power-bank-3-ultra-compact",
-    summary:
-      "Ultra-compact 10,000 mAh-class power bank with 22.5 W max output, USB-C/Micro-USB input, and three-device charging.",
-    summaryUk:
-      "Ultra-compact 10,000 mAh-class power bank with 22.5 W max output, USB-C/Micro-USB input, and three-device charging.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872424.98064819.png",
-    priceCents: null,
-    productCode: "PB1022ZM",
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 200,
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/10000mah-mi-power-bank-3-ultra-compact/specs/",
-    specifications: {
-      ratedCapacityMah: 5500,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 37,
-      typicalCapacityMah: 10000,
-      batteryVoltageV: 3.7,
-      conversionRate: "74% (5V/3A)",
-      maxInputW: 22.5,
-      maxOutputW: 22.5,
-      dimensionsMm: "90 x 63.9 x 24.4",
-      workingTemperatureC: "5 to 35",
-      chargingTime: [
-        "Approximately 3.5 hours with PD 24W charger or above and C to C cable",
-        "Approximately 6 hours with 5V/2A charger and included cable",
-      ],
-      inputPorts: ["USB-C", "Micro-USB"],
-      outputPorts: ["USB-A", "USB-C"],
-      inputParameters: ["USB-C: 5V/3A, 9V/2.5A", "Micro-USB: 5V/2A, 9V/2A"],
-      outputParameters: [
-        "22.5W max",
-        "Multiple ports: 5V/3A",
-        "USB-A: 5V/2.4A, 9V/2.5A max, 12V/1.85A max",
-        "USB-C: 5V/3A, 9V/2.5A max, 12V/1.85A max",
-      ],
-      features: [
-        "Ultra-compact body",
-        "Can charge three devices simultaneously",
-        "Low-current charging mode",
-        "Suitable for air travel under 100 Wh",
-      ],
-      packageContents: [
-        "10000mAh Mi Power Bank 3 Ultra Compact",
-        "USB-A to USB-C cable",
-        "User manual",
-      ],
-      listPosition: 21,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Mi 50W Power Bank 20000mAh",
-    slug: "mi-50w-power-bank-20000",
-    summary:
-      "20,000 mAh-class laptop-capable power bank with 50 W USB-C output, 45 W input, and three-port charging.",
-    summaryUk:
-      "20,000 mAh-class laptop-capable power bank with 50 W USB-C output, 45 W input, and three-port charging.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872404.25699306.png",
-    priceCents: null,
-    productCode: "PB200SZM",
-    nominalVoltageV: 5,
-    capacityWh: 74,
-    continuousPowerW: 50,
-    peakPowerW: 50,
-    maxChargeCurrentA: 5,
-    chemistry: "Lithium-ion polymer",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/mi-50w-power-bank-20000/specs/",
-    specifications: {
-      ratedCapacityMah: 12000,
-      ratedCapacityAt: "5V/4A",
-      ratedEnergyWh: 74,
-      typicalCapacityMah: 20000,
-      batteryVoltageV: 3.7,
-      maxInputW: 45,
-      maxOutputW: 50,
-      operatingTemperatureC: "5 to 35",
-      chargingTime: [
-        "Approximately 11 hours with 5V/2A charger",
-        "Approximately 6.5 hours with 18W charger",
-        "Approximately 4.5 hours with 45W charger and package cable",
-      ],
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-A", "USB-A", "USB-C"],
-      inputParameters: ["5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/2.25A"],
-      outputParameters: [
-        "50W max",
-        "USB-A single port: 5V/3A, 9V/2.23A, 12V/1.67A, 10V/2.25A",
-        "USB-A two ports: 5V/3A",
-        "USB-C: 5V/3A, 9V/3A, 10V/5A, 12V/3A, 15V/3A, 20V/2A",
-        "Three ports: 5V/4A, 9V/3A, 10V/5A, 12V/3A, 15V/3A, 20V/2A",
-      ],
-      features: [
-        "Charges laptops over USB-C",
-        "Can charge three devices simultaneously",
-        "Low-current charging mode",
-        "Suitable for air travel under 100 Wh",
-      ],
-      packageContents: [
-        "Mi 50W Power Bank 20000mAh",
-        "Charging cable",
-        "User manual",
-      ],
-      listPosition: 22,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "Xiaomi 10W Wireless Power Bank 10000",
-    slug: "xiaomi-10w-wireless-power-bank-10000",
-    summary:
-      "10,000 mAh-class wireless power bank with 10 W wireless output, 22.5 W wired fast charging, and pass-through charging.",
-    summaryUk:
-      "10,000 mAh-class wireless power bank with 10 W wireless output, 22.5 W wired fast charging, and pass-through charging.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666841240.21987017.png",
-    priceCents: null,
-    productCode: "WPB15PDZM",
-    nominalVoltageV: 5,
-    capacityWh: 36,
-    continuousPowerW: 23,
-    peakPowerW: 23,
-    maxChargeCurrentA: 3,
-    chemistry: "Lithium-ion polymer",
-    weightGrams: 240,
-    communicationProtocols: "Qi wireless charging",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/xiaomi-10w-wireless-power-bank-10000/specs/",
-    specifications: {
-      ratedCapacityMah: 5600,
-      ratedCapacityAt: "5V/3A",
-      ratedEnergyWh: 35.2,
-      typicalEnergyWh: 36,
-      ratedBatteryMah: 9800,
-      typicalCapacityMah: 10000,
-      maxInputW: 22.5,
-      maxOutputW: 22.5,
-      wirelessOutputW: 10,
-      inductionDistanceMm: 5,
-      dimensionsMm: "147.9 x 70.6 x 16.6",
-      operatingTemperatureC: "5 to 35",
-      inputPorts: ["USB-C"],
-      outputPorts: ["USB-A", "USB-C", "Wireless charging"],
-      inputParameters: ["5V/3A, 9V/2.5A"],
-      outputParameters: [
-        "USB-A: 5V/3A, 9V/2.23A, 12V/1.67A, 10V/2.25A max",
-        "USB-C: 5V/3A, 9V/2.23A, 12V/1.67A, 10V/2.25A max",
-        "Dual port: 5V/3A",
-        "Wireless: 10W max",
-      ],
-      features: [
-        "10W wireless fast charging",
-        "22.5W wired fast charging",
-        "Pass-through charging",
-        "Can charge up to three devices at once",
-      ],
-      packageContents: [
-        "Xiaomi 10W Wireless Power Bank 10000",
-        "Charging cable",
-        "User manual",
-      ],
-      listPosition: 23,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "20000 mAh Redmi Fast Charge Power Bank",
-    slug: "20000mah-redmi-fast-charge-power-bank",
-    summary:
-      "20,000 mAh-class Redmi fast-charge power bank with USB-C/Micro-USB input and dual USB-A output.",
-    summaryUk:
-      "20,000 mAh-class Redmi fast-charge power bank with USB-C/Micro-USB input and dual USB-A output.",
-    imagePath:
-      "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666845794.21862206.png",
-    priceCents: null,
-    productCode: "PB200LZM",
-    nominalVoltageV: 5,
-    capacityWh: 74,
-    continuousPowerW: 18,
-    peakPowerW: 18,
-    maxChargeCurrentA: 4,
-    chemistry: "Lithium-ion polymer",
-    sourceLabel: "Xiaomi official specs",
-    sourceLabelUk: "Xiaomi official specs",
-    sourceUrl:
-      "https://www.mi.com/global/product/20000mah-redmi-fast-charge-power-bank/specs/",
-    specifications: {
-      ratedCapacityMah: 12000,
-      ratedCapacityAt: "5.1V/3.6A",
-      ratedEnergyWh: 74,
-      typicalCapacityMah: 20000,
-      batteryVoltageV: 3.7,
-      maxOutputW: 18,
-      dimensionsMm: "154 x 73.6 x 27.3",
-      inputPorts: ["Micro-USB", "USB-C"],
-      outputPorts: ["USB-A", "USB-A"],
-      outputParameters: [
-        "5V/2.1A, 9V/2.1A, 12V/1.5A",
-        "Single-port output: 5.1V/2.4A, 9V/max 2A, 12V/max 1.5A",
-        "Dual-port output: 5.1V/3.6A",
-      ],
-      features: [
-        "Dual USB-A output",
-        "USB-C and Micro-USB input",
-        "20,000 mAh-class capacity",
-      ],
-      packageContents: [
-        "20,000-mAh Redmi Fast Charge Power Bank",
-        "Instruction manual",
-        "Power cable",
-      ],
-      listPosition: 24,
-    },
-  },
-  {
-    categorySlug: "power-banks",
-    manufacturer: "Xiaomi",
-    model: "10000mAh Mi 18W Fast Charge Power Bank 3",
-    slug: "10000mah-mi-18w-fast-charge-power-bank-3",
-    summary:
-      "10,000 mAh-class aluminium power bank with 18 W fast charging, dual input, dual USB-A output, and low-current mode.",
-    summaryUk:
-      "10,000 mAh-class aluminium power bank with 18 W fast charging, dual input, dual USB-A output, and low-current mode.",
-    imagePath:
-      "https://i01.appmifile.com/webfile/globalimg/products/pc/10000mAh-mi-18w-fast-charge-power-bank-3//index_0061.png",
-    priceCents: null,
-    nominalVoltageV: 5,
-    capacityWh: 37,
-    continuousPowerW: 18,
-    peakPowerW: 18,
-    chemistry: "Lithium-ion polymer",
-    sourceLabel: "Xiaomi official product page",
-    sourceLabelUk: "Xiaomi official product page",
-    sourceUrl:
-      "https://www.mi.com/global/10000mAh-mi-18w-fast-charge-power-bank-3/",
-    specifications: {
-      typicalCapacityMah: 10000,
-      ratedEnergyWh: 37,
-      maxInputW: 18,
-      maxOutputW: 18,
-      chargingTime: ["Self-charging can be completed in 4 hours"],
-      inputPorts: ["Micro-USB", "USB-C"],
-      outputPorts: ["USB-A", "USB-A"],
-      outputParameters: [
-        "Single USB-A port supports 18W max fast charging",
-        "Dual USB-A output can charge two devices at the same time",
-      ],
-      features: [
-        "Aluminium alloy metal cover",
-        "Dual port input",
-        "Dual USB-A output",
-        "Low-current charging mode",
-        "Suitable for air travel under 100 Wh",
-      ],
-      packageContents: ["Power bank", "Micro-USB cable"],
-      listPosition: 25,
-    },
-  },
   {
     categorySlug: "inverters",
     manufacturer: "Victron Energy",
@@ -2407,9 +1170,11 @@ const nkonBatteryRows: SeedEquipment[] = [
 const seededEquipmentRows = [
   ...ankerPowerBankRows,
   ...ugreenPowerBankRows,
+  ...baseusPowerBankRows,
+  ...xiaomiPowerBankRows,
   ...equipmentRows.filter((row) => {
     // Keep non-catalog sections out as before, but only exclude power-banks
-    // when they are provided by the separate Anker / UGREEN seed files.
+    // when they are provided by the separate brand seed files.
     if (
       ["batteries", "power-stations", "inverters"].includes(row.categorySlug)
     ) {
@@ -2417,7 +1182,7 @@ const seededEquipmentRows = [
     }
     if (
       row.categorySlug === "power-banks" &&
-      ["Anker", "UGREEN"].includes(row.manufacturer)
+      ["Anker", "UGREEN", "Baseus", "Xiaomi"].includes(row.manufacturer)
     ) {
       return false;
     }
@@ -2426,7 +1191,7 @@ const seededEquipmentRows = [
   ...victronInverterRows,
   ...ecoFlowPowerStationRows,
   ...nkonBatteryRows,
-];
+].map(mergePowerBankCompletion);
 
 async function upsertCategories() {
   for (const row of categories) {
@@ -2514,7 +1279,10 @@ async function seedEquipment() {
         sourceLabel: row.sourceLabel,
         sourceLabelUk: row.sourceLabelUk,
         sourceUrl: row.sourceUrl ?? null,
-        specifications: row.specifications ?? null,
+        specifications:
+          row.categorySlug === "power-banks"
+            ? mergePowerBankSpecifications(row)
+            : (row.specifications ?? null),
       })
       .onConflictDoUpdate({
         target: equipment.slug,
@@ -2538,7 +1306,10 @@ async function seedEquipment() {
           sourceLabel: row.sourceLabel,
           sourceLabelUk: row.sourceLabelUk,
           sourceUrl: row.sourceUrl ?? null,
-          specifications: row.specifications ?? null,
+          specifications:
+            row.categorySlug === "power-banks"
+              ? mergePowerBankSpecifications(row)
+              : (row.specifications ?? null),
           updatedAt: new Date(),
         },
       });

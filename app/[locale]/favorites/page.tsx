@@ -74,7 +74,7 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
 
   return (
     <div className="bg-background text-foreground">
-      <section className="mx-auto max-w-7xl px-5 py-8">
+      <section className="mx-auto max-w-[1840px] px-5 py-8">
         <div className="mb-6 flex flex-col gap-3 border-b border-black/10 pb-5 sm:flex-row sm:items-end sm:justify-between dark:border-white/10">
           <div>
             <div className="flex items-center gap-2 text-sm font-medium text-zinc-500">
@@ -111,7 +111,7 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
             </p>
           </div>
         ) : data.products.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
             {data.products.map((product: CatalogProduct) => (
               <ProductCard
                 key={product.id}

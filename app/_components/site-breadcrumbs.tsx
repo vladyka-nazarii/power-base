@@ -59,7 +59,7 @@ export default function SiteBreadcrumbs({
       aria-label="Breadcrumb"
       className="border-b border-black/10 px-5 py-3 text-sm dark:border-white/10"
     >
-      <ol className="mx-auto flex max-w-[1400px] items-center gap-1 overflow-x-auto whitespace-nowrap text-zinc-500 dark:text-zinc-400">
+      <ol className="mx-auto flex max-w-[1880px] items-center gap-1 overflow-x-auto whitespace-nowrap text-zinc-500 dark:text-zinc-400">
         {breadcrumbs.map((item, index) => {
           const isCurrent = index === breadcrumbs.length - 1;
 

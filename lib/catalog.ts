@@ -13,6 +13,10 @@ import {
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 import type { Locale } from "@/lib/i18n";
+import {
+  normalizePowerBankSpecifications,
+  type PowerBankSpecifications,
+} from "@/lib/power-bank-specs";
 
 export const catalogCategorySlugs = [
   "power-banks",
@@ -38,6 +42,21 @@ export type CatalogFilters = {
   chemistries: string[];
   minCapacityWh?: number;
   minPowerW?: number;
+  capacityWh?: number;
+  batteryChemistries: string[];
+  supportedOutputProtocols: string[];
+  maxInputPower?: number;
+  maxOutputPower?: number;
+  passthroughCharging?: boolean;
+  gravimetricDensity?: number;
+  dimensionLength?: number;
+  dimensionWidth?: number;
+  dimensionThickness?: number;
+  weight?: number;
+  displayTypes: string[];
+  price?: number;
+  builtInCables: string[];
+  wirelessChargingMaxPower?: number;
   sort: CatalogSort;
 };
 
@@ -129,6 +148,20 @@ export const catalogUiCopy: Record<
     chemistry: string;
     minCapacity: string;
     minPower: string;
+    maxInputPower: string;
+    maxOutputPower: string;
+    passthroughCharging: string;
+    minGravimetricDensity: string;
+    maxDimensions: string;
+    length: string;
+    width: string;
+    thickness: string;
+    maxWeight: string;
+    displayType: string;
+    maxPrice: string;
+    outputProtocols: string;
+    builtInCable: string;
+    minWirelessChargingPower: string;
     matchingProducts: (count: number) => string;
     productCount: (shown: number, total: number) => string;
     sortOptions: Record<CatalogSort, string>;
@@ -152,6 +185,20 @@ export const catalogUiCopy: Record<
     chemistry: "Chemistry",
     minCapacity: "Min capacity (Wh)",
     minPower: "Min power (W)",
+    maxInputPower: "Min input power (W)",
+    maxOutputPower: "Min output power (W)",
+    passthroughCharging: "Passthrough charging",
+    minGravimetricDensity: "Min density (Wh/kg)",
+    maxDimensions: "Max dimensions (mm)",
+    length: "Length",
+    width: "Width",
+    thickness: "Thickness",
+    maxWeight: "Max weight (g)",
+    displayType: "Display type",
+    maxPrice: "Max price (USD)",
+    outputProtocols: "Output protocols",
+    builtInCable: "Built-in cable",
+    minWirelessChargingPower: "Min wireless power (W)",
     matchingProducts: (count) => `${count} matching products`,
     productCount: (shown, total) => `${shown} of ${total} products`,
     sortOptions: {
@@ -183,6 +230,20 @@ export const catalogUiCopy: Record<
     chemistry: "Хімія",
     minCapacity: "Мін. ємність (Wh)",
     minPower: "Мін. потужність (W)",
+    maxInputPower: "Min input power (W)",
+    maxOutputPower: "Min output power (W)",
+    passthroughCharging: "Passthrough charging",
+    minGravimetricDensity: "Min density (Wh/kg)",
+    maxDimensions: "Max dimensions (mm)",
+    length: "Length",
+    width: "Width",
+    thickness: "Thickness",
+    maxWeight: "Max weight (g)",
+    displayType: "Display type",
+    maxPrice: "Max price (USD)",
+    outputProtocols: "Output protocols",
+    builtInCable: "Built-in cable",
+    minWirelessChargingPower: "Min wireless power (W)",
     matchingProducts: (count) => `${count} товарів знайдено`,
     productCount: (shown, total) => `${shown} з ${total} товарів`,
     sortOptions: {
@@ -328,6 +389,129 @@ function compactConditions(conditions: Array<SQL | undefined>) {
   return conditions.filter(Boolean) as SQL[];
 }
 
+type CatalogProductRow = {
+  model: string;
+  manufacturer: string;
+  capacityWh: number | null;
+  chemistry: string | null;
+  communicationProtocols: string | null;
+  continuousPowerW: number | null;
+  weightGrams: number | null;
+  priceCents: number | null;
+  summary: string | null;
+  specifications: unknown;
+};
+
+type CountedFacet = {
+  value: string;
+  count: number;
+};
+
+function powerBankSpecs(product: CatalogProductRow): PowerBankSpecifications {
+  const specifications =
+    product.specifications &&
+    typeof product.specifications === "object" &&
+    !Array.isArray(product.specifications)
+      ? (product.specifications as Record<string, unknown>)
+      : null;
+
+  return {
+    ...(specifications ?? {}),
+    ...normalizePowerBankSpecifications({
+      ...product,
+      specifications,
+    }),
+  } as PowerBankSpecifications;
+}
+
+function matchesPowerBankFilters(
+  product: CatalogProductRow,
+  filters: CatalogFilters,
+  exclude: string | null = null,
+) {
+  const specifications = powerBankSpecs(product);
+  const dimensions = specifications.dimensions;
+
+  return [
+    exclude === "manufacturer" ||
+      filters.manufacturers.length === 0 ||
+      filters.manufacturers.includes(product.manufacturer),
+    filters.capacityWh === undefined ||
+      (specifications.capacityWh ?? 0) >= filters.capacityWh,
+    exclude === "batteryChemistry" ||
+      filters.batteryChemistries.length === 0 ||
+      (specifications.batteryChemistry !== undefined &&
+        filters.batteryChemistries.includes(specifications.batteryChemistry)),
+    exclude === "supportedOutputProtocols" ||
+      filters.supportedOutputProtocols.length === 0 ||
+      filters.supportedOutputProtocols.some((protocol) =>
+        specifications.supportedOutputProtocols?.includes(
+          protocol as never,
+        ),
+      ),
+    filters.maxInputPower === undefined ||
+      (specifications.maxInputPower ?? 0) >= filters.maxInputPower,
+    filters.maxOutputPower === undefined ||
+      (specifications.maxOutputPower ?? 0) >= filters.maxOutputPower,
+    filters.passthroughCharging !== true ||
+      specifications.passthroughCharging === true,
+    filters.gravimetricDensity === undefined ||
+      (specifications.gravimetricDensity ?? 0) >= filters.gravimetricDensity,
+    filters.dimensionLength === undefined ||
+      (dimensions?.length ?? Number.POSITIVE_INFINITY) <=
+        filters.dimensionLength,
+    filters.dimensionWidth === undefined ||
+      (dimensions?.width ?? Number.POSITIVE_INFINITY) <= filters.dimensionWidth,
+    filters.dimensionThickness === undefined ||
+      (dimensions?.thickness ?? Number.POSITIVE_INFINITY) <=
+        filters.dimensionThickness,
+    filters.weight === undefined ||
+      (specifications.weight ?? Number.POSITIVE_INFINITY) <= filters.weight,
+    exclude === "displayType" ||
+      filters.displayTypes.length === 0 ||
+      (specifications.displayType !== undefined &&
+        filters.displayTypes.includes(specifications.displayType)),
+    filters.price === undefined ||
+      (specifications.price ?? Number.POSITIVE_INFINITY) <= filters.price,
+    exclude === "builtInCable" ||
+      filters.builtInCables.length === 0 ||
+      (specifications.builtInCable !== undefined &&
+        filters.builtInCables.includes(specifications.builtInCable)),
+    filters.wirelessChargingMaxPower === undefined ||
+      (specifications.wirelessChargingMaxPower ?? 0) >=
+        filters.wirelessChargingMaxPower,
+  ].every(Boolean);
+}
+
+function uniqueDefined<T>(values: Array<T | undefined>) {
+  return [...new Set(values.filter((value): value is T => value !== undefined))];
+}
+
+function countByOption<T extends string>(
+  options: T[],
+  rows: CatalogProductRow[],
+  matches: (row: CatalogProductRow, option: T) => boolean,
+): CountedFacet[] {
+  return options.map((option) => ({
+    value: option,
+    count: rows.filter((row) => matches(row, option)).length,
+  }));
+}
+
+function filterRowsForSearch(rows: CatalogProductRow[], filters: CatalogFilters) {
+  if (!filters.q) {
+    return rows;
+  }
+
+  const query = filters.q.toLowerCase();
+
+  return rows.filter(
+    (row) =>
+      row.model.toLowerCase().includes(query) ||
+      (row.summary?.toLowerCase().includes(query) ?? false),
+  );
+}
+
 export async function getCatalogPageData(
   categorySlug: CatalogCategorySlug,
   filters: CatalogFilters,
@@ -393,16 +577,16 @@ export async function getCatalogPageData(
       filters.manufacturers.length > 0
         ? inArray(manufacturers.name, filters.manufacturers)
         : undefined,
-      filters.voltages.length > 0
+      categorySlug !== "power-banks" && filters.voltages.length > 0
         ? inArray(equipment.nominalVoltageV, filters.voltages)
         : undefined,
-      filters.chemistries.length > 0
+      categorySlug !== "power-banks" && filters.chemistries.length > 0
         ? inArray(equipment.chemistry, filters.chemistries)
         : undefined,
-      filters.minCapacityWh
+      categorySlug !== "power-banks" && filters.minCapacityWh
         ? gte(equipment.capacityWh, filters.minCapacityWh)
         : undefined,
-      filters.minPowerW
+      categorySlug !== "power-banks" && filters.minPowerW
         ? gte(equipment.continuousPowerW, filters.minPowerW)
         : undefined,
     ]);
@@ -444,6 +628,39 @@ export async function getCatalogPageData(
       .where(and(...conditions))
       .orderBy(sortExpression(filters.sort), asc(equipment.id));
 
+    const filteredProducts =
+      categorySlug === "power-banks"
+        ? products.filter((product) => matchesPowerBankFilters(product, filters))
+        : products;
+    const powerBankBaseSpecs =
+      categorySlug === "power-banks" ? baseRows.map(powerBankSpecs) : [];
+    const searchableBaseRows = filterRowsForSearch(baseRows, filters);
+    const manufacturerOptions = [
+      ...new Set(baseRows.map((product) => product.manufacturer)),
+    ];
+    const manufacturerFacets =
+      categorySlug === "power-banks"
+        ? countByOption(manufacturerOptions, searchableBaseRows, (row, option) =>
+            row.manufacturer === option &&
+            matchesPowerBankFilters(row, filters, "manufacturer"),
+          )
+        : countByOption(
+            manufacturerOptions,
+            searchableBaseRows,
+            (row, option) => row.manufacturer === option,
+          );
+    const powerBankChemistryOptions = uniqueDefined(
+      powerBankBaseSpecs.map((spec) => spec.batteryChemistry),
+    );
+    const powerBankProtocolOptions = uniqueDefined(
+      powerBankBaseSpecs.flatMap((spec) => spec.supportedOutputProtocols ?? []),
+    );
+    const powerBankDisplayOptions = uniqueDefined(
+      powerBankBaseSpecs.map((spec) => spec.displayType),
+    );
+    const powerBankBuiltInCableOptions = uniqueDefined(
+      powerBankBaseSpecs.map((spec) => spec.builtInCable),
+    );
     const capacities = baseRows
       .map((product) => product.capacityWh)
       .filter((value): value is number => value !== null);
@@ -452,13 +669,11 @@ export async function getCatalogPageData(
       .filter((value): value is number => value !== null);
 
     return {
-      products,
+      products: filteredProducts,
       totalProducts: baseRows.length,
       unavailable: false,
       facets: {
-        manufacturers: [
-          ...new Set(baseRows.map((product) => product.manufacturer)),
-        ],
+        manufacturers: manufacturerFacets,
         voltages: [
           ...new Set(
             baseRows
@@ -486,6 +701,39 @@ export async function getCatalogPageData(
         ].map((value) => JSON.parse(value) as { value: string; label: string }),
         maxCapacityWh: capacities.length > 0 ? Math.max(...capacities) : null,
         maxPowerW: powers.length > 0 ? Math.max(...powers) : null,
+        powerBanks: {
+          batteryChemistries: countByOption(
+            powerBankChemistryOptions,
+            searchableBaseRows,
+            (row, option) =>
+              powerBankSpecs(row).batteryChemistry === option &&
+              matchesPowerBankFilters(row, filters, "batteryChemistry"),
+          ),
+          supportedOutputProtocols: countByOption(
+            powerBankProtocolOptions,
+            searchableBaseRows,
+            (row, option) =>
+              (powerBankSpecs(row).supportedOutputProtocols?.includes(
+                option,
+              ) ??
+                false) &&
+              matchesPowerBankFilters(row, filters, "supportedOutputProtocols"),
+          ),
+          displayTypes: countByOption(
+            powerBankDisplayOptions,
+            searchableBaseRows,
+            (row, option) =>
+              powerBankSpecs(row).displayType === option &&
+              matchesPowerBankFilters(row, filters, "displayType"),
+          ),
+          builtInCables: countByOption(
+            powerBankBuiltInCableOptions,
+            searchableBaseRows,
+            (row, option) =>
+              powerBankSpecs(row).builtInCable === option &&
+              matchesPowerBankFilters(row, filters, "builtInCable"),
+          ),
+        },
       },
     };
   } catch (error) {
@@ -501,6 +749,12 @@ export async function getCatalogPageData(
         chemistries: [],
         maxCapacityWh: null,
         maxPowerW: null,
+        powerBanks: {
+          batteryChemistries: [],
+          supportedOutputProtocols: [],
+          displayTypes: [],
+          builtInCables: [],
+        },
       },
     };
   }
@@ -590,7 +844,7 @@ export function parseCatalogFilters(
   };
   const numberValues = (key: string) =>
     values(key)
-      .map((value) => Number.parseInt(value, 10))
+      .map((value) => Number.parseFloat(value))
       .filter((value) => Number.isFinite(value));
   const numberValue = (key: string) => {
     const [value] = numberValues(key);
@@ -614,6 +868,21 @@ export function parseCatalogFilters(
     chemistries: values("chemistry"),
     minCapacityWh: numberValue("minCapacityWh"),
     minPowerW: numberValue("minPowerW"),
+    capacityWh: numberValue("capacityWh") ?? numberValue("minCapacityWh"),
+    batteryChemistries: values("batteryChemistry"),
+    supportedOutputProtocols: values("supportedOutputProtocols"),
+    maxInputPower: numberValue("maxInputPower"),
+    maxOutputPower: numberValue("maxOutputPower") ?? numberValue("minPowerW"),
+    passthroughCharging: values("passthroughCharging").includes("true"),
+    gravimetricDensity: numberValue("gravimetricDensity"),
+    dimensionLength: numberValue("length"),
+    dimensionWidth: numberValue("width"),
+    dimensionThickness: numberValue("thickness"),
+    weight: numberValue("weight"),
+    displayTypes: values("displayType"),
+    price: numberValue("price"),
+    builtInCables: values("builtInCable"),
+    wirelessChargingMaxPower: numberValue("wirelessChargingMaxPower"),
     sort: sorts.includes(sortValue as CatalogSort)
       ? (sortValue as CatalogSort)
       : "recommended",

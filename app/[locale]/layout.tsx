@@ -27,7 +27,7 @@ export default async function LocaleLayout({
   const dictionary = getDictionary(locale);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col">
+    <div className="mx-auto flex min-h-screen max-w-[1920px] flex-col">
       <SiteHeader locale={locale} dictionary={dictionary} />
       <SiteBreadcrumbs locale={locale} labels={dictionary.navigation} />
       <main className="flex-1">{children}</main>

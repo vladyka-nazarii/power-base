@@ -99,7 +99,7 @@ export default async function Home({ params }: HomeProps) {
       </section>
 
       <section className="px-5 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1840px]">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-semibold tracking-normal text-black sm:text-4xl dark:text-white">
               {home.featuresTitle}
@@ -132,7 +132,7 @@ export default async function Home({ params }: HomeProps) {
         id="brief"
         className="border-y border-black/10 bg-zinc-50 px-5 py-16 dark:border-white/10 dark:bg-zinc-950"
       >
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="mx-auto grid max-w-[1840px] gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <h2 className="text-3xl font-semibold tracking-normal text-black sm:text-4xl dark:text-white">
               {home.categoriesTitle}
@@ -172,7 +172,7 @@ export default async function Home({ params }: HomeProps) {
       </section>
 
       <section className="px-5 py-12">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 rounded-lg border border-black/10 bg-white p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:bg-black">
+        <div className="mx-auto flex max-w-[1840px] flex-col gap-4 rounded-lg border border-black/10 bg-white p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:bg-black">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="size-5 text-black dark:text-white" />
             <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
