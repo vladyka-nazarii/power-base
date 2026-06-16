@@ -2407,12 +2407,22 @@ const nkonBatteryRows: SeedEquipment[] = [
 const seededEquipmentRows = [
   ...ankerPowerBankRows,
   ...ugreenPowerBankRows,
-  ...equipmentRows.filter(
-    (row) =>
-      !["power-banks", "batteries", "power-stations", "inverters"].includes(
-        row.categorySlug,
-      ),
-  ),
+  ...equipmentRows.filter((row) => {
+    // Keep non-catalog sections out as before, but only exclude power-banks
+    // when they are provided by the separate Anker / UGREEN seed files.
+    if (
+      ["batteries", "power-stations", "inverters"].includes(row.categorySlug)
+    ) {
+      return false;
+    }
+    if (
+      row.categorySlug === "power-banks" &&
+      ["Anker", "UGREEN"].includes(row.manufacturer)
+    ) {
+      return false;
+    }
+    return true;
+  }),
   ...victronInverterRows,
   ...ecoFlowPowerStationRows,
   ...nkonBatteryRows,
