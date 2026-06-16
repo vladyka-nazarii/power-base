@@ -58,6 +58,9 @@ export const dictionaries = {
     common: {
       logo: "PowerBase",
       footer: "PowerBase equipment catalog",
+      footerProjectLabel: "Project",
+      footerSourceLabel: "Source code",
+      footerStackLabel: "Stack",
       languages: {
         en: "EN",
         uk: "УКР",
@@ -149,6 +152,9 @@ export const dictionaries = {
     common: {
       logo: "PowerBase",
       footer: "Каталог обладнання PowerBase",
+      footerProjectLabel: "Проєкт",
+      footerSourceLabel: "Код проєкту",
+      footerStackLabel: "Стек",
       languages: {
         en: "EN",
         uk: "УКР",
