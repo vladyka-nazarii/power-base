@@ -144,7 +144,8 @@
     "capacityWh": 89,
     "batteryChemistry": null,
     "supportedOutputProtocols": [
-      "PD 3.1"
+      "PD 3.1",
+      "PD 3.0"
     ],
     "maxInputPower": null,
     "maxOutputPower": 140,
@@ -166,7 +167,8 @@
           "maxOutputPower",
           "supportedOutputProtocols",
           "weight"
-        ]
+        ],
+        "note": "Official Anker page names Power Delivery 3.1; PD 3.0 is included as a lower-version protocol implied by PD 3.1 support."
       },
       {
         "url": "https://www.anker.com/eu-en/products/a1289?variant=42109767549118&collections_power-banks&Sort_by=Recommended",
@@ -189,7 +191,9 @@
     "slug": "anker-prime-20-000mah-power-bank-200w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 200,
     "passthroughCharging": null,
@@ -222,11 +226,17 @@
           "price"
         ],
         "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1336-20000mah-power-bank?variant=42948669309118&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Anker page names Power Delivery 3.0 technology."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
@@ -281,7 +291,9 @@
     "slug": "anker-633-magnetic-battery",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 20,
     "passthroughCharging": null,
@@ -308,11 +320,17 @@
           "price"
         ],
         "note": "Source price converted from EUR to USD at 1.1594 on 2026-06-16."
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1641?variant=41510196740286&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Anker page names a 20W USB-C Power Delivery port. Because no PD version is stated, PD is normalized to the lowest allowed catalog version, PD 3.0."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -506,7 +524,8 @@
     "capacityWh": 102,
     "batteryChemistry": null,
     "supportedOutputProtocols": [
-      "PD 3.1"
+      "PD 3.1",
+      "PD 3.0"
     ],
     "maxInputPower": null,
     "maxOutputPower": 250,
@@ -528,7 +547,8 @@
           "maxOutputPower",
           "supportedOutputProtocols",
           "weight"
-        ]
+        ],
+        "note": "Official Anker page names PD 3.1 technology; PD 3.0 is included as a lower-version protocol implied by PD 3.1 support."
       }
     ],
     "missingReason": {
@@ -545,7 +565,10 @@
     "slug": "anker-525-power-bank-powercore-20k",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "QC 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 20,
     "passthroughCharging": null,
@@ -565,11 +588,17 @@
           "maxOutputPower",
           "weight"
         ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1287?variant=41510197362878&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Anker page names Power Delivery and Quick Charge technology. Because no Quick Charge version is stated, QC is normalized to the lowest allowed catalog version, QC 3.0; generic Power Delivery is normalized to PD 3.0."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -621,7 +650,9 @@
     "slug": "anker-prime-12-000mah-power-bank-130w",
     "capacityWh": 44,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 130,
     "passthroughCharging": null,
@@ -647,11 +678,17 @@
           "maxOutputPower",
           "weight"
         ]
+      },
+      {
+        "url": "https://www.anker.com/eu-en/products/a1335-12000mah-power-bank?variant=42948695556286&collections_power-banks&Sort_by=Recommended",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Anker page names Power Delivery 3.0 technology."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
@@ -1041,7 +1078,9 @@
     "slug": "baseus-enerfill-fc41-digital-display-power-bank-20000mah-100w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 100,
     "passthroughCharging": null,
@@ -1067,11 +1106,17 @@
           "price"
         ],
         "note": "Source price is USD."
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fc41-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Baseus page names 100W PD fast charging; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1305,7 +1350,10 @@
     "slug": "baseus-picogo-ac22-ultra-mini-power-bank-with-built-in-cable-20000mah-45w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "QC 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 45,
     "passthroughCharging": true,
@@ -1334,11 +1382,17 @@
           "price"
         ],
         "note": "Source price is USD."
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-ac22-ultra-mini-power-bank-with-built-in-cable-20000mah-45w",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Baseus page says the charger supports PD and QC. Because no versions are stated, PD and QC are normalized to the lowest allowed catalog versions: PD 3.0 and QC 3.0."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1393,7 +1447,9 @@
     "slug": "baseus-picogo-power-bank-45w-10000mah-with-built-in-cable",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 45,
     "passthroughCharging": null,
@@ -1420,11 +1476,17 @@
           "price"
         ],
         "note": "Source price is USD."
+      },
+      {
+        "url": "https://www.baseus.com/products/picogo-power-bank-45w-10000mah-with-built-in-cable",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Baseus page names 45W PD ultra-fast charging; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1437,7 +1499,9 @@
     "slug": "baseus-blade-h1-digital-display-power-bank-20000mah-100w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 100,
     "passthroughCharging": true,
@@ -1464,11 +1528,17 @@
           "price"
         ],
         "note": "Source price is USD."
+      },
+      {
+        "url": "https://www.baseus.com/products/blade-h1-digital-display-power-bank-20000mah-100w",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Baseus page names 100W PD charging; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1481,7 +1551,9 @@
     "slug": "baseus-enerfill-fm21-qi2-2-magnetic-power-bank-10000mah-45w",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 45,
     "passthroughCharging": null,
@@ -1506,11 +1578,17 @@
           "price"
         ],
         "note": "Source price is USD."
+      },
+      {
+        "url": "https://www.baseus.com/products/enerfill-fm21-qi2-2-magnetic-power-bank-10000mah-45w",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Baseus page names 45W USB-C PD output; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1525,7 +1603,9 @@
     "slug": "ugreen-nexode-s-magnetic-wireless-power-bank-10000mah-20w",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 20,
     "passthroughCharging": null,
@@ -1550,11 +1630,17 @@
           "price"
         ],
         "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25919",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Seeded official-source metadata names USB-C PD; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1569,7 +1655,13 @@
     "slug": "ugreen-nexode-power-bank-25000mah-165w-with-built-in-usb-c-cable",
     "capacityWh": 93,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.1",
+      "PD 3.0",
+      "PPS",
+      "QC 3.0",
+      "SCP"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 165,
     "passthroughCharging": null,
@@ -1588,11 +1680,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55995b",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page lists PD3.1, PPS, UFCS, SCP, QC and more. UFCS is outside the allowed list; generic QC is normalized to the lowest allowed catalog version, QC 3.0. PD 3.0 is included as lower-version support implied by PD 3.1."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1607,7 +1705,9 @@
     "slug": "ugreen-nexode-power-bank-20000mah-67w-with-built-in-usb-c-cable",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 67,
     "passthroughCharging": null,
@@ -1633,11 +1733,17 @@
           "price"
         ],
         "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55996b",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page names 67W PD bidirectional power delivery; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1651,7 +1757,11 @@
     "slug": "ugreen-nexode-power-bank-20000mah-100w-with-built-in-usb-c-cable",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "PPS",
+      "SCP"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 100,
     "passthroughCharging": null,
@@ -1677,11 +1787,17 @@
           "price"
         ],
         "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55988b",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page names 45W PPS Super Charger and PD/SCP multi-protocol support; PD is stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1695,7 +1811,10 @@
     "slug": "ugreen-nexode-power-bank-20000mah-100w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "QC 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 100,
     "passthroughCharging": null,
@@ -1720,11 +1839,17 @@
           "price"
         ],
         "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-25188",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page states support for PD/QC and other popular fast charging technologies. Because no versions are stated, PD and QC are normalized to the lowest allowed catalog versions: PD 3.0 and QC 3.0."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1739,7 +1864,12 @@
     "slug": "ugreen-nexode-power-bank-mini-5000mah-20w-2c",
     "capacityWh": 19,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "QC 3.0",
+      "FCP",
+      "SCP"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 20,
     "passthroughCharging": null,
@@ -1757,11 +1887,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35338",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page lists supported protocol output: PD3.0/SCP/QC3.0/FCP/APPLE 5V2.4A/BC1.2; Apple and BC1.2 are outside the allowed list."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1821,7 +1957,9 @@
     "slug": "ugreen-uno-magnetic-wireless-power-bank-10000mah-20w",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 20,
     "passthroughCharging": null,
@@ -1839,11 +1977,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-45327",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page names PD 20W fast charging; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1859,7 +2003,9 @@
     "slug": "ugreen-uno-power-bank-10000mah-30w",
     "capacityWh": 37,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 30,
     "passthroughCharging": null,
@@ -1877,11 +2023,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35603",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Seeded official-source metadata names USB-C PD; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1897,7 +2049,9 @@
     "slug": "ugreen-nexode-power-bank-20000mah-165w-with-retractable-usb-c-cable",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 165,
     "passthroughCharging": null,
@@ -1916,11 +2070,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-55987",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Seeded official-source metadata names USB-C PD; stored as PD 3.0 because the canonical protocol list has no unversioned USB PD value."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1935,7 +2095,15 @@
     "slug": "ugreen-nexode-pro-power-bank-20000mah-200w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.1",
+      "PD 3.0",
+      "PPS",
+      "QC 3.0",
+      "AFC",
+      "FCP",
+      "SCP"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 200,
     "passthroughCharging": null,
@@ -1960,11 +2128,17 @@
           "price"
         ],
         "note": "Source price converted from AED to USD at the UAE dirham peg of 1 USD = 3.6725 AED on 2026-06-16."
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35525",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page names PD 3.1 and lists PD, PPS, QC, AFC, FCP, SCP. Generic QC is normalized to the lowest allowed catalog version, QC 3.0. PD 3.0 is included as lower-version support implied by PD 3.1."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1979,7 +2153,14 @@
     "slug": "ugreen-nexode-pro-power-bank-20000mah-130w",
     "capacityWh": 74,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "PPS",
+      "QC 3.0",
+      "AFC",
+      "FCP",
+      "SCP"
+    ],
     "maxInputPower": null,
     "maxOutputPower": 130,
     "passthroughCharging": null,
@@ -1997,11 +2178,17 @@
           "capacityWh",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.ugreen.com/en-ae/products/ae-35524",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official UGREEN page lists PD, PPS, QC, AFC, FCP, SCP. Because no PD/QC versions are stated, PD and QC are normalized to the lowest allowed catalog versions: PD 3.0 and QC 3.0."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2093,7 +2280,8 @@
           "supportedOutputProtocols",
           "weight",
           "wirelessChargingMaxPower"
-        ]
+        ],
+        "note": "Official Xiaomi specs in seeded metadata list PD3.0 PPS and QC3.0."
       }
     ],
     "missingReason": {
@@ -2105,7 +2293,11 @@
     "slug": "xiaomi-67w-power-bank-10000-integrated-cable",
     "capacityWh": 39,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.0",
+      "PPS",
+      "QC 3.0"
+    ],
     "maxInputPower": 65,
     "maxOutputPower": 67,
     "passthroughCharging": true,
@@ -2134,11 +2326,17 @@
           "passthroughCharging",
           "weight"
         ]
+      },
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-67w-power-bank-10000-integrated-cable/specs/",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Seeded Xiaomi metadata from official specs includes PD3.0 PPS and QC3.0 protocol labels."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
       "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
     }
@@ -2315,7 +2513,10 @@
     "slug": "xiaomi-212w-hypercharge-power-bank-24500",
     "capacityWh": 89,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.1",
+      "PD 3.0"
+    ],
     "maxInputPower": 100,
     "maxOutputPower": 212,
     "passthroughCharging": null,
@@ -2339,11 +2540,17 @@
           "maxInputPower",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-24500/specs/",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Xiaomi specs list USB-C output up to 28V/5A; 28V EPR output implies USB PD 3.1, and PD 3.0 is included as lower-version support."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "weight": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2357,7 +2564,10 @@
     "slug": "xiaomi-212w-hypercharge-power-bank-25000",
     "capacityWh": 89,
     "batteryChemistry": null,
-    "supportedOutputProtocols": null,
+    "supportedOutputProtocols": [
+      "PD 3.1",
+      "PD 3.0"
+    ],
     "maxInputPower": 100,
     "maxOutputPower": 212,
     "passthroughCharging": null,
@@ -2381,11 +2591,17 @@
           "maxInputPower",
           "maxOutputPower"
         ]
+      },
+      {
+        "url": "https://www.mi.com/global/product/xiaomi-212w-hypercharge-power-bank-25000/specs/",
+        "fields": [
+          "supportedOutputProtocols"
+        ],
+        "note": "Official Xiaomi specs list USB-C output up to 28V/5A; 28V EPR output implies USB PD 3.1, and PD 3.0 is included as lower-version support."
       }
     ],
     "missingReason": {
       "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
-      "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "weight": "Source page and seeded source data do not expose this field with enough specificity.",

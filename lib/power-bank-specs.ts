@@ -277,15 +277,31 @@ function normalizeProtocols(
     }
   };
 
-  add("PD 3.0", ["pd 3.0", "pd3.0", "pd3", "power delivery 3.0"]);
+  add("PD 3.0", [
+    "pd 3.0",
+    "pd3.0",
+    "pd3",
+    "power delivery 3.0",
+    "power delivery",
+    "usb-c pd",
+    "usb c pd",
+  ]);
   add("PD 3.1", ["pd 3.1", "pd3.1", "power delivery 3.1"]);
   add("PPS", ["pps"]);
-  add("QC 3.0", ["qc 3.0", "qc3.0"]);
+  add("QC 3.0", ["qc 3.0", "qc3.0", "quick charge", "qc"]);
   add("QC 4.0", ["qc 4.0", "qc4.0"]);
   add("AFC", ["afc"]);
   add("FCP", ["fcp"]);
   add("SCP", ["scp"]);
   add("SuperVOOC", ["supervooc", "super vooc"]);
+
+  if (protocols.includes("PD 3.1")) {
+    protocols.push("PD 3.0");
+  }
+
+  if (protocols.includes("QC 4.0")) {
+    protocols.push("QC 3.0");
+  }
 
   return [...new Set(protocols)];
 }
