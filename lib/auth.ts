@@ -87,8 +87,12 @@ export const auth = betterAuth({
           };
         },
         afterVerification: async ({ context }) => {
+          if (!context) {
+            return;
+          }
+
           const registrationContext = verifyPasskeyRegistrationContext(
-            context ?? null,
+            context,
           );
           const [existingUser] = await db
             .select({ id: schema.user.id })

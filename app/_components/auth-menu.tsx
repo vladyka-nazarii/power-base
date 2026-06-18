@@ -3,8 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { KeyRound, LogIn, LogOut, User } from "lucide-react";
-import { useEffect, useTransition } from "react";
+import {
+  CheckCircle2,
+  KeyRound,
+  LogIn,
+  LogOut,
+  User,
+  XCircle,
+} from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { authSessionChangedEvent } from "@/lib/auth-session-events";
@@ -38,19 +45,28 @@ type AuthMenuProps = {
   showIdentity?: boolean;
 };
 
+type PasskeyStatus = {
+  type: "success" | "error";
+  message: string;
+} | null;
+
 export default function AuthMenu({
   locale,
   showIdentity = false,
 }: AuthMenuProps) {
   const router = useRouter();
   const copy = authMenuCopy[locale];
+  const [passkeyStatus, setPasskeyStatus] = useState<PasskeyStatus>(null);
   const [isAddingPasskey, startAddPasskeyTransition] = useTransition();
   const { data: session, isPending, refetch } = authClient.useSession();
+  const { data: passkeys, isPending: arePasskeysPending } =
+    authClient.useListPasskeys();
   const isAnonymous =
     session?.user && "isAnonymous" in session.user
       ? Boolean(session.user.isAnonymous)
       : false;
   const userImage = !isAnonymous ? session?.user.image : null;
+  const hasPasskey = Boolean(passkeys?.length);
 
   useEffect(() => {
     const handleSessionChanged = () => {
@@ -65,6 +81,20 @@ export default function AuthMenu({
       window.removeEventListener(authSessionChangedEvent, handleSessionChanged);
     };
   }, [refetch, router]);
+
+  useEffect(() => {
+    if (!passkeyStatus) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setPasskeyStatus(null);
+    }, 4000);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [passkeyStatus]);
 
   if (isPending) {
     return (
@@ -130,19 +160,23 @@ export default function AuthMenu({
       return;
     }
 
+    setPasskeyStatus(null);
+
     startAddPasskeyTransition(async () => {
       const { error } = await authClient.passkey.addPasskey({
         name: `${session.user.name || session.user.email} passkey`,
       });
 
-      window.alert(
-        error ? (error.message ?? copy.passkeyError) : copy.passkeyAdded,
+      setPasskeyStatus(
+        error
+          ? { type: "error", message: error.message ?? copy.passkeyError }
+          : { type: "success", message: copy.passkeyAdded },
       );
     });
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="relative flex items-center gap-2">
       <span
         className={cn(
           "items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400",
@@ -163,17 +197,19 @@ export default function AuthMenu({
         )}
         {session.user.name}
       </span>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        disabled={isAddingPasskey}
-        aria-label={copy.addPasskey}
-        title={copy.addPasskey}
-        onClick={addPasskey}
-      >
-        <KeyRound aria-hidden="true" />
-      </Button>
+      {!hasPasskey ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          disabled={isAddingPasskey || arePasskeysPending}
+          aria-label={copy.addPasskey}
+          title={copy.addPasskey}
+          onClick={addPasskey}
+        >
+          <KeyRound aria-hidden="true" />
+        </Button>
+      ) : null}
       <Button
         type="button"
         variant="ghost"
@@ -192,6 +228,27 @@ export default function AuthMenu({
       >
         <LogOut aria-hidden="true" />
       </Button>
+      {passkeyStatus ? (
+        <div
+          className={cn(
+            "absolute top-full right-0 z-50 mt-2 flex w-64 items-start gap-2 rounded-lg border bg-white p-3 text-sm shadow-lg dark:bg-zinc-950",
+            passkeyStatus.type === "success"
+              ? "border-emerald-200 text-emerald-800 dark:border-emerald-900 dark:text-emerald-200"
+              : "border-red-200 text-red-800 dark:border-red-900 dark:text-red-200",
+          )}
+          role="status"
+        >
+          {passkeyStatus.type === "success" ? (
+            <CheckCircle2
+              className="mt-0.5 size-4 shrink-0"
+              aria-hidden="true"
+            />
+          ) : (
+            <XCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          )}
+          <span className="leading-5">{passkeyStatus.message}</span>
+        </div>
+      ) : null}
     </div>
   );
 }
