@@ -59,12 +59,12 @@ export default function SiteBreadcrumbs({
       aria-label="Breadcrumb"
       className="border-b border-black/10 px-5 py-3 text-sm dark:border-white/10"
     >
-      <ol className="mx-auto flex max-w-[1880px] items-center gap-1 overflow-x-auto whitespace-nowrap text-zinc-500 dark:text-zinc-400">
+      <ol className="mx-auto flex max-w-[1880px] flex-wrap items-center gap-1 text-zinc-500 sm:flex-nowrap sm:whitespace-nowrap dark:text-zinc-400">
         {breadcrumbs.map((item, index) => {
           const isCurrent = index === breadcrumbs.length - 1;
 
           return (
-            <li key={item.href} className="flex items-center gap-1">
+            <li key={item.href} className="flex min-w-0 items-center gap-1">
               {index > 0 ? (
                 <ChevronRight
                   aria-hidden="true"
@@ -74,14 +74,14 @@ export default function SiteBreadcrumbs({
               {isCurrent ? (
                 <span
                   aria-current="page"
-                  className="font-medium text-zinc-900 dark:text-zinc-100"
+                  className="min-w-0 break-words font-medium text-zinc-900 dark:text-zinc-100"
                 >
                   {item.label}
                 </span>
               ) : (
                 <Link
                   href={item.href}
-                  className="focus-visible:outline-ring rounded-sm transition hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-100"
+                  className="focus-visible:outline-ring min-w-0 rounded-sm break-words transition hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-100"
                 >
                   {item.label}
                 </Link>

@@ -51,15 +51,8 @@ function specValue(value: unknown, locale: Locale): string {
     return "";
   }
 
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => specValue(item, locale))
-      .filter(Boolean)
-      .join(", ");
-  }
-
   if (typeof value === "object") {
-    return JSON.stringify(value);
+    return "";
   }
 
   if (typeof value === "number") {
@@ -109,7 +102,7 @@ function DetailGroup({
   title: string;
 }) {
   return (
-    <section className="rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
+    <section className="min-w-0 rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
       <div className="flex items-center gap-2">
         <span className="text-zinc-500">{icon}</span>
         <h2 className="text-base font-semibold text-black dark:text-white">
@@ -120,10 +113,10 @@ function DetailGroup({
         {items.map((item) => (
           <div
             key={item.label}
-            className="grid gap-1 py-3 text-sm sm:grid-cols-[180px_1fr]"
+            className="grid min-w-0 gap-1 py-3 text-sm sm:grid-cols-[180px_minmax(0,1fr)]"
           >
-            <dt className="text-zinc-500">{item.label}</dt>
-            <dd className="font-medium text-black dark:text-white">
+            <dt className="min-w-0 text-zinc-500">{item.label}</dt>
+            <dd className="min-w-0 break-words font-medium text-black dark:text-white">
               {item.value}
             </dd>
           </div>
@@ -395,8 +388,8 @@ export default async function ProductDetailPage({
           </div>
         </div>
 
-        <aside className="grid content-start gap-5 lg:sticky lg:top-20">
-          <section className="rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
+        <aside className="grid min-w-0 content-start gap-5 lg:sticky lg:top-20">
+          <section className="min-w-0 rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
             <div className="flex items-center gap-2">
               <Database className="size-4 text-zinc-500" aria-hidden="true" />
               <h2 className="text-base font-semibold text-black dark:text-white">
@@ -411,24 +404,28 @@ export default async function ProductDetailPage({
                 href={product.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="focus-visible:outline-ring mt-4 inline-flex items-center gap-2 rounded-md border border-black/10 px-3 py-2 text-sm font-medium text-black transition hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-white/10 dark:text-white dark:hover:bg-zinc-900"
+                className="focus-visible:outline-ring mt-4 inline-flex max-w-full items-center gap-2 rounded-md border border-black/10 px-3 py-2 text-sm font-medium text-black transition hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 dark:border-white/10 dark:text-white dark:hover:bg-zinc-900"
               >
-                <ExternalLink className="size-4" aria-hidden="true" />
-                {product.sourceLabel}
+                <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
+                <span className="min-w-0 break-words">
+                  {product.sourceLabel}
+                </span>
               </a>
             ) : null}
           </section>
 
           {specs.length > 0 ? (
-            <section className="rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
+            <section className="min-w-0 rounded-lg border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-black">
               <h2 className="text-base font-semibold text-black dark:text-white">
                 {copy.additionalSpecifications}
               </h2>
               <dl className="mt-4 divide-y divide-black/10 dark:divide-white/10">
                 {specs.map((item) => (
-                  <div key={item.label} className="py-3 text-sm">
-                    <dt className="text-zinc-500">{item.label}</dt>
-                    <dd className="mt-1 font-medium break-words text-black dark:text-white">
+                  <div key={item.label} className="min-w-0 py-3 text-sm">
+                    <dt className="min-w-0 break-words text-zinc-500">
+                      {item.label}
+                    </dt>
+                    <dd className="mt-1 min-w-0 break-words font-medium text-black dark:text-white">
                       {item.value}
                     </dd>
                   </div>
