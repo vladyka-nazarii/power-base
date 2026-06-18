@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import CatalogPage from "@/app/[locale]/(catalog)/_components/catalog-page";
 import { isLocale, type Locale } from "@/lib/i18n";
-import { parseCatalogFilters } from "@/lib/catalog";
+import { parseCatalogFilters, parseCompareSlugs } from "@/lib/catalog";
 
 type InvertersPageProps = {
   params: Promise<{ locale: string }>;
@@ -19,7 +19,16 @@ export default async function InvertersPage({
   }
 
   const locale: Locale = localeParam;
-  const filters = parseCatalogFilters(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const filters = parseCatalogFilters(resolvedSearchParams);
+  const compareSlugs = parseCompareSlugs(resolvedSearchParams);
 
-  return <CatalogPage category="inverters" filters={filters} locale={locale} />;
+  return (
+    <CatalogPage
+      category="inverters"
+      compareSlugs={compareSlugs}
+      filters={filters}
+      locale={locale}
+    />
+  );
 }

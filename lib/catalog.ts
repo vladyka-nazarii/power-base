@@ -575,15 +575,30 @@ function matchesNumberRangeFilter(
 }
 
 type CatalogProductRow = {
+  id?: number;
   model: string;
+  slug?: string;
   manufacturer: string;
+  imagePath?: string;
+  productCode?: string | null;
+  nominalVoltageV?: number | null;
   capacityWh: number | null;
   chemistry: string | null;
+  chemistryLabel?: string | null;
   communicationProtocols: string | null;
   continuousPowerW: number | null;
+  peakPowerW?: number | null;
+  maxPvVoltageV?: number | null;
+  maxChargeCurrentA?: number | null;
   weightGrams: number | null;
+  warrantyYears?: number | null;
+  lifecycleCycles?: number | null;
+  sourceLabel?: string | null;
+  sourceUrl?: string | null;
   priceCents: number | null;
   summary: string | null;
+  categoryName?: string | null;
+  categorySlug?: string | null;
   specifications: unknown;
 };
 
@@ -836,6 +851,66 @@ export async function getCatalogPageData(
   return data;
 }
 
+export function parseCompareSlugs(
+  searchParams: Record<string, string | string[] | undefined>,
+) {
+  const values = searchParams.compare;
+  const rawValues = Array.isArray(values) ? values : values ? [values] : [];
+
+  return [
+    ...new Set(
+      rawValues
+        .flatMap((value) => value.split(","))
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  ];
+}
+
+export async function getCatalogProductsBySlugs({
+  categorySlug,
+  locale,
+  slugs,
+}: {
+  categorySlug: CatalogCategorySlug;
+  locale: Locale;
+  slugs: string[];
+}) {
+  if (slugs.length === 0) {
+    return [];
+  }
+
+  const uniqueSlugs = [...new Set(slugs)];
+
+  try {
+    const rows = await db
+      .select(catalogSelection(locale))
+      .from(equipment)
+      .innerJoin(
+        equipmentCategories,
+        eq(equipment.categoryId, equipmentCategories.id),
+      )
+      .innerJoin(manufacturers, eq(equipment.manufacturerId, manufacturers.id))
+      .where(
+        and(
+          eq(equipmentCategories.slug, categorySlug),
+          inArray(equipment.slug, uniqueSlugs),
+        ),
+      );
+    const order = new Map(uniqueSlugs.map((slug, index) => [slug, index]));
+
+    return rows.sort(
+      (left, right) =>
+        (order.get(left.slug) ?? Number.MAX_SAFE_INTEGER) -
+        (order.get(right.slug) ?? Number.MAX_SAFE_INTEGER),
+    );
+  } catch (error) {
+    console.error("Catalog compare products read failed", error);
+
+    return [];
+  }
+}
+
 function catalogPageCacheKey(
   categorySlug: CatalogCategorySlug,
   filters: CatalogFilters,
@@ -864,11 +939,7 @@ function stableCacheValue(value: unknown): unknown {
   return value;
 }
 
-async function getUncachedCatalogPageData(
-  categorySlug: CatalogCategorySlug,
-  filters: CatalogFilters,
-  locale: Locale,
-) {
+function catalogSelection(locale: Locale) {
   const localizedSummary =
     locale === "uk" ? equipment.summaryUk : equipment.summary;
   const localizedSourceLabel =
@@ -876,7 +947,8 @@ async function getUncachedCatalogPageData(
   const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
     locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
-  const catalogSelection = {
+
+  return {
     id: equipment.id,
     model: equipment.model,
     slug: equipment.slug,
@@ -903,10 +975,18 @@ async function getUncachedCatalogPageData(
     categoryName: localizedCategoryName,
     categorySlug: equipmentCategories.slug,
   };
+}
+
+async function getUncachedCatalogPageData(
+  categorySlug: CatalogCategorySlug,
+  filters: CatalogFilters,
+  locale: Locale,
+) {
+  const selection = catalogSelection(locale);
 
   try {
     const baseRows = await db
-      .select(catalogSelection)
+      .select(selection)
       .from(equipment)
       .innerJoin(
         equipmentCategories,
@@ -947,7 +1027,7 @@ async function getUncachedCatalogPageData(
       categorySlug === "power-banks"
         ? (
             await db
-              .select(catalogSelection)
+              .select(selection)
               .from(equipment)
               .innerJoin(
                 equipmentCategories,
@@ -981,7 +1061,7 @@ async function getUncachedCatalogPageData(
       categorySlug === "power-banks"
         ? paginatedRows(filteredProducts ?? [], pagination)
         : await db
-            .select(catalogSelection)
+            .select(selection)
             .from(equipment)
             .innerJoin(
               equipmentCategories,

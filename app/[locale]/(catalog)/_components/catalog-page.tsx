@@ -11,6 +11,10 @@ import {
 } from "lucide-react";
 
 import AutoSubmitForm from "@/app/[locale]/(catalog)/_components/auto-submit-form";
+import {
+  CatalogCompareTray,
+  CompareCheckbox,
+} from "@/app/[locale]/(catalog)/_components/catalog-compare";
 import FavoriteButton from "@/app/_components/favorite-button";
 import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters-link";
 import { cn } from "@/lib/utils";
@@ -20,6 +24,7 @@ import {
   formatPrice,
   formatWeight,
   getCatalogPageData,
+  getCatalogProductsBySlugs,
   powerBankNumberFilterGroups,
   type CatalogCategorySlug,
   type CatalogFilters,
@@ -35,6 +40,7 @@ import {
 
 type CatalogPageProps = {
   category: CatalogCategorySlug;
+  compareSlugs: string[];
   filters: CatalogFilters;
   locale: Locale;
 };
@@ -606,11 +612,15 @@ function PowerBankFilters({
 }
 
 export function ProductCard({
+  compareEnabled = false,
+  compareSlugs = [],
   locale,
   product,
   ui,
   isFavorite,
 }: {
+  compareEnabled?: boolean;
+  compareSlugs?: string[];
   locale: Locale;
   product: CatalogProduct;
   ui: (typeof catalogUiCopy)[Locale];
@@ -650,6 +660,14 @@ export function ProductCard({
           isFavorite={isFavorite}
           className="absolute top-3 right-3 z-10 shadow-sm"
         />
+        {compareEnabled ? (
+          <CompareCheckbox
+            category={product.categorySlug as CatalogCategorySlug}
+            initialSelected={compareSlugs.includes(product.slug)}
+            locale={locale}
+            product={product}
+          />
+        ) : null}
       </div>
 
       <div className="p-5">
@@ -726,13 +744,19 @@ export function ProductCard({
 
 export default async function CatalogPage({
   category,
+  compareSlugs,
   filters,
   locale,
 }: CatalogPageProps) {
   const copy = catalogPageCopy[locale][category];
   const ui = catalogUiCopy[locale];
-  const [data, session] = await Promise.all([
+  const [data, comparedProducts, session] = await Promise.all([
     getCatalogPageData(category, filters, locale),
+    getCatalogProductsBySlugs({
+      categorySlug: category,
+      locale,
+      slugs: compareSlugs,
+    }),
     getCurrentSession(),
   ]);
   const favoriteEquipmentIds = await getFavoriteEquipmentIds(session?.user.id);
@@ -949,6 +973,8 @@ export default async function CatalogPage({
               {data.products.map((product) => (
                 <ProductCard
                   key={product.id}
+                  compareEnabled
+                  compareSlugs={compareSlugs}
                   locale={locale}
                   product={product}
                   ui={ui}
@@ -978,6 +1004,12 @@ export default async function CatalogPage({
           </div>
         </div>
       </section>
+      <CatalogCompareTray
+        category={category}
+        initialCompareSlugs={compareSlugs}
+        initialProducts={[...comparedProducts, ...data.products]}
+        locale={locale}
+      />
     </div>
   );
 }
