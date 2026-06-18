@@ -42,14 +42,16 @@ export async function generateMetadata({
     return {};
   }
 
+  const title = `${product.manufacturer} ${product.model}`;
+
   return {
-    title: `${product.manufacturer} ${product.model} | PowerBase`,
+    title,
     description: product.summary,
     alternates: localizedAlternates(locale, `/${category}/${productSlug}`),
     openGraph: localizedOpenGraph(
       locale,
       `/${category}/${productSlug}`,
-      `${product.manufacturer} ${product.model}`,
+      title,
       product.summary,
     ),
   };

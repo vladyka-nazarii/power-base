@@ -29,7 +29,9 @@ export async function generateMetadata({
   const home = getDictionary(locale).home;
 
   return {
-    title: home.title,
+    title: {
+      absolute: home.title,
+    },
     description: home.description,
     alternates: localizedAlternates(locale, "/"),
     openGraph: localizedOpenGraph(locale, "/", home.title, home.description),
