@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { LogIn, LogOut, User } from "lucide-react";
-import { useEffect } from "react";
+import { KeyRound, LogIn, LogOut, User } from "lucide-react";
+import { useEffect, useTransition } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { authSessionChangedEvent } from "@/lib/auth-session-events";
@@ -17,12 +17,18 @@ const authMenuCopy = {
     signIn: "Sign in",
     guest: "Guest",
     userAvatar: "User avatar",
+    addPasskey: "Add passkey",
+    passkeyAdded: "Passkey added.",
+    passkeyError: "Unable to add passkey.",
     signOut: "Sign out",
   },
   uk: {
     signIn: "Увійти",
     guest: "Гість",
     userAvatar: "Аватар користувача",
+    addPasskey: "Додати passkey",
+    passkeyAdded: "Passkey додано.",
+    passkeyError: "Не вдалося додати passkey.",
     signOut: "Вийти",
   },
 } as const;
@@ -38,6 +44,7 @@ export default function AuthMenu({
 }: AuthMenuProps) {
   const router = useRouter();
   const copy = authMenuCopy[locale];
+  const [isAddingPasskey, startAddPasskeyTransition] = useTransition();
   const { data: session, isPending, refetch } = authClient.useSession();
   const isAnonymous =
     session?.user && "isAnonymous" in session.user
@@ -120,6 +127,22 @@ export default function AuthMenu({
     );
   }
 
+  function addPasskey() {
+    if (!session?.user) {
+      return;
+    }
+
+    startAddPasskeyTransition(async () => {
+      const { error } = await authClient.passkey.addPasskey({
+        name: `${session.user.name || session.user.email} passkey`,
+      });
+
+      window.alert(
+        error ? (error.message ?? copy.passkeyError) : copy.passkeyAdded,
+      );
+    });
+  }
+
   return (
     <div className="flex items-center gap-2">
       <span
@@ -142,6 +165,17 @@ export default function AuthMenu({
         )}
         {session.user.name}
       </span>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        disabled={isAddingPasskey}
+        aria-label={copy.addPasskey}
+        title={copy.addPasskey}
+        onClick={addPasskey}
+      >
+        <KeyRound aria-hidden="true" />
+      </Button>
       <Button
         type="button"
         variant="ghost"

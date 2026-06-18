@@ -3,6 +3,7 @@
 import type { SVGProps } from "react";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { KeyRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
@@ -25,6 +26,7 @@ const authFormCopy = {
     social: {
       google: "Continue with Google",
       github: "Continue with GitHub",
+      passkey: "Continue with passkey",
     },
     emailDivider: "Email",
     fields: {
@@ -43,6 +45,7 @@ const authFormCopy = {
       createAccount: "Unable to create account.",
       verifyBeforeSignIn: "Please verify your email address before signing in.",
       signIn: "Unable to sign in.",
+      passkey: "Unable to sign in with passkey.",
       social: "Unable to start sign in.",
     },
   },
@@ -56,6 +59,7 @@ const authFormCopy = {
     social: {
       google: "Продовжити з Google",
       github: "Продовжити з GitHub",
+      passkey: "Продовжити з passkey",
     },
     emailDivider: "Email",
     fields: {
@@ -74,6 +78,7 @@ const authFormCopy = {
       createAccount: "Не вдалося створити акаунт.",
       verifyBeforeSignIn: "Підтвердьте email-адресу перед входом.",
       signIn: "Не вдалося увійти.",
+      passkey: "Не вдалося увійти з passkey.",
       social: "Не вдалося почати вхід.",
     },
   },
@@ -114,15 +119,17 @@ export default function AuthForm({ locale }: AuthFormProps) {
   const router = useRouter();
   const copy = authFormCopy[locale];
   const [mode, setMode] = useState<AuthMode>("sign-in");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const callbackURL = localizeHref(locale, "/");
 
   function submit(formData: FormData) {
-    const email = String(formData.get("email") ?? "");
+    const submittedEmail = String(formData.get("email") ?? "");
     const password = String(formData.get("password") ?? "");
-    const name = String(formData.get("name") ?? "");
+    const submittedName = String(formData.get("name") ?? "");
 
     setError(null);
     setMessage(null);
@@ -130,8 +137,8 @@ export default function AuthForm({ locale }: AuthFormProps) {
     startTransition(async () => {
       if (mode === "sign-up") {
         const { error: signUpError } = await authClient.signUp.email({
-          name,
-          email,
+          name: submittedName,
+          email: submittedEmail,
           password,
           callbackURL,
         });
@@ -146,7 +153,7 @@ export default function AuthForm({ locale }: AuthFormProps) {
       }
 
       const { error: signInError } = await authClient.signIn.email({
-        email,
+        email: submittedEmail,
         password,
         callbackURL,
       });
@@ -178,6 +185,65 @@ export default function AuthForm({ locale }: AuthFormProps) {
       if (socialError) {
         setError(socialError.message ?? copy.errors.social);
       }
+    });
+  }
+
+  function signInWithPasskey() {
+    setError(null);
+    setMessage(null);
+
+    startTransition(async () => {
+      const { error: passkeyError } = await authClient.signIn.passkey();
+
+      if (passkeyError) {
+        setError(passkeyError.message ?? copy.errors.passkey);
+        return;
+      }
+
+      router.push(callbackURL);
+      router.refresh();
+    });
+  }
+
+  function createAccountWithPasskey() {
+    setError(null);
+    setMessage(null);
+
+    startTransition(async () => {
+      const contextResponse = await fetch("/api/passkey-registration-context", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, name }),
+      });
+      const contextBody = (await contextResponse.json().catch(() => null)) as {
+        context?: string;
+        error?: string;
+      } | null;
+
+      if (!contextResponse.ok || !contextBody?.context) {
+        setError(contextBody?.error ?? copy.errors.createAccount);
+        return;
+      }
+
+      const { error: registrationError } = await authClient.passkey.addPasskey({
+        name: `${name || email} passkey`,
+        context: contextBody.context,
+      });
+
+      if (registrationError) {
+        setError(registrationError.message ?? copy.errors.createAccount);
+        return;
+      }
+
+      const { error: passkeyError } = await authClient.signIn.passkey();
+
+      if (passkeyError) {
+        setError(passkeyError.message ?? copy.errors.passkey);
+        return;
+      }
+
+      router.push(callbackURL);
+      router.refresh();
     });
   }
 
@@ -213,6 +279,18 @@ export default function AuthForm({ locale }: AuthFormProps) {
           <GitHubIcon aria-hidden="true" />
           {copy.social.github}
         </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          disabled={isPending}
+          onClick={
+            mode === "sign-in" ? signInWithPasskey : createAccountWithPasskey
+          }
+        >
+          <KeyRound aria-hidden="true" />
+          {copy.social.passkey}
+        </Button>
       </div>
 
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-xs text-zinc-500">
@@ -228,6 +306,8 @@ export default function AuthForm({ locale }: AuthFormProps) {
             <input
               name="name"
               autoComplete="name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               required
               className="h-10 rounded-md border border-black/10 bg-transparent px-3 text-sm font-normal outline-none dark:border-white/10"
             />
@@ -240,6 +320,8 @@ export default function AuthForm({ locale }: AuthFormProps) {
             name="email"
             type="email"
             autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             required
             className="h-10 rounded-md border border-black/10 bg-transparent px-3 text-sm font-normal outline-none dark:border-white/10"
           />

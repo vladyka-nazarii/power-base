@@ -1,12 +1,15 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { anonymous } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email";
 import { mergeFavoriteUsers } from "@/lib/favorite-merging";
+import { verifyPasskeyRegistrationContext } from "@/lib/passkey-registration-context";
 
 const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 const authBaseURL =
@@ -20,6 +23,8 @@ const authSecret =
   (isProductionBuild || process.env.NODE_ENV !== "production"
     ? "powerbase-local-build-auth-secret-change-in-runtime"
     : undefined);
+const passkeyOrigin = authBaseURL ?? null;
+const passkeyRpID = authBaseURL ? new URL(authBaseURL).hostname : undefined;
 const socialProviders = {
   ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
     ? {
@@ -64,6 +69,46 @@ export const auth = betterAuth({
   },
   socialProviders,
   plugins: [
+    passkey({
+      rpID: passkeyRpID,
+      rpName: "PowerBase",
+      origin: passkeyOrigin,
+      registration: {
+        requireSession: false,
+        resolveUser: ({ context }) => {
+          const registrationContext = verifyPasskeyRegistrationContext(
+            context ?? null,
+          );
+
+          return {
+            id: registrationContext.id,
+            name: registrationContext.email,
+            displayName: registrationContext.name,
+          };
+        },
+        afterVerification: async ({ context }) => {
+          const registrationContext = verifyPasskeyRegistrationContext(
+            context ?? null,
+          );
+          const [existingUser] = await db
+            .select({ id: schema.user.id })
+            .from(schema.user)
+            .where(eq(schema.user.email, registrationContext.email))
+            .limit(1);
+
+          if (existingUser) {
+            throw new Error("A user with this email already exists.");
+          }
+
+          await db.insert(schema.user).values({
+            id: registrationContext.id,
+            name: registrationContext.name,
+            email: registrationContext.email,
+            emailVerified: false,
+          });
+        },
+      },
+    }),
     anonymous({
       generateName: () => "Guest",
       generateRandomEmail: () =>
