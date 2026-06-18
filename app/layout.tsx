@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "PowerBase",
   description: "Alternative energy equipment catalog",
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || "",
+  },
 };
 
 const themeScript = `
