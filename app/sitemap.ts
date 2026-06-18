@@ -4,7 +4,7 @@ import type { MetadataRoute } from "next";
 import { catalogCategorySlugs } from "@/lib/catalog";
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories } from "@/lib/db/schema";
-import { type Locale, locales } from "@/lib/i18n";
+import { defaultLocale, type Locale, locales } from "@/lib/i18n";
 import { absoluteUrl, localizedPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -18,12 +18,15 @@ function sitemapEntry(
   return {
     url: absoluteUrl(localizedPath(locale, pathname)),
     alternates: {
-      languages: Object.fromEntries(
-        locales.map((item) => [
-          item,
-          absoluteUrl(localizedPath(item, pathname)),
-        ]),
-      ),
+      languages: {
+        ...Object.fromEntries(
+          locales.map((item) => [
+            item,
+            absoluteUrl(localizedPath(item, pathname)),
+          ]),
+        ),
+        "x-default": absoluteUrl(localizedPath(defaultLocale, pathname)),
+      },
     },
     ...metadata,
   };
