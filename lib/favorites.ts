@@ -1,4 +1,4 @@
-import { desc, eq, inArray } from "drizzle-orm";
+import { desc, eq, inArray, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
@@ -67,12 +67,18 @@ export async function getFavoriteCatalogProducts({
   }
 
   const localizedSummary =
-    locale === "uk" ? equipment.summaryUk : equipment.summary;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.summaryUk}, ${equipment.summary})`
+      : equipment.summary;
   const localizedSourceLabel =
-    locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.sourceLabelUk}, ${equipment.sourceLabel})`
+      : equipment.sourceLabel;
   const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
-    locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipmentCategories.nameUk}, ${equipmentCategories.name})`
+      : equipmentCategories.name;
 
   try {
     const products = await db

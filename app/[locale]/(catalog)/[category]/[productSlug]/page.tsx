@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 
 import ProductDetailPage from "@/app/[locale]/(catalog)/_components/product-detail-page";
 import {
+  type CatalogCategorySlug,
   catalogCategorySlugs,
   getProductDetailData,
-  type CatalogCategorySlug,
 } from "@/lib/catalog";
 import { isLocale, type Locale } from "@/lib/i18n";
+import { localizedAlternates, localizedOpenGraph } from "@/lib/seo";
 
 type ProductPageProps = {
   params: Promise<{
@@ -44,6 +45,13 @@ export async function generateMetadata({
   return {
     title: `${product.manufacturer} ${product.model} | PowerBase`,
     description: product.summary,
+    alternates: localizedAlternates(locale, `/${category}/${productSlug}`),
+    openGraph: localizedOpenGraph(
+      locale,
+      `/${category}/${productSlug}`,
+      `${product.manufacturer} ${product.model}`,
+      product.summary,
+    ),
   };
 }
 

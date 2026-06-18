@@ -1,19 +1,32 @@
-import type { MetadataRoute } from "next";
 import { asc, eq } from "drizzle-orm";
+import type { MetadataRoute } from "next";
 
 import { catalogCategorySlugs } from "@/lib/catalog";
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories } from "@/lib/db/schema";
-import { locales } from "@/lib/i18n";
+import { type Locale, locales } from "@/lib/i18n";
+import { absoluteUrl, localizedPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-function absoluteUrl(pathname: string) {
-  const origin = siteUrl.replace(/\/+$/, "");
-  return `${origin}${pathname}`;
+function sitemapEntry(
+  locale: Locale,
+  pathname: string,
+  metadata: Omit<MetadataRoute.Sitemap[number], "url" | "alternates">,
+): MetadataRoute.Sitemap[number] {
+  return {
+    url: absoluteUrl(localizedPath(locale, pathname)),
+    alternates: {
+      languages: Object.fromEntries(
+        locales.map((item) => [
+          item,
+          absoluteUrl(localizedPath(item, pathname)),
+        ]),
+      ),
+    },
+    ...metadata,
+  };
 }
 
 function staticRoutes(): MetadataRoute.Sitemap {
@@ -25,10 +38,11 @@ function staticRoutes(): MetadataRoute.Sitemap {
 
   return locales.flatMap((locale) =>
     paths.map((path) => ({
-      url: absoluteUrl(path === "/" ? `/${locale}` : `/${locale}${path}`),
-      lastModified: now,
-      changeFrequency: path === "/" ? "weekly" : "daily",
-      priority: path === "/" ? 1 : 0.8,
+      ...sitemapEntry(locale, path, {
+        lastModified: now,
+        changeFrequency: path === "/" ? "weekly" : "daily",
+        priority: path === "/" ? 1 : 0.8,
+      }),
     })),
   );
 }
@@ -48,14 +62,13 @@ async function productRoutes(): Promise<MetadataRoute.Sitemap> {
     .orderBy(asc(equipmentCategories.slug), asc(equipment.slug));
 
   return locales.flatMap((locale) =>
-    products.map((product) => ({
-      url: absoluteUrl(
-        `/${locale}/${product.categorySlug}/${product.productSlug}`,
-      ),
-      lastModified: product.updatedAt,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    })),
+    products.map((product) =>
+      sitemapEntry(locale, `/${product.categorySlug}/${product.productSlug}`, {
+        lastModified: product.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.7,
+      }),
+    ),
   );
 }
 

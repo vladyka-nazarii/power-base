@@ -1,14 +1,24 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import ServiceWorkerRegistration from "@/app/_components/service-worker-registration";
+import { isLocale, type Locale } from "@/lib/i18n";
+import { siteUrl } from "@/lib/seo";
 import "./globals.css";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "PowerBase",
+  title: {
+    default: "PowerBase",
+    template: "%s | PowerBase",
+  },
   description: "Alternative energy equipment catalog",
   applicationName: "PowerBase",
+  openGraph: {
+    title: "PowerBase",
+    description: "Alternative energy equipment catalog",
+    siteName: "PowerBase",
+    type: "website",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -56,13 +66,18 @@ const themeScript = `
 })();
 `;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const localeHeader = requestHeaders.get("x-powerbase-locale");
+  const locale: Locale =
+    localeHeader && isLocale(localeHeader) ? localeHeader : "en";
+
   return (
-    <html lang="en" suppressHydrationWarning className="font-sans">
+    <html lang={locale} suppressHydrationWarning className="font-sans">
       <head>
         <meta name="theme-color" content="#ffffff" />
         <script

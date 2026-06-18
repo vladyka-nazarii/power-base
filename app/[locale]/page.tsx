@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
@@ -6,13 +5,36 @@ import {
   FileText,
   Zap,
 } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PowerBaseLogoMark } from "@/app/_components/powerbase-logo";
-import { getDictionary, isLocale, localizeHref, type Locale } from "@/lib/i18n";
+import { getDictionary, isLocale, type Locale, localizeHref } from "@/lib/i18n";
+import { localizedAlternates, localizedOpenGraph } from "@/lib/seo";
 
 type HomeProps = {
   params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: HomeProps): Promise<Metadata> {
+  const { locale: localeParam } = await params;
+
+  if (!isLocale(localeParam)) {
+    return {};
+  }
+
+  const locale: Locale = localeParam;
+  const home = getDictionary(locale).home;
+
+  return {
+    title: home.title,
+    description: home.description,
+    alternates: localizedAlternates(locale, "/"),
+    openGraph: localizedOpenGraph(locale, "/", home.title, home.description),
+  };
+}
 
 export default async function Home({ params }: HomeProps) {
   const { locale: localeParam } = await params;

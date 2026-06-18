@@ -1,10 +1,11 @@
-import Link from "next/link";
 import { Database, Heart } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
-  ProductCard,
   type CatalogProduct,
+  ProductCard,
 } from "@/app/[locale]/(catalog)/_components/catalog-page";
 import { catalogUiCopy } from "@/lib/catalog";
 import {
@@ -12,7 +13,7 @@ import {
   getFavoriteCatalogProducts,
   getFavoriteEquipmentIds,
 } from "@/lib/favorites";
-import { isLocale, localizeHref, type Locale } from "@/lib/i18n";
+import { isLocale, type Locale, localizeHref } from "@/lib/i18n";
 
 type FavoritesPageProps = {
   params: Promise<{ locale: string }>;
@@ -55,6 +56,28 @@ const favoritesCopy: Record<
       "Запустіть локальний Postgres, виконайте auth-міграцію, а потім оновіть сторінку.",
   },
 };
+
+export async function generateMetadata({
+  params,
+}: FavoritesPageProps): Promise<Metadata> {
+  const { locale: localeParam } = await params;
+
+  if (!isLocale(localeParam)) {
+    return {};
+  }
+
+  const locale: Locale = localeParam;
+  const copy = favoritesCopy[locale];
+
+  return {
+    title: copy.title,
+    description: copy.description,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
 
 export default async function FavoritesPage({ params }: FavoritesPageProps) {
   const { locale: localeParam } = await params;

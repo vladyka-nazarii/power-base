@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   and,
   asc,
@@ -9,8 +10,8 @@ import {
   inArray,
   or,
   type SQL,
+  sql,
 } from "drizzle-orm";
-import { createHash } from "node:crypto";
 
 import { ensureRedisConnected } from "@/lib/cache/redis";
 import { db } from "@/lib/db";
@@ -941,12 +942,18 @@ function stableCacheValue(value: unknown): unknown {
 
 function catalogSelection(locale: Locale) {
   const localizedSummary =
-    locale === "uk" ? equipment.summaryUk : equipment.summary;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.summaryUk}, ${equipment.summary})`
+      : equipment.summary;
   const localizedSourceLabel =
-    locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.sourceLabelUk}, ${equipment.sourceLabel})`
+      : equipment.sourceLabel;
   const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
-    locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipmentCategories.nameUk}, ${equipmentCategories.name})`
+      : equipmentCategories.name;
 
   return {
     id: equipment.id,
@@ -1295,12 +1302,18 @@ export async function getProductDetailData({
   productSlug: string;
 }) {
   const localizedSummary =
-    locale === "uk" ? equipment.summaryUk : equipment.summary;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.summaryUk}, ${equipment.summary})`
+      : equipment.summary;
   const localizedSourceLabel =
-    locale === "uk" ? equipment.sourceLabelUk : equipment.sourceLabel;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipment.sourceLabelUk}, ${equipment.sourceLabel})`
+      : equipment.sourceLabel;
   const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
-    locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
+    locale === "uk"
+      ? sql<string>`coalesce(${equipmentCategories.nameUk}, ${equipmentCategories.name})`
+      : equipmentCategories.name;
 
   try {
     const [product] = await db
