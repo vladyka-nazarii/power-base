@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ServiceWorkerRegistration from "@/app/_components/service-worker-registration";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -7,6 +8,24 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "PowerBase",
   description: "Alternative energy equipment catalog",
+  applicationName: "PowerBase",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "PowerBase",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    apple: "/icons/powerbase-icon-192.png",
+    icon: [
+      { url: "/icons/powerbase-icon.svg", type: "image/svg+xml" },
+      { url: "/icons/powerbase-icon-192.png", sizes: "192x192" },
+    ],
+    shortcut: "/icons/powerbase-icon-192.png",
+  },
+  manifest: "/manifest.webmanifest",
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION || "",
   },
@@ -51,7 +70,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ServiceWorkerRegistration />
+        {children}
+      </body>
     </html>
   );
 }

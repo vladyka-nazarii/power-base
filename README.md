@@ -45,6 +45,7 @@ self-hosted deployment documentation in place.
 - Structured product records with typed technical fields.
 - Favorite products with server-side merging support.
 - Redis health route and cache boundary for expensive derived reads.
+- PWA manifest, installable app metadata, and an offline fallback shell.
 - Drizzle schema and migrations for catalog, auth, passkeys, and favorites.
 - Docker-based local PostgreSQL and Redis services.
 
