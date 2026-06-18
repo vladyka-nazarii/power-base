@@ -81,7 +81,6 @@ export default function SiteBreadcrumbs({
               ) : (
                 <Link
                   href={item.href}
-                  prefetch={false}
                   className="focus-visible:outline-ring rounded-sm transition hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-100"
                 >
                   {item.label}

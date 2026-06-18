@@ -51,7 +51,6 @@ export default async function Home({ params }: HomeProps) {
           <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
             <Link
               href={localizeHref(locale, "/inverters")}
-              prefetch={false}
               className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-black px-4 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
             >
               {home.primaryAction}
@@ -181,7 +180,6 @@ export default async function Home({ params }: HomeProps) {
           </div>
           <Link
             href={localizeHref(locale, "/batteries")}
-            prefetch={false}
             className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-black/10 px-3 text-sm font-medium text-black transition hover:bg-zinc-50 dark:border-white/15 dark:text-white dark:hover:bg-zinc-950"
           >
             {home.primaryAction}

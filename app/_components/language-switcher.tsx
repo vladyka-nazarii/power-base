@@ -47,7 +47,6 @@ export default function LanguageSwitcher({
         <Link
           key={item}
           href={getLocalizedPath(pathname, item)}
-          prefetch={false}
           aria-current={item === locale ? "page" : undefined}
           aria-label={`Switch language to ${labels[item]}`}
           className="rounded-full px-2.5 py-1 text-black/60 transition-colors hover:text-black aria-[current=page]:bg-black aria-[current=page]:text-white aria-[current=page]:shadow-sm aria-[current=page]:ring-1 aria-[current=page]:ring-black/10 dark:text-white/65 dark:hover:text-white dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-black dark:aria-[current=page]:ring-white/20"

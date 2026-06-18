@@ -328,7 +328,6 @@ export default async function ProductDetailPage({
         <div className="min-w-0">
           <Link
             href={catalogHref}
-            prefetch={false}
             className="focus-visible:outline-ring inline-flex items-center gap-2 rounded-sm text-sm font-medium text-zinc-500 transition hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 dark:hover:text-white"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />

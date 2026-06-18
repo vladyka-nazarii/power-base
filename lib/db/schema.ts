@@ -200,7 +200,42 @@ export const equipment = pgTable(
       .defaultNow()
       .notNull(),
   },
-  (table) => [uniqueIndex("equipment_slug_idx").on(table.slug)],
+  (table) => [
+    uniqueIndex("equipment_slug_idx").on(table.slug),
+    index("equipment_category_id_idx").on(table.categoryId),
+    index("equipment_manufacturer_id_idx").on(table.manufacturerId),
+    index("equipment_category_id_id_idx").on(table.categoryId, table.id),
+    index("equipment_category_price_id_idx").on(
+      table.categoryId,
+      table.priceCents,
+      table.id,
+    ),
+    index("equipment_category_capacity_id_idx").on(
+      table.categoryId,
+      table.capacityWh,
+      table.id,
+    ),
+    index("equipment_category_voltage_id_idx").on(
+      table.categoryId,
+      table.nominalVoltageV,
+      table.id,
+    ),
+    index("equipment_category_chemistry_id_idx").on(
+      table.categoryId,
+      table.chemistry,
+      table.id,
+    ),
+    index("equipment_category_power_id_idx").on(
+      table.categoryId,
+      table.continuousPowerW,
+      table.id,
+    ),
+    index("equipment_category_weight_id_idx").on(
+      table.categoryId,
+      table.weightGrams,
+      table.id,
+    ),
+  ],
 );
 
 export const userFavorites = pgTable(

@@ -76,7 +76,6 @@ export default function AuthMenu({
     return (
       <Link
         href={localizeHref(locale, "/sign-in")}
-        prefetch={false}
         className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
       >
         <LogIn aria-hidden="true" />
@@ -99,7 +98,6 @@ export default function AuthMenu({
         </span>
         <Link
           href={localizeHref(locale, "/sign-in")}
-          prefetch={false}
           className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
         >
           <LogIn aria-hidden="true" />

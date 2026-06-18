@@ -1,6 +1,7 @@
 import {
   and,
   asc,
+  count,
   desc,
   eq,
   gte,
@@ -9,7 +10,9 @@ import {
   or,
   type SQL,
 } from "drizzle-orm";
+import { createHash } from "node:crypto";
 
+import { ensureRedisConnected } from "@/lib/cache/redis";
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 import type { Locale } from "@/lib/i18n";
@@ -68,9 +71,24 @@ export type CatalogFilters = {
   wirelessChargingMaxPower?: number;
   wirelessChargingMaxPowerRanges: string[];
   sort: CatalogSort;
+  page: number;
 };
 
 export type CatalogProductSpecifications = Record<string, unknown>;
+
+export const catalogPageSize = 12;
+const catalogPageCacheTtlSeconds = Number(
+  process.env.CATALOG_PAGE_CACHE_TTL_SECONDS ?? 300,
+);
+
+export type CatalogPagination = {
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalProducts: number;
+  shownFrom: number;
+  shownTo: number;
+};
 
 export type NumberRangeFilterOption = {
   id: string;
@@ -491,10 +509,32 @@ function sortExpression(sort: CatalogSort) {
       return desc(equipment.continuousPowerW);
     case "weight-asc":
       return asc(equipment.weightGrams);
-    case "recommended":
     default:
       return asc(equipment.id);
   }
+}
+
+function paginationFor(totalProducts: number, requestedPage: number) {
+  const totalPages = Math.max(1, Math.ceil(totalProducts / catalogPageSize));
+  const page = Math.min(Math.max(requestedPage, 1), totalPages);
+  const shownFrom = totalProducts === 0 ? 0 : (page - 1) * catalogPageSize + 1;
+  const shownTo =
+    totalProducts === 0 ? 0 : Math.min(page * catalogPageSize, totalProducts);
+
+  return {
+    page,
+    pageSize: catalogPageSize,
+    totalPages,
+    totalProducts,
+    shownFrom,
+    shownTo,
+  };
+}
+
+function paginatedRows<T>(rows: T[], pagination: CatalogPagination) {
+  const offset = (pagination.page - 1) * pagination.pageSize;
+
+  return rows.slice(offset, offset + pagination.pageSize);
 }
 
 function compactConditions(conditions: Array<SQL | undefined>) {
@@ -556,7 +596,18 @@ type CountedNumberRangeFacet = CountedFacet & {
   label: string;
 };
 
+const powerBankSpecsCache = new WeakMap<
+  CatalogProductRow,
+  PowerBankSpecifications
+>();
+
 function powerBankSpecs(product: CatalogProductRow): PowerBankSpecifications {
+  const cachedSpecifications = powerBankSpecsCache.get(product);
+
+  if (cachedSpecifications) {
+    return cachedSpecifications;
+  }
+
   const specifications =
     product.specifications &&
     typeof product.specifications === "object" &&
@@ -564,13 +615,17 @@ function powerBankSpecs(product: CatalogProductRow): PowerBankSpecifications {
       ? (product.specifications as Record<string, unknown>)
       : null;
 
-  return {
+  const normalizedSpecifications = {
     ...(specifications ?? {}),
     ...normalizePowerBankSpecifications({
       ...product,
       specifications,
     }),
   } as PowerBankSpecifications;
+
+  powerBankSpecsCache.set(product, normalizedSpecifications);
+
+  return normalizedSpecifications;
 }
 
 function matchesPowerBankFilters(
@@ -745,6 +800,75 @@ export async function getCatalogPageData(
   filters: CatalogFilters,
   locale: Locale,
 ) {
+  const cacheKey = catalogPageCacheKey(categorySlug, filters, locale);
+
+  if (catalogPageCacheTtlSeconds > 0) {
+    try {
+      const redis = await ensureRedisConnected();
+      const cachedData = await redis.get(cacheKey);
+
+      if (cachedData) {
+        return JSON.parse(cachedData) as Awaited<
+          ReturnType<typeof getUncachedCatalogPageData>
+        >;
+      }
+    } catch (error) {
+      console.warn("Catalog Redis cache read failed", error);
+    }
+  }
+
+  const data = await getUncachedCatalogPageData(categorySlug, filters, locale);
+
+  if (catalogPageCacheTtlSeconds > 0 && !data.unavailable) {
+    try {
+      const redis = await ensureRedisConnected();
+      await redis.set(
+        cacheKey,
+        JSON.stringify(data),
+        "EX",
+        catalogPageCacheTtlSeconds,
+      );
+    } catch (error) {
+      console.warn("Catalog Redis cache write failed", error);
+    }
+  }
+
+  return data;
+}
+
+function catalogPageCacheKey(
+  categorySlug: CatalogCategorySlug,
+  filters: CatalogFilters,
+  locale: Locale,
+) {
+  const digest = createHash("sha256")
+    .update(JSON.stringify(stableCacheValue({ filters, locale })))
+    .digest("hex");
+
+  return `powerbase:catalog:v1:${categorySlug}:${locale}:${digest}`;
+}
+
+function stableCacheValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(stableCacheValue);
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, nestedValue]) => [key, stableCacheValue(nestedValue)]),
+    );
+  }
+
+  return value;
+}
+
+async function getUncachedCatalogPageData(
+  categorySlug: CatalogCategorySlug,
+  filters: CatalogFilters,
+  locale: Locale,
+) {
   const localizedSummary =
     locale === "uk" ? equipment.summaryUk : equipment.summary;
   const localizedSourceLabel =
@@ -752,36 +876,37 @@ export async function getCatalogPageData(
   const localizedChemistry = equipment.chemistry;
   const localizedCategoryName =
     locale === "uk" ? equipmentCategories.nameUk : equipmentCategories.name;
+  const catalogSelection = {
+    id: equipment.id,
+    model: equipment.model,
+    slug: equipment.slug,
+    summary: localizedSummary,
+    imagePath: equipment.imagePath,
+    priceCents: equipment.priceCents,
+    productCode: equipment.productCode,
+    nominalVoltageV: equipment.nominalVoltageV,
+    capacityWh: equipment.capacityWh,
+    continuousPowerW: equipment.continuousPowerW,
+    peakPowerW: equipment.peakPowerW,
+    maxPvVoltageV: equipment.maxPvVoltageV,
+    maxChargeCurrentA: equipment.maxChargeCurrentA,
+    chemistry: equipment.chemistry,
+    chemistryLabel: localizedChemistry,
+    communicationProtocols: equipment.communicationProtocols,
+    weightGrams: equipment.weightGrams,
+    warrantyYears: equipment.warrantyYears,
+    lifecycleCycles: equipment.lifecycleCycles,
+    sourceLabel: localizedSourceLabel,
+    sourceUrl: equipment.sourceUrl,
+    specifications: equipment.specifications,
+    manufacturer: manufacturers.name,
+    categoryName: localizedCategoryName,
+    categorySlug: equipmentCategories.slug,
+  };
 
   try {
     const baseRows = await db
-      .select({
-        id: equipment.id,
-        model: equipment.model,
-        slug: equipment.slug,
-        summary: localizedSummary,
-        imagePath: equipment.imagePath,
-        priceCents: equipment.priceCents,
-        productCode: equipment.productCode,
-        nominalVoltageV: equipment.nominalVoltageV,
-        capacityWh: equipment.capacityWh,
-        continuousPowerW: equipment.continuousPowerW,
-        peakPowerW: equipment.peakPowerW,
-        maxPvVoltageV: equipment.maxPvVoltageV,
-        maxChargeCurrentA: equipment.maxChargeCurrentA,
-        chemistry: equipment.chemistry,
-        chemistryLabel: localizedChemistry,
-        communicationProtocols: equipment.communicationProtocols,
-        weightGrams: equipment.weightGrams,
-        warrantyYears: equipment.warrantyYears,
-        lifecycleCycles: equipment.lifecycleCycles,
-        sourceLabel: localizedSourceLabel,
-        sourceUrl: equipment.sourceUrl,
-        specifications: equipment.specifications,
-        manufacturer: manufacturers.name,
-        categoryName: localizedCategoryName,
-        categorySlug: equipmentCategories.slug,
-      })
+      .select(catalogSelection)
       .from(equipment)
       .innerJoin(
         equipmentCategories,
@@ -818,50 +943,58 @@ export async function getCatalogPageData(
         ? gte(equipment.continuousPowerW, filters.minPowerW)
         : undefined,
     ]);
-
-    const products = await db
-      .select({
-        id: equipment.id,
-        model: equipment.model,
-        slug: equipment.slug,
-        summary: localizedSummary,
-        imagePath: equipment.imagePath,
-        priceCents: equipment.priceCents,
-        productCode: equipment.productCode,
-        nominalVoltageV: equipment.nominalVoltageV,
-        capacityWh: equipment.capacityWh,
-        continuousPowerW: equipment.continuousPowerW,
-        peakPowerW: equipment.peakPowerW,
-        maxPvVoltageV: equipment.maxPvVoltageV,
-        maxChargeCurrentA: equipment.maxChargeCurrentA,
-        chemistry: equipment.chemistry,
-        chemistryLabel: localizedChemistry,
-        communicationProtocols: equipment.communicationProtocols,
-        weightGrams: equipment.weightGrams,
-        warrantyYears: equipment.warrantyYears,
-        lifecycleCycles: equipment.lifecycleCycles,
-        sourceLabel: localizedSourceLabel,
-        sourceUrl: equipment.sourceUrl,
-        specifications: equipment.specifications,
-        manufacturer: manufacturers.name,
-        categoryName: localizedCategoryName,
-        categorySlug: equipmentCategories.slug,
-      })
-      .from(equipment)
-      .innerJoin(
-        equipmentCategories,
-        eq(equipment.categoryId, equipmentCategories.id),
-      )
-      .innerJoin(manufacturers, eq(equipment.manufacturerId, manufacturers.id))
-      .where(and(...conditions))
-      .orderBy(sortExpression(filters.sort), asc(equipment.id));
-
     const filteredProducts =
       categorySlug === "power-banks"
-        ? products.filter((product) =>
-            matchesPowerBankFilters(product, filters),
-          )
-        : products;
+        ? (
+            await db
+              .select(catalogSelection)
+              .from(equipment)
+              .innerJoin(
+                equipmentCategories,
+                eq(equipment.categoryId, equipmentCategories.id),
+              )
+              .innerJoin(
+                manufacturers,
+                eq(equipment.manufacturerId, manufacturers.id),
+              )
+              .where(and(...conditions))
+              .orderBy(sortExpression(filters.sort), asc(equipment.id))
+          ).filter((product) => matchesPowerBankFilters(product, filters))
+        : null;
+    const [{ totalProducts }] =
+      categorySlug === "power-banks"
+        ? [{ totalProducts: filteredProducts?.length ?? 0 }]
+        : await db
+            .select({ totalProducts: count() })
+            .from(equipment)
+            .innerJoin(
+              equipmentCategories,
+              eq(equipment.categoryId, equipmentCategories.id),
+            )
+            .innerJoin(
+              manufacturers,
+              eq(equipment.manufacturerId, manufacturers.id),
+            )
+            .where(and(...conditions));
+    const pagination = paginationFor(totalProducts, filters.page);
+    const products =
+      categorySlug === "power-banks"
+        ? paginatedRows(filteredProducts ?? [], pagination)
+        : await db
+            .select(catalogSelection)
+            .from(equipment)
+            .innerJoin(
+              equipmentCategories,
+              eq(equipment.categoryId, equipmentCategories.id),
+            )
+            .innerJoin(
+              manufacturers,
+              eq(equipment.manufacturerId, manufacturers.id),
+            )
+            .where(and(...conditions))
+            .orderBy(sortExpression(filters.sort), asc(equipment.id))
+            .limit(pagination.pageSize)
+            .offset((pagination.page - 1) * pagination.pageSize);
     const powerBankBaseSpecs =
       categorySlug === "power-banks" ? baseRows.map(powerBankSpecs) : [];
     const searchableBaseRows = filterRowsForSearch(baseRows, filters);
@@ -979,8 +1112,9 @@ export async function getCatalogPageData(
       .filter((value): value is number => value !== null);
 
     return {
-      products: filteredProducts,
-      totalProducts: baseRows.length,
+      products,
+      totalProducts,
+      pagination,
       unavailable: false,
       facets: {
         manufacturers: manufacturerFacets,
@@ -1051,6 +1185,7 @@ export async function getCatalogPageData(
     return {
       products: [],
       totalProducts: 0,
+      pagination: paginationFor(0, 1),
       unavailable: true,
       facets: {
         manufacturers: [],
@@ -1162,6 +1297,7 @@ export function parseCatalogFilters(
   };
   const [q] = values("q");
   const [sortValue] = values("sort");
+  const parsedPage = Math.floor(numberValue("page") ?? 1);
   const sorts: CatalogSort[] = [
     "recommended",
     "price-asc",
@@ -1206,6 +1342,7 @@ export function parseCatalogFilters(
     sort: sorts.includes(sortValue as CatalogSort)
       ? (sortValue as CatalogSort)
       : "recommended",
+    page: parsedPage > 0 ? parsedPage : 1,
   };
 }
 

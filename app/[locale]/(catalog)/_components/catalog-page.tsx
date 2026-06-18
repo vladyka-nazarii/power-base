@@ -1,11 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowUpDown, Database, Search, SlidersHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Database,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import AutoSubmitForm from "@/app/[locale]/(catalog)/_components/auto-submit-form";
 import FavoriteButton from "@/app/_components/favorite-button";
 import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters-link";
+import { cn } from "@/lib/utils";
 import {
   catalogPageCopy,
   catalogUiCopy,
@@ -116,6 +124,181 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   return inputs.map(([name, value]) => (
     <input key={`${name}-${value}`} type="hidden" name={name} value={value} />
   ));
+}
+
+function catalogSearchParams(filters: CatalogFilters, page: number) {
+  const params = new URLSearchParams();
+  const add = (name: string, value: string | number | undefined) => {
+    if (value !== undefined && value !== "") {
+      params.append(name, String(value));
+    }
+  };
+
+  add("q", filters.q);
+  filters.manufacturers.forEach((value) => add("manufacturer", value));
+  filters.voltages.forEach((value) => add("voltage", value));
+  filters.chemistries.forEach((value) => add("chemistry", value));
+  add("minCapacityWh", filters.minCapacityWh);
+  add("minPowerW", filters.minPowerW);
+  add("capacityWh", filters.capacityWh);
+  filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
+  filters.batteryChemistries.forEach((value) => add("batteryChemistry", value));
+  filters.supportedOutputProtocols.forEach((value) =>
+    add("supportedOutputProtocols", value),
+  );
+  add("maxInputPower", filters.maxInputPower);
+  filters.maxInputPowerRanges.forEach((value) =>
+    add("maxInputPowerRange", value),
+  );
+  add("maxOutputPower", filters.maxOutputPower);
+  filters.maxOutputPowerRanges.forEach((value) =>
+    add("maxOutputPowerRange", value),
+  );
+  add(
+    "passthroughCharging",
+    filters.passthroughCharging === true ? "true" : undefined,
+  );
+  add("gravimetricDensity", filters.gravimetricDensity);
+  filters.gravimetricDensityRanges.forEach((value) =>
+    add("gravimetricDensityRange", value),
+  );
+  add("length", filters.dimensionLength);
+  filters.dimensionLengthRanges.forEach((value) => add("lengthRange", value));
+  add("width", filters.dimensionWidth);
+  filters.dimensionWidthRanges.forEach((value) => add("widthRange", value));
+  add("thickness", filters.dimensionThickness);
+  filters.dimensionThicknessRanges.forEach((value) =>
+    add("thicknessRange", value),
+  );
+  add("weight", filters.weight);
+  filters.weightRanges.forEach((value) => add("weightRange", value));
+  filters.displayTypes.forEach((value) => add("displayType", value));
+  add("price", filters.price);
+  filters.priceRanges.forEach((value) => add("priceRange", value));
+  filters.builtInCables.forEach((value) => add("builtInCable", value));
+  add("wirelessChargingMaxPower", filters.wirelessChargingMaxPower);
+  filters.wirelessChargingMaxPowerRanges.forEach((value) =>
+    add("wirelessChargingMaxPowerRange", value),
+  );
+  add("sort", filters.sort === "recommended" ? undefined : filters.sort);
+  add("page", page > 1 ? page : undefined);
+
+  return params;
+}
+
+function catalogPageHref({
+  category,
+  filters,
+  locale,
+  page,
+}: {
+  category: CatalogCategorySlug;
+  filters: CatalogFilters;
+  locale: Locale;
+  page: number;
+}) {
+  const params = catalogSearchParams(filters, page);
+  const queryString = params.toString();
+  const pathname = localizeHref(locale, `/${category}`);
+
+  return queryString ? `${pathname}?${queryString}` : pathname;
+}
+
+function visiblePaginationPages(page: number, totalPages: number) {
+  const pages = new Set([1, totalPages, page - 1, page, page + 1]);
+
+  return [...pages]
+    .filter((value) => value >= 1 && value <= totalPages)
+    .sort((a, b) => a - b);
+}
+
+function CatalogPagination({
+  category,
+  data,
+  filters,
+  locale,
+}: {
+  category: CatalogCategorySlug;
+  data: CatalogData;
+  filters: CatalogFilters;
+  locale: Locale;
+}) {
+  const { page, totalPages } = data.pagination;
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const pages = visiblePaginationPages(page, totalPages);
+
+  return (
+    <nav
+      aria-label="Pagination"
+      className="flex flex-wrap items-center justify-center gap-2"
+    >
+      <Link
+        href={catalogPageHref({
+          category,
+          filters,
+          locale,
+          page: Math.max(1, page - 1),
+        })}
+        aria-disabled={page === 1}
+        tabIndex={page === 1 ? -1 : undefined}
+        className="inline-flex size-10 items-center justify-center rounded-md border border-black/10 text-zinc-600 transition hover:border-black/20 hover:text-black aria-disabled:pointer-events-none aria-disabled:opacity-40 dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/20 dark:hover:text-white"
+      >
+        <ChevronLeft className="size-4" aria-hidden="true" />
+        <span className="sr-only">Previous page</span>
+      </Link>
+
+      {pages.map((visiblePage, index) => {
+        const previousPage = pages[index - 1];
+        const showGap =
+          previousPage !== undefined && visiblePage - previousPage > 1;
+
+        return (
+          <div key={visiblePage} className="flex items-center gap-2">
+            {showGap ? (
+              <span className="px-1 text-sm text-zinc-400" aria-hidden="true">
+                ...
+              </span>
+            ) : null}
+            <Link
+              href={catalogPageHref({
+                category,
+                filters,
+                locale,
+                page: visiblePage,
+              })}
+              aria-current={visiblePage === page ? "page" : undefined}
+              className={cn(
+                "inline-flex size-10 items-center justify-center rounded-md border border-black/10 text-sm font-medium text-zinc-600 transition hover:border-black/20 hover:text-black dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/20 dark:hover:text-white",
+                visiblePage === page &&
+                  "border-black bg-black text-white hover:border-black hover:text-white dark:border-white dark:bg-white dark:text-black dark:hover:border-white dark:hover:text-black",
+              )}
+            >
+              {visiblePage}
+            </Link>
+          </div>
+        );
+      })}
+
+      <Link
+        href={catalogPageHref({
+          category,
+          filters,
+          locale,
+          page: Math.min(totalPages, page + 1),
+        })}
+        aria-disabled={page === totalPages}
+        tabIndex={page === totalPages ? -1 : undefined}
+        className="inline-flex size-10 items-center justify-center rounded-md border border-black/10 text-zinc-600 transition hover:border-black/20 hover:text-black aria-disabled:pointer-events-none aria-disabled:opacity-40 dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/20 dark:hover:text-white"
+      >
+        <ChevronRight className="size-4" aria-hidden="true" />
+        <span className="sr-only">Next page</span>
+      </Link>
+    </nav>
+  );
 }
 
 function productDetailSpecs(product: CatalogProduct) {
@@ -451,7 +634,6 @@ export function ProductCard({
       <div className="relative border-b border-black/10 dark:border-white/10">
         <Link
           href={detailHref}
-          prefetch={false}
           className="focus-visible:outline-ring flex aspect-[4/3] items-center justify-center bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-[-2px] dark:bg-zinc-950"
         >
           <Image
@@ -479,7 +661,6 @@ export function ProductCard({
             <h2 className="mt-1 text-lg font-semibold text-black dark:text-white">
               <Link
                 href={detailHref}
-                prefetch={false}
                 className="focus-visible:outline-ring rounded-sm transition hover:text-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 dark:hover:text-zinc-300"
               >
                 {product.model}
@@ -559,7 +740,7 @@ export default async function CatalogPage({
   const paginationSummary = (
     <div className="rounded-lg border border-black/10 px-4 py-3 text-sm dark:border-white/10">
       <span className="text-zinc-500">
-        {ui.productCount(data.products.length, data.totalProducts)}
+        {ui.productCount(data.pagination.shownTo, data.totalProducts)}
       </span>
     </div>
   );
@@ -578,7 +759,6 @@ export default async function CatalogPage({
               </div>
               <ResetFiltersLink
                 href={clearHref}
-                prefetch={false}
                 className="text-sm text-zinc-500 transition hover:text-black dark:hover:text-white"
               >
                 {ui.reset}
@@ -741,7 +921,7 @@ export default async function CatalogPage({
             <p className="text-sm text-zinc-500">
               {data.unavailable
                 ? ui.databaseUnavailable
-                : ui.matchingProducts(data.products.length)}
+                : ui.matchingProducts(data.totalProducts)}
             </p>
 
             <AutoSubmitForm className="flex items-center gap-2">
@@ -787,7 +967,15 @@ export default async function CatalogPage({
             </div>
           )}
 
-          <div className="mt-6 flex justify-center">{paginationSummary}</div>
+          <div className="mt-6 flex flex-col items-center gap-4">
+            {paginationSummary}
+            <CatalogPagination
+              category={category}
+              data={data}
+              filters={filters}
+              locale={locale}
+            />
+          </div>
         </div>
       </section>
     </div>

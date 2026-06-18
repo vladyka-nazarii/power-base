@@ -90,7 +90,6 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
           </div>
           <Link
             href={localizeHref(locale, "/power-banks")}
-            prefetch={false}
             className="inline-flex h-9 items-center justify-center rounded-lg border border-black/10 px-3 text-sm font-medium transition hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-zinc-900"
           >
             {copy.browseCatalog}

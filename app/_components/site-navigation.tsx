@@ -54,7 +54,6 @@ export default function SiteNavigation({
                     "bg-zinc-900 font-medium text-white hover:bg-zinc-900 hover:text-white dark:bg-white dark:text-black dark:hover:bg-white dark:hover:text-black",
                 )}
                 href={href}
-                prefetch={false}
               >
                 {item.href === "/favorites" ? (
                   <Heart className="size-4" aria-hidden="true" />
