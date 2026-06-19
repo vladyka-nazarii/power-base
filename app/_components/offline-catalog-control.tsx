@@ -135,7 +135,7 @@ export default function OfflineCatalogControl({ locale }: { locale: Locale }) {
         )}
       </Button>
       {open ? (
-        <div className="absolute top-full right-0 z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-black/10 bg-white p-4 shadow-xl shadow-black/10 dark:border-white/10 dark:bg-zinc-950 dark:shadow-black/40">
+        <div className="fixed top-16 right-3 left-3 z-[60] max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-lg border border-black/10 bg-white p-4 shadow-xl shadow-black/10 lg:absolute lg:top-full lg:right-0 lg:left-auto lg:z-50 lg:mt-2 lg:max-h-none lg:w-[min(22rem,calc(100vw-2rem))] lg:overflow-visible dark:border-white/10 dark:bg-zinc-950 dark:shadow-black/40">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="font-semibold">{ui.title}</h2>
