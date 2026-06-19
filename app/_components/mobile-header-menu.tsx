@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 import AuthMenu from "@/app/_components/auth-menu";
 import LanguageSwitcher from "@/app/_components/language-switcher";
+import OfflineCatalogControl from "@/app/_components/offline-catalog-control";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
 import { mainNavigation } from "@/app/_config/navigation";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,7 @@ export default function MobileHeaderMenu({
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-black/10 pt-3 dark:border-white/10">
             <LanguageSwitcher locale={locale} labels={languageLabels} />
             <ThemeSwitcher />
+            <OfflineCatalogControl locale={locale} />
             <AuthMenu locale={locale} showIdentity />
           </div>
         </div>

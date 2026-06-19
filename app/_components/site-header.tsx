@@ -2,6 +2,7 @@ import Link from "next/link";
 import AuthMenu from "@/app/_components/auth-menu";
 import LanguageSwitcher from "@/app/_components/language-switcher";
 import MobileHeaderMenu from "@/app/_components/mobile-header-menu";
+import OfflineCatalogControl from "@/app/_components/offline-catalog-control";
 import PowerBaseLogo from "@/app/_components/powerbase-logo";
 import SiteNavigation from "@/app/_components/site-navigation";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
@@ -43,6 +44,7 @@ export default async function SiteHeader({
             labels={dictionary.common.languages}
           />
           <ThemeSwitcher />
+          <OfflineCatalogControl locale={locale} />
           <AuthMenu locale={locale} />
         </div>
         <MobileHeaderMenu

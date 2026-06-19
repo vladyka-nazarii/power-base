@@ -11,6 +11,10 @@ export function proxy(request: NextRequest) {
   const firstSegment = pathname.split("/")[1];
   const requestHeaders = new Headers(request.headers);
 
+  if (pathname === "/offline") {
+    return NextResponse.next();
+  }
+
   if (isLocale(firstSegment)) {
     requestHeaders.set("x-powerbase-locale", firstSegment);
 
