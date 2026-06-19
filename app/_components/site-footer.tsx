@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-import { getDictionary } from "@/lib/i18n";
+import type { getDictionary } from "@/lib/i18n";
 
 type SiteFooterProps = {
   dictionary: ReturnType<typeof getDictionary>;

@@ -182,6 +182,11 @@ async function performSynchronization({
   const favoriteIds = await readFavoriteIds();
 
   if (current?.manifest.version === manifest.version && !initial) {
+    await sendServiceWorkerCommand(
+      "SYNC_OFFLINE_CATALOG",
+      { imagePaths: [], obsoleteImagePaths: [] },
+      onProgress,
+    );
     await updateFavoriteMetadata(favoriteIds);
     return { ...current, favoriteIds };
   }

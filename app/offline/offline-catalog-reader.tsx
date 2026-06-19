@@ -2,18 +2,36 @@
 
 import {
   ArrowLeft,
-  BatteryCharging,
+  ArrowRight,
+  CheckCircle2,
+  ChevronRight,
   Database,
+  FileText,
   Heart,
   Search,
   SlidersHorizontal,
   WifiOff,
+  Zap,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  type MouseEvent,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import { PowerBaseLogoMark } from "@/app/_components/powerbase-logo";
+import PowerBaseLogo, {
+  PowerBaseLogoMark,
+} from "@/app/_components/powerbase-logo";
+import SiteFooter from "@/app/_components/site-footer";
+import ThemeSwitcher from "@/app/_components/theme-switcher";
 import type { CatalogCategorySlug } from "@/lib/catalog";
+import { getDictionary } from "@/lib/i18n";
 import {
   filterAndSortOfflineProducts,
   localizeOfflineText,
@@ -86,6 +104,34 @@ function offlineHref(path: string) {
   return `/offline?path=${encodeURIComponent(path)}`;
 }
 
+const OfflineNavigationContext = createContext<(path: string) => void>(
+  () => {},
+);
+
+function OfflineLink({
+  path,
+  children,
+  className,
+}: {
+  path: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  const navigate = useContext(OfflineNavigationContext);
+  return (
+    <a
+      href={offlineHref(path)}
+      className={className}
+      onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        navigate(path);
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
 function imagePlaceholder(category: CatalogCategorySlug) {
   const names: Record<CatalogCategorySlug, string> = {
     "power-banks": "power-bank",
@@ -105,26 +151,103 @@ function formatPrice(value: number | null, locale: "en" | "uk") {
   }).format(value / 100);
 }
 
-function ReaderHeader({ locale }: { locale: "en" | "uk" }) {
+function ReaderHeader({ locale, path }: { locale: "en" | "uk"; path: string }) {
   const otherLocale = locale === "en" ? "uk" : "en";
+  const otherLocalePath =
+    path === `/${locale}`
+      ? `/${otherLocale}`
+      : path.replace(/^\/(en|uk)\//, `/${otherLocale}/`);
   return (
-    <header className="sticky top-0 z-20 flex min-h-14 items-center justify-between border-b border-black/10 bg-white/90 px-5 backdrop-blur dark:border-white/10 dark:bg-black/85">
-      <a href={offlineHref(`/${locale}`)} className="flex items-center gap-3">
-        <PowerBaseLogoMark className="size-8" />
-        <span className="font-semibold">PowerBase</span>
-      </a>
-      <div className="flex items-center gap-3 text-sm">
+    <header className="sticky top-0 z-20 flex min-h-14 items-center justify-between gap-4 border-b border-black/10 bg-white/90 px-5 backdrop-blur dark:border-white/10 dark:bg-black/85">
+      <OfflineLink path={`/${locale}`} className="shrink-0">
+        <PowerBaseLogo />
+      </OfflineLink>
+      <nav className="hidden min-w-0 lg:block" aria-label="Primary">
+        <ul className="flex items-center gap-1">
+          {Object.entries(categoryLabels[locale]).map(([category, label]) => (
+            <li key={category}>
+              <OfflineLink
+                path={`/${locale}/${category}`}
+                className="rounded-md px-2.5 py-1.5 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-white"
+              >
+                {label}
+              </OfflineLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="flex shrink-0 items-center gap-2 text-sm">
         <span className="inline-flex items-center gap-2 text-zinc-500">
           <WifiOff className="size-4" /> {copy[locale].offline}
         </span>
-        <a
-          href={offlineHref(`/${otherLocale}`)}
+        <ThemeSwitcher />
+        <OfflineLink
+          path={otherLocalePath}
           className="rounded-md border border-black/10 px-2.5 py-1.5 font-medium dark:border-white/15"
         >
           {otherLocale.toUpperCase()}
-        </a>
+        </OfflineLink>
       </div>
     </header>
+  );
+}
+
+function OfflineBreadcrumbs({
+  route,
+  product,
+}: {
+  route: ReturnType<typeof parseOfflineRoute>;
+  product?: OfflineCatalogProduct;
+}) {
+  if (route.kind === "home" || route.kind === "unsupported") return null;
+  const items = [
+    {
+      label: getDictionary(route.locale).navigation.home,
+      path: `/${route.locale}`,
+    },
+    {
+      label: categoryLabels[route.locale][route.category],
+      path: `/${route.locale}/${route.category}`,
+    },
+    ...(route.kind === "product"
+      ? [{ label: product?.model ?? route.productSlug, path: "" }]
+      : []),
+  ];
+
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      className="border-b border-black/10 px-5 py-3 text-sm dark:border-white/10"
+    >
+      <ol className="mx-auto flex max-w-[1880px] flex-wrap items-center gap-1 text-zinc-500 dark:text-zinc-400">
+        {items.map((item, index) => {
+          const current = index === items.length - 1;
+          return (
+            <li
+              key={item.path || item.label}
+              className="flex items-center gap-1"
+            >
+              {index > 0 ? <ChevronRight className="size-3.5" /> : null}
+              {current ? (
+                <span
+                  aria-current="page"
+                  className="font-medium text-zinc-900 dark:text-zinc-100"
+                >
+                  {item.label}
+                </span>
+              ) : (
+                <OfflineLink
+                  path={item.path}
+                  className="hover:text-zinc-900 dark:hover:text-zinc-100"
+                >
+                  {item.label}
+                </OfflineLink>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 }
 
@@ -135,37 +258,149 @@ function OfflineHome({
   locale: "en" | "uk";
   snapshot: OfflineCatalogSnapshot;
 }) {
+  const home = getDictionary(locale).home;
   return (
     <main>
-      <section className="border-b border-black/10 px-5 py-20 text-center dark:border-white/10">
-        <Database className="mx-auto size-9 text-zinc-500" />
-        <h1 className="mt-5 text-5xl font-semibold tracking-tight">
-          PowerBase
-        </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          {copy[locale].description}
-        </p>
-        <p className="mt-4 text-sm text-zinc-500">
-          {snapshot.products.length} {copy[locale].products}
-        </p>
-      </section>
-      <section className="mx-auto grid max-w-6xl gap-5 px-5 py-12 sm:grid-cols-2">
-        {Object.entries(categoryLabels[locale]).map(([category, label]) => {
-          const count =
-            snapshot.manifest.categories[category as CatalogCategorySlug]
-              .length;
-          return (
-            <a
-              key={category}
-              href={offlineHref(`/${locale}/${category}`)}
-              className="rounded-xl border border-black/10 bg-white p-6 transition hover:bg-zinc-50 dark:border-white/10 dark:bg-black dark:hover:bg-zinc-950"
+      <section className="relative border-b border-black/10 px-5 py-20 text-center sm:py-24 dark:border-white/10">
+        <div className="mx-auto flex max-w-5xl flex-col items-center">
+          <div className="mb-8 inline-flex h-8 items-center gap-2 rounded-full border border-black/10 bg-white px-3 text-sm text-zinc-700 shadow-sm dark:border-white/15 dark:bg-zinc-950 dark:text-zinc-300">
+            <Zap className="size-4" />
+            <span>{home.badge}</span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-7">
+            <PowerBaseLogoMark className="size-24 sm:size-32 lg:size-40" />
+            <h1 className="max-w-4xl text-5xl leading-[1.05] font-semibold text-balance sm:text-6xl lg:text-7xl">
+              {home.title}
+            </h1>
+          </div>
+          <p className="mt-6 max-w-3xl text-xl leading-8 text-balance text-zinc-600 sm:text-2xl dark:text-zinc-400">
+            {home.headline}
+          </p>
+          <p className="mt-5 max-w-3xl text-base leading-8 text-pretty text-zinc-600 sm:text-lg dark:text-zinc-400">
+            {home.description}
+          </p>
+          <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
+            <OfflineLink
+              path={`/${locale}/inverters`}
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-black px-4 text-sm font-medium text-white dark:bg-white dark:text-black"
             >
-              <BatteryCharging className="size-5 text-zinc-500" />
-              <h2 className="mt-8 text-xl font-semibold">{label}</h2>
-              <p className="mt-2 text-sm text-zinc-500">{count} products</p>
+              {home.primaryAction} <ArrowRight className="size-4" />
+            </OfflineLink>
+            <a
+              href="#brief"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-4 text-sm font-medium dark:border-white/15 dark:bg-black"
+            >
+              <FileText className="size-4" /> {home.secondaryAction}
             </a>
-          );
-        })}
+          </div>
+          <div className="mt-12 w-full max-w-2xl overflow-hidden rounded-lg border border-black/10 bg-zinc-950 text-left shadow-2xl dark:border-white/15">
+            <div className="flex h-10 items-center gap-2 border-b border-white/10 px-4">
+              <span className="size-3 rounded-full bg-zinc-500" />
+              <span className="size-3 rounded-full bg-zinc-600" />
+              <span className="size-3 rounded-full bg-zinc-700" />
+            </div>
+            <div className="flex items-center gap-3 px-4 py-5 font-mono text-sm text-zinc-100 sm:text-base">
+              <span className="text-zinc-500">▲</span>
+              <code className="overflow-x-auto whitespace-nowrap">
+                {home.command}
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="grid border-b border-black/10 sm:grid-cols-3 dark:border-white/10">
+        {home.stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="border-b border-black/10 px-5 py-8 text-center last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0 dark:border-white/10"
+          >
+            <div className="text-3xl font-semibold">{stat.value}</div>
+            <div className="mx-auto mt-2 max-w-56 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </section>
+      <section className="px-5 py-16 sm:py-20">
+        <div className="mx-auto max-w-[1840px]">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-semibold sm:text-4xl">
+              {home.featuresTitle}
+            </h2>
+            <p className="mt-4 text-base leading-7 text-zinc-600 sm:text-lg dark:text-zinc-400">
+              {home.featuresDescription}
+            </p>
+          </div>
+          <div className="mt-12 grid overflow-hidden rounded-lg border border-black/10 bg-white sm:grid-cols-2 lg:grid-cols-3 dark:border-white/10 dark:bg-black">
+            {home.features.map((feature) => (
+              <article
+                key={feature.title}
+                className="min-h-56 border-b border-black/10 p-6 lg:border-r dark:border-white/10"
+              >
+                <Database className="mb-8 size-5" />
+                <h3 className="font-semibold">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                  {feature.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section
+        id="brief"
+        className="border-y border-black/10 bg-zinc-50 px-5 py-16 dark:border-white/10 dark:bg-zinc-950"
+      >
+        <div className="mx-auto grid max-w-[1840px] gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <h2 className="text-3xl font-semibold sm:text-4xl">
+              {home.categoriesTitle}
+            </h2>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {home.categories.map((category) => (
+                <span
+                  key={category}
+                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-sm dark:border-white/15 dark:bg-black"
+                >
+                  {category}
+                </span>
+              ))}
+            </div>
+            <p className="mt-6 text-sm text-zinc-500">
+              {snapshot.products.length} {copy[locale].products}
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-lg border border-black/10 bg-white dark:border-white/10 dark:bg-black">
+            <div className="border-b border-black/10 px-5 py-4 dark:border-white/10">
+              <h3 className="font-medium">{home.pipelineTitle}</h3>
+            </div>
+            <ol className="divide-y divide-black/10 dark:divide-white/10">
+              {home.pipeline.map((item, index) => (
+                <li key={item} className="flex gap-4 px-5 py-5">
+                  <div className="flex size-7 shrink-0 items-center justify-center rounded-full border border-black/10 text-sm font-medium dark:border-white/15">
+                    {index + 1}
+                  </div>
+                  <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                    {item}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+      <section className="px-5 py-12">
+        <div className="mx-auto flex max-w-[1840px] flex-col gap-4 rounded-lg border border-black/10 bg-white p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:bg-black">
+          <p className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+            <CheckCircle2 className="size-5" /> {home.description}
+          </p>
+          <OfflineLink
+            path={`/${locale}/batteries`}
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-black/10 px-3 text-sm font-medium dark:border-white/10"
+          >
+            {home.primaryAction} <ArrowRight className="size-4" />
+          </OfflineLink>
+        </div>
       </section>
     </main>
   );
@@ -311,8 +546,8 @@ function OfflineCategory({
               key={product.id}
               className="overflow-hidden rounded-lg border border-black/10 bg-white dark:border-white/10 dark:bg-black"
             >
-              <a
-                href={offlineHref(`/${locale}/${category}/${product.slug}`)}
+              <OfflineLink
+                path={`/${locale}/${category}/${product.slug}`}
                 className="block"
               >
                 <div className="aspect-[4/3] bg-zinc-50 p-5 dark:bg-zinc-950">
@@ -330,7 +565,7 @@ function OfflineCategory({
                     {formatPrice(product.priceCents, locale)}
                   </p>
                 </div>
-              </a>
+              </OfflineLink>
             </article>
           ))}
         </div>
@@ -363,12 +598,12 @@ function OfflineProduct({
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8">
-      <a
-        href={offlineHref(`/${locale}/${product.categorySlug}`)}
+      <OfflineLink
+        path={`/${locale}/${product.categorySlug}`}
         className="inline-flex items-center gap-2 text-sm text-zinc-500"
       >
         <ArrowLeft className="size-4" /> {ui.back}
-      </a>
+      </OfflineLink>
       <section className="mt-6 grid gap-8 lg:grid-cols-[420px_minmax(0,1fr)]">
         <div className="relative aspect-[4/3] rounded-lg border border-black/10 bg-zinc-50 p-8 dark:border-white/10 dark:bg-zinc-950">
           <ProductImage product={product} />
@@ -425,16 +660,29 @@ function OfflineProduct({
 
 export default function OfflineCatalogReader() {
   const searchParams = useSearchParams();
-  const route = useMemo(
-    () => parseOfflineRoute(searchParams.get("path") ?? "/en"),
-    [searchParams],
-  );
+  const [path, setPath] = useState(() => searchParams.get("path") ?? "/en");
+  const route = useMemo(() => parseOfflineRoute(path), [path]);
   const [snapshot, setSnapshot] = useState<OfflineCatalogSnapshot | null>();
+
+  const navigate = useCallback((nextPath: string) => {
+    setPath(nextPath);
+    window.history.pushState(null, "", offlineHref(nextPath));
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   useEffect(() => {
     readOfflineSnapshot()
       .then(setSnapshot)
       .catch(() => setSnapshot(null));
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setPath(params.get("path") ?? "/en");
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   if (snapshot === undefined) {
@@ -456,6 +704,7 @@ export default function OfflineCatalogReader() {
   }
 
   let content: React.ReactNode;
+  let breadcrumbProduct: OfflineCatalogProduct | undefined;
   if (route.kind === "home") {
     content = <OfflineHome locale={route.locale} snapshot={snapshot} />;
   } else if (route.kind === "category") {
@@ -471,6 +720,7 @@ export default function OfflineCatalogReader() {
       (item) =>
         item.categorySlug === route.category && item.slug === route.productSlug,
     );
+    breadcrumbProduct = product;
     content = product ? (
       <OfflineProduct
         locale={route.locale}
@@ -487,9 +737,13 @@ export default function OfflineCatalogReader() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <ReaderHeader locale={route.locale} />
-      {content}
-    </div>
+    <OfflineNavigationContext.Provider value={navigate}>
+      <div className="bg-background text-foreground mx-auto flex min-h-screen max-w-[1920px] flex-col">
+        <ReaderHeader locale={route.locale} path={path} />
+        <OfflineBreadcrumbs route={route} product={breadcrumbProduct} />
+        <div className="flex-1">{content}</div>
+        <SiteFooter dictionary={getDictionary(route.locale)} />
+      </div>
+    </OfflineNavigationContext.Provider>
   );
 }
