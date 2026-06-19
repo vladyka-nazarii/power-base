@@ -8,10 +8,12 @@ import {
   Database,
   FileText,
   Heart,
+  Menu,
   Search,
   SlidersHorizontal,
   Wifi,
   WifiOff,
+  X,
   Zap,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -23,6 +25,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import LanguageSwitcher from "@/app/_components/language-switcher";
@@ -31,6 +34,7 @@ import PowerBaseLogo, {
 } from "@/app/_components/powerbase-logo";
 import SiteFooter from "@/app/_components/site-footer";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
+import { Button } from "@/components/ui/button";
 import type { CatalogCategorySlug } from "@/lib/catalog";
 import {
   type PowerBankRangeKey,
@@ -191,6 +195,142 @@ function formatPrice(value: number | null, locale: "en" | "uk") {
   }).format(value / 100);
 }
 
+function onlinePathFor(path: string, locale: "en" | "uk") {
+  const route = parseOfflineRoute(path);
+  if (route.kind === "home") return `/${route.locale}`;
+  if (route.kind === "category") {
+    return `/${route.locale}/${route.category}`;
+  }
+  if (route.kind === "product") {
+    return `/${route.locale}/${route.category}/${route.productSlug}`;
+  }
+  return `/${locale}`;
+}
+
+function localizedOfflinePath(
+  path: string,
+  currentLocale: "en" | "uk",
+  nextLocale: "en" | "uk",
+) {
+  return path === `/${currentLocale}`
+    ? `/${nextLocale}`
+    : path.replace(/^\/(en|uk)\//, `/${nextLocale}/`);
+}
+
+function OfflineMobileMenu({
+  locale,
+  path,
+  online,
+}: {
+  locale: "en" | "uk";
+  path: string;
+  online: boolean;
+}) {
+  const navigate = useContext(OfflineNavigationContext);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const route = parseOfflineRoute(path);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [open]);
+
+  const items = [
+    {
+      label: getDictionary(locale).navigation.home,
+      path: `/${locale}`,
+      active: route.kind === "home",
+    },
+    ...Object.entries(categoryLabels[locale]).map(([category, label]) => ({
+      label,
+      path: `/${locale}/${category}`,
+      active:
+        (route.kind === "category" || route.kind === "product") &&
+        route.category === category,
+    })),
+  ];
+
+  return (
+    <div ref={menuRef} className="lg:hidden">
+      <Button
+        type="button"
+        variant="outline"
+        size="icon"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        aria-controls="offline-mobile-header-menu"
+        onClick={() => setOpen((current) => !current)}
+      >
+        {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+      </Button>
+      {open ? (
+        <div
+          id="offline-mobile-header-menu"
+          className="absolute top-full right-3 left-3 mt-2 rounded-lg border border-black/10 bg-white p-3 shadow-xl shadow-black/10 dark:border-white/10 dark:bg-zinc-950 dark:shadow-black/40"
+          onClickCapture={(event) => {
+            if ((event.target as Element).closest("a")) setOpen(false);
+          }}
+        >
+          <div className="mb-3 flex items-center gap-2 px-3 text-xs font-medium text-zinc-500">
+            <WifiOff className="size-3.5" /> {copy[locale].offline}
+          </div>
+          <nav aria-label="Primary">
+            <ul className="grid gap-1">
+              {items.map((item) => (
+                <li key={item.path}>
+                  <OfflineLink
+                    path={item.path}
+                    className={`flex min-h-10 items-center rounded-md px-3 text-sm font-medium transition ${
+                      item.active
+                        ? "bg-zinc-900 text-white dark:bg-white dark:text-black"
+                        : "text-zinc-700 hover:bg-zinc-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                  </OfflineLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          {online ? (
+            <a
+              href={onlinePathFor(path, locale)}
+              className="mt-3 flex min-h-10 items-center justify-center gap-2 rounded-md bg-black px-3 text-sm font-medium text-white dark:bg-white dark:text-black"
+            >
+              <Wifi className="size-4" /> {copy[locale].returnOnline}
+            </a>
+          ) : null}
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-black/10 pt-3 dark:border-white/10">
+            <LanguageSwitcher
+              locale={locale}
+              labels={getDictionary(locale).common.languages}
+              getHref={(nextLocale) =>
+                offlineHref(localizedOfflinePath(path, locale, nextLocale))
+              }
+              onLocaleChange={(nextLocale) =>
+                navigate(localizedOfflinePath(path, locale, nextLocale))
+              }
+            />
+            <ThemeSwitcher />
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function ReaderHeader({
   locale,
   path,
@@ -201,19 +341,8 @@ function ReaderHeader({
   online: boolean;
 }) {
   const navigate = useContext(OfflineNavigationContext);
-  const parsedRoute = parseOfflineRoute(path);
-  const onlinePath =
-    parsedRoute.kind === "home"
-      ? `/${parsedRoute.locale}`
-      : parsedRoute.kind === "category"
-        ? `/${parsedRoute.locale}/${parsedRoute.category}`
-        : parsedRoute.kind === "product"
-          ? `/${parsedRoute.locale}/${parsedRoute.category}/${parsedRoute.productSlug}`
-          : `/${locale}`;
   const localizedPath = (nextLocale: "en" | "uk") =>
-    path === `/${locale}`
-      ? `/${nextLocale}`
-      : path.replace(/^\/(en|uk)\//, `/${nextLocale}/`);
+    localizedOfflinePath(path, locale, nextLocale);
   return (
     <header className="sticky top-0 z-20 flex min-h-14 items-center justify-between gap-4 border-b border-black/10 bg-white/90 px-5 backdrop-blur dark:border-white/10 dark:bg-black/85">
       <OfflineLink path={`/${locale}`} className="shrink-0">
@@ -233,13 +362,13 @@ function ReaderHeader({
           ))}
         </ul>
       </nav>
-      <div className="flex shrink-0 items-center gap-2 text-sm">
-        <span className="hidden items-center gap-2 text-zinc-500 sm:inline-flex">
+      <div className="hidden shrink-0 items-center gap-2 text-sm lg:flex">
+        <span className="inline-flex items-center gap-2 text-zinc-500">
           <WifiOff className="size-4" /> {copy[locale].offline}
         </span>
         {online ? (
           <a
-            href={onlinePath}
+            href={onlinePathFor(path, locale)}
             className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-black px-2.5 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
           >
             <Wifi className="size-3.5" /> {copy[locale].returnOnline}
@@ -253,6 +382,7 @@ function ReaderHeader({
           onLocaleChange={(nextLocale) => navigate(localizedPath(nextLocale))}
         />
       </div>
+      <OfflineMobileMenu locale={locale} path={path} online={online} />
     </header>
   );
 }
