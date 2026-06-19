@@ -7,6 +7,10 @@ import {
   type OfflineCatalogProduct,
   parseOfflineRoute,
 } from "@/lib/offline/catalog";
+import {
+  createOfflineCatalogFilters,
+  filterOfflineCatalogProducts,
+} from "@/lib/offline/catalog-filters";
 
 const product = (overrides: Partial<OfflineCatalogProduct> = {}) => ({
   id: 1,
@@ -118,5 +122,53 @@ describe("filterAndSortOfflineProducts", () => {
         sort: "price-asc",
       }).map((item) => item.id),
     ).toEqual([1, 2]);
+  });
+});
+
+describe("filterOfflineCatalogProducts", () => {
+  test("applies the online general catalog filters", () => {
+    const filters = createOfflineCatalogFilters();
+    filters.manufacturers = ["Acme"];
+    filters.voltages = [48];
+    filters.chemistries = ["LFP"];
+    filters.minCapacityWh = "900";
+    filters.minPowerW = "400";
+
+    expect(
+      filterOfflineCatalogProducts(
+        [product(), product({ id: 2, manufacturer: "Other" })],
+        filters,
+        "en",
+        false,
+      ).map((item) => item.id),
+    ).toEqual([1]);
+  });
+
+  test("applies power-bank protocol and range filters", () => {
+    const powerBank = product({
+      categorySlug: "power-banks",
+      capacityWh: 30,
+      chemistry: "Li-ion",
+      communicationProtocols: "USB-C PD 3.0",
+      continuousPowerW: 45,
+      weightGrams: 180,
+      specifications: {
+        maxInputW: 30,
+        maxOutputW: 45,
+        dimensionsMm: "120 x 70 x 20 mm",
+      },
+    });
+    const filters = createOfflineCatalogFilters();
+    filters.supportedOutputProtocols = ["PD 3.0"];
+    filters.ranges.capacityWh = ["20-50"];
+    filters.ranges.weight = ["lt-200"];
+
+    expect(
+      filterOfflineCatalogProducts([powerBank], filters, "en", true),
+    ).toHaveLength(1);
+    filters.ranges.capacityWh = ["gt-50"];
+    expect(
+      filterOfflineCatalogProducts([powerBank], filters, "en", true),
+    ).toHaveLength(0);
   });
 });

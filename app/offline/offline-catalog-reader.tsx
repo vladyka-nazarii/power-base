@@ -32,9 +32,12 @@ import PowerBaseLogo, {
 import SiteFooter from "@/app/_components/site-footer";
 import ThemeSwitcher from "@/app/_components/theme-switcher";
 import type { CatalogCategorySlug } from "@/lib/catalog";
+import {
+  type PowerBankRangeKey,
+  powerBankNumberFilterGroups,
+} from "@/lib/catalog-filter-definitions";
 import { getDictionary } from "@/lib/i18n";
 import {
-  filterAndSortOfflineProducts,
   localizeOfflineText,
   type OfflineCatalogProduct,
   type OfflineCatalogSnapshot,
@@ -42,6 +45,18 @@ import {
   parseOfflineRoute,
 } from "@/lib/offline/catalog";
 import { readOfflineSnapshot } from "@/lib/offline/catalog-client";
+import {
+  createOfflineCatalogFilters,
+  filterOfflineCatalogProducts,
+  getOfflinePowerBankSpecs,
+  type OfflineCatalogFilters,
+} from "@/lib/offline/catalog-filters";
+import {
+  powerBankBuiltInCableOptions,
+  powerBankChemistryOptions,
+  powerBankDisplayOptions,
+  powerBankProtocolOptions,
+} from "@/lib/power-bank-specs";
 
 const categoryLabels: Record<
   "en" | "uk",
@@ -68,7 +83,18 @@ const copy = {
       "The saved PowerBase catalog is available without a connection.",
     search: "Search saved products",
     manufacturer: "Manufacturer",
+    filters: "Filters",
+    reset: "Reset",
     chemistry: "Chemistry",
+    nominalVoltage: "Nominal voltage",
+    outputProtocols: "Output protocols",
+    displayType: "Display type",
+    builtInCable: "Built-in cable",
+    maxDimensions: "Maximum dimensions",
+    length: "Length",
+    width: "Width",
+    thickness: "Thickness",
+    passthroughCharging: "Passthrough charging",
     minCapacity: "Minimum capacity (Wh)",
     minPower: "Minimum power (W)",
     sort: "Sort",
@@ -87,7 +113,18 @@ const copy = {
     description: "Збережений каталог PowerBase доступний без підключення.",
     search: "Пошук збережених товарів",
     manufacturer: "Виробник",
+    filters: "Фільтри",
+    reset: "Скинути",
     chemistry: "Хімія",
+    nominalVoltage: "Номінальна напруга",
+    outputProtocols: "Протоколи виходу",
+    displayType: "Тип дисплея",
+    builtInCable: "Вбудований кабель",
+    maxDimensions: "Максимальні розміри",
+    length: "Довжина",
+    width: "Ширина",
+    thickness: "Товщина",
+    passthroughCharging: "Наскрізне заряджання",
     minCapacity: "Мінімальна ємність (Вт·год)",
     minPower: "Мінімальна потужність (Вт)",
     sort: "Сортування",
@@ -449,6 +486,106 @@ function ProductImage({ product }: { product: OfflineCatalogProduct }) {
   );
 }
 
+function toggleFilterValue<T>(values: T[], value: T) {
+  return values.includes(value)
+    ? values.filter((item) => item !== value)
+    : [...values, value];
+}
+
+function OfflineCheckboxGroup({
+  title,
+  options,
+  selected,
+  onToggle,
+  className = "mt-6",
+}: {
+  title: string;
+  options: Array<{ value: string; count?: number }>;
+  selected: string[];
+  onToggle: (value: string) => void;
+  className?: string;
+}) {
+  return (
+    <fieldset className={className}>
+      <legend className="text-sm font-medium">{title}</legend>
+      <div className="mt-3 space-y-2">
+        {options.map((option) => (
+          <label
+            key={option.value}
+            className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400"
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(option.value)}
+              onChange={() => onToggle(option.value)}
+              className="size-4 rounded border-black/20"
+            />
+            <span className="min-w-0 flex-1">
+              {option.value}
+              {option.count !== undefined ? (
+                <span className="text-zinc-400"> ({option.count})</span>
+              ) : null}
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+function OfflineRangeGroup({
+  rangeKey,
+  title,
+  filters,
+  products,
+  locale,
+  onToggle,
+}: {
+  rangeKey: PowerBankRangeKey;
+  title: string;
+  filters: OfflineCatalogFilters;
+  products: OfflineCatalogProduct[];
+  locale: "en" | "uk";
+  onToggle: (value: string) => void;
+}) {
+  const group = powerBankNumberFilterGroups[rangeKey];
+  const options = group.options.map((option) => {
+    const testFilters = createOfflineCatalogFilters();
+    testFilters.ranges[rangeKey] = [option.id];
+    return {
+      value: option.id,
+      label: option.label,
+      count: filterOfflineCatalogProducts(products, testFilters, locale, true)
+        .length,
+    };
+  });
+
+  return (
+    <fieldset>
+      <legend className="text-sm font-medium">{title}</legend>
+      <div className="mt-3 space-y-2">
+        {options.map((option) => (
+          <label
+            key={option.value}
+            className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400"
+          >
+            <input
+              type="checkbox"
+              checked={filters.ranges[rangeKey].includes(option.value)}
+              onChange={() => onToggle(option.value)}
+              className="size-4 rounded border-black/20"
+            />
+            <span>
+              {option.label}
+              <span className="text-zinc-400"> ({option.count})</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 function OfflineCategory({
   locale,
   category,
@@ -459,95 +596,278 @@ function OfflineCategory({
   snapshot: OfflineCatalogSnapshot;
 }) {
   const ui = copy[locale];
-  const [query, setQuery] = useState("");
-  const [manufacturer, setManufacturer] = useState("");
-  const [chemistry, setChemistry] = useState("");
-  const [minCapacity, setMinCapacity] = useState("");
-  const [minPower, setMinPower] = useState("");
-  const [sort, setSort] = useState<OfflineSort>("recommended");
+  const [filters, setFilters] = useState(createOfflineCatalogFilters);
   const categoryIds = new Set(snapshot.manifest.categories[category]);
   const sourceProducts = snapshot.products.filter((product) =>
     categoryIds.has(product.id),
   );
-  const manufacturers = [
-    ...new Set(sourceProducts.map((item) => item.manufacturer)),
-  ];
-  const chemistries = [
-    ...new Set(sourceProducts.map((item) => item.chemistry).filter(Boolean)),
-  ] as string[];
-  const products = filterAndSortOfflineProducts(sourceProducts, {
-    locale,
-    query,
-    manufacturers: manufacturer ? [manufacturer] : [],
-    sort,
-  }).filter(
-    (product) =>
-      (!chemistry || product.chemistry === chemistry) &&
-      (!minCapacity || (product.capacityWh ?? 0) >= Number(minCapacity)) &&
-      (!minPower || (product.continuousPowerW ?? 0) >= Number(minPower)),
+  const countOptions = (values: string[]) =>
+    [...new Set(values)].map((value) => ({
+      value,
+      count: values.filter((item) => item === value).length,
+    }));
+  const manufacturers = countOptions(
+    sourceProducts.map((item) => item.manufacturer),
   );
+  const chemistries = countOptions(
+    sourceProducts
+      .map((item) => item.chemistry)
+      .filter((value): value is string => Boolean(value)),
+  );
+  const voltages = [
+    ...new Set(
+      sourceProducts
+        .map((item) => item.nominalVoltageV)
+        .filter((value): value is number => value !== null),
+    ),
+  ].sort((left, right) => left - right);
+  const powerBankSpecs = sourceProducts.map((product) =>
+    getOfflinePowerBankSpecs(product, locale),
+  );
+  const optionCounts = (
+    values: Array<string | undefined>,
+    options: readonly string[],
+  ) =>
+    options.map((value) => ({
+      value,
+      count: values.filter((item) => item === value).length,
+    }));
+  const protocolCounts = powerBankProtocolOptions.map((value) => ({
+    value,
+    count: powerBankSpecs.filter((specs) =>
+      specs.supportedOutputProtocols?.includes(value),
+    ).length,
+  }));
+  const products = filterOfflineCatalogProducts(
+    sourceProducts,
+    filters,
+    locale,
+    category === "power-banks",
+  );
+
+  const toggleArray = (
+    key:
+      | "manufacturers"
+      | "chemistries"
+      | "batteryChemistries"
+      | "supportedOutputProtocols"
+      | "displayTypes"
+      | "builtInCables",
+    value: string,
+  ) =>
+    setFilters((current) => ({
+      ...current,
+      [key]: toggleFilterValue(current[key], value),
+    }));
+  const toggleRange = (key: PowerBankRangeKey, value: string) =>
+    setFilters((current) => ({
+      ...current,
+      ranges: {
+        ...current.ranges,
+        [key]: toggleFilterValue(current.ranges[key], value),
+      },
+    }));
 
   return (
     <main className="mx-auto grid max-w-[1840px] gap-8 px-5 py-8 lg:grid-cols-[280px_minmax(0,1fr)]">
       <aside className="rounded-lg border border-black/10 bg-white p-4 lg:sticky lg:top-20 lg:self-start dark:border-white/10 dark:bg-black">
-        <div className="flex items-center gap-2 border-b border-black/10 pb-4 dark:border-white/10">
-          <SlidersHorizontal className="size-4" />
-          <h2 className="font-semibold">{categoryLabels[locale][category]}</h2>
+        <div className="flex items-center justify-between gap-2 border-b border-black/10 pb-4 dark:border-white/10">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="size-4" />
+            <h2 className="text-sm font-semibold">{ui.filters}</h2>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFilters(createOfflineCatalogFilters())}
+            className="text-sm text-zinc-500 transition hover:text-black dark:hover:text-white"
+          >
+            {ui.reset}
+          </button>
         </div>
         <label className="mt-4 block text-sm font-medium">
           {ui.search}
           <span className="mt-2 flex items-center gap-2 rounded-md border border-black/10 px-3 dark:border-white/10">
             <Search className="size-4 text-zinc-500" />
             <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              value={filters.query}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  query: event.target.value,
+                }))
+              }
               className="h-10 min-w-0 flex-1 bg-transparent outline-none"
             />
           </span>
         </label>
-        {[
-          [ui.manufacturer, manufacturer, setManufacturer, manufacturers],
-          [ui.chemistry, chemistry, setChemistry, chemistries],
-        ].map(([label, value, setter, options]) => (
-          <label
-            key={label as string}
-            className="mt-4 block text-sm font-medium"
-          >
-            {label as string}
-            <select
-              value={value as string}
-              onChange={(event) =>
-                (setter as (value: string) => void)(event.target.value)
+        <OfflineCheckboxGroup
+          title={ui.manufacturer}
+          options={manufacturers}
+          selected={filters.manufacturers}
+          onToggle={(value) => toggleArray("manufacturers", value)}
+        />
+        {category === "power-banks" ? (
+          <>
+            <OfflineCheckboxGroup
+              title={ui.chemistry}
+              options={optionCounts(
+                powerBankSpecs.map((specs) => specs.batteryChemistry),
+                powerBankChemistryOptions,
+              )}
+              selected={filters.batteryChemistries}
+              onToggle={(value) => toggleArray("batteryChemistries", value)}
+            />
+            <OfflineCheckboxGroup
+              title={ui.outputProtocols}
+              options={protocolCounts}
+              selected={filters.supportedOutputProtocols}
+              onToggle={(value) =>
+                toggleArray("supportedOutputProtocols", value)
               }
-              className="mt-2 h-10 w-full rounded-md border border-black/10 bg-white px-3 dark:border-white/10 dark:bg-black"
-            >
-              <option value="">{ui.all}</option>
-              {(options as string[]).map((option) => (
-                <option key={option}>{option}</option>
+            />
+            <OfflineCheckboxGroup
+              title={ui.displayType}
+              options={optionCounts(
+                powerBankSpecs.map((specs) => specs.displayType),
+                powerBankDisplayOptions,
+              )}
+              selected={filters.displayTypes}
+              onToggle={(value) => toggleArray("displayTypes", value)}
+            />
+            <OfflineCheckboxGroup
+              title={ui.builtInCable}
+              options={optionCounts(
+                powerBankSpecs.map((specs) => specs.builtInCable),
+                powerBankBuiltInCableOptions,
+              )}
+              selected={filters.builtInCables}
+              onToggle={(value) => toggleArray("builtInCables", value)}
+            />
+            <div className="mt-6 grid gap-6">
+              {(
+                [
+                  "capacityWh",
+                  "maxInputPower",
+                  "maxOutputPower",
+                  "gravimetricDensity",
+                  "weight",
+                  "price",
+                  "wirelessChargingMaxPower",
+                ] as PowerBankRangeKey[]
+              ).map((rangeKey) => (
+                <OfflineRangeGroup
+                  key={rangeKey}
+                  rangeKey={rangeKey}
+                  title={powerBankNumberFilterGroups[rangeKey].title}
+                  filters={filters}
+                  products={sourceProducts}
+                  locale={locale}
+                  onToggle={(value) => toggleRange(rangeKey, value)}
+                />
               ))}
-            </select>
-          </label>
-        ))}
-        <label className="mt-4 block text-sm font-medium">
-          {ui.minCapacity}
-          <input
-            type="number"
-            min="0"
-            value={minCapacity}
-            onChange={(event) => setMinCapacity(event.target.value)}
-            className="mt-2 h-10 w-full rounded-md border border-black/10 bg-transparent px-3 dark:border-white/10"
-          />
-        </label>
-        <label className="mt-4 block text-sm font-medium">
-          {ui.minPower}
-          <input
-            type="number"
-            min="0"
-            value={minPower}
-            onChange={(event) => setMinPower(event.target.value)}
-            className="mt-2 h-10 w-full rounded-md border border-black/10 bg-transparent px-3 dark:border-white/10"
-          />
-        </label>
+            </div>
+            <fieldset className="mt-6">
+              <legend className="text-sm font-medium">
+                {ui.maxDimensions}
+              </legend>
+              <div className="mt-3 grid gap-6">
+                {(
+                  [
+                    ["dimensionLength", ui.length],
+                    ["dimensionWidth", ui.width],
+                    ["dimensionThickness", ui.thickness],
+                  ] as Array<[PowerBankRangeKey, string]>
+                ).map(([rangeKey, title]) => (
+                  <OfflineRangeGroup
+                    key={rangeKey}
+                    rangeKey={rangeKey}
+                    title={title}
+                    filters={filters}
+                    products={sourceProducts}
+                    locale={locale}
+                    onToggle={(value) => toggleRange(rangeKey, value)}
+                  />
+                ))}
+              </div>
+            </fieldset>
+            <label className="mt-6 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <input
+                type="checkbox"
+                checked={filters.passthroughCharging}
+                onChange={(event) =>
+                  setFilters((current) => ({
+                    ...current,
+                    passthroughCharging: event.target.checked,
+                  }))
+                }
+                className="size-4 rounded border-black/20"
+              />
+              {ui.passthroughCharging}
+            </label>
+          </>
+        ) : (
+          <>
+            <fieldset className="mt-6">
+              <legend className="text-sm font-medium">
+                {ui.nominalVoltage}
+              </legend>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {voltages.map((voltage) => (
+                  <label key={voltage}>
+                    <input
+                      type="checkbox"
+                      checked={filters.voltages.includes(voltage)}
+                      onChange={() =>
+                        setFilters((current) => ({
+                          ...current,
+                          voltages: toggleFilterValue(
+                            current.voltages,
+                            voltage,
+                          ),
+                        }))
+                      }
+                      className="peer sr-only"
+                    />
+                    <span className="inline-flex h-8 items-center rounded-md border border-black/10 px-3 text-sm text-zinc-600 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white dark:border-white/10 dark:text-zinc-400 dark:peer-checked:border-white dark:peer-checked:bg-white dark:peer-checked:text-black">
+                      {voltage} V
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            {chemistries.length > 0 ? (
+              <OfflineCheckboxGroup
+                title={ui.chemistry}
+                options={chemistries}
+                selected={filters.chemistries}
+                onToggle={(value) => toggleArray("chemistries", value)}
+              />
+            ) : null}
+            <div className="mt-6 grid gap-4">
+              {[
+                ["minCapacityWh", ui.minCapacity],
+                ["minPowerW", ui.minPower],
+              ].map(([key, label]) => (
+                <label key={key} className="text-sm font-medium">
+                  {label}
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    value={filters[key as "minCapacityWh" | "minPowerW"]}
+                    onChange={(event) =>
+                      setFilters((current) => ({
+                        ...current,
+                        [key]: event.target.value,
+                      }))
+                    }
+                    className="mt-2 h-10 w-full rounded-md border border-black/10 bg-transparent px-3 outline-none dark:border-white/10"
+                  />
+                </label>
+              ))}
+            </div>
+          </>
+        )}
       </aside>
       <section className="min-w-0">
         <div className="mb-5 flex items-center justify-between border-b border-black/10 pb-5 dark:border-white/10">
@@ -555,8 +875,13 @@ function OfflineCategory({
           <label className="text-sm">
             <span className="sr-only">{ui.sort}</span>
             <select
-              value={sort}
-              onChange={(event) => setSort(event.target.value as OfflineSort)}
+              value={filters.sort}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  sort: event.target.value as OfflineSort,
+                }))
+              }
               className="h-10 rounded-md border border-black/10 bg-white px-3 dark:border-white/10 dark:bg-black"
             >
               <option value="recommended">Recommended</option>
@@ -750,6 +1075,7 @@ export default function OfflineCatalogReader() {
   } else if (route.kind === "category") {
     content = (
       <OfflineCategory
+        key={route.category}
         locale={route.locale}
         category={route.category}
         snapshot={snapshot}
