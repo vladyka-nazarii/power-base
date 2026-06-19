@@ -53,6 +53,7 @@ export async function generateMetadata({
       `/${category}/${productSlug}`,
       title,
       product.summary,
+      { alt: title, url: product.imagePath },
     ),
   };
 }

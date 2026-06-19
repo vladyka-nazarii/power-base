@@ -5,6 +5,10 @@ export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export function absoluteUrl(pathname: string) {
+  if (/^https?:\/\//i.test(pathname)) {
+    return pathname;
+  }
+
   const origin = siteUrl.replace(/\/+$/, "");
   const normalizedPathname = pathname.startsWith("/")
     ? pathname
@@ -39,6 +43,7 @@ export function localizedOpenGraph(
   pathname: string,
   title: string,
   description: string,
+  image?: { alt: string; url: string },
 ): NonNullable<Metadata["openGraph"]> {
   return {
     title,
@@ -50,5 +55,13 @@ export function localizedOpenGraph(
     siteName: "PowerBase",
     type: "website",
     url: absoluteUrl(localizedPath(locale, pathname)),
+    images: image
+      ? [
+          {
+            alt: image.alt,
+            url: absoluteUrl(image.url),
+          },
+        ]
+      : undefined,
   };
 }
