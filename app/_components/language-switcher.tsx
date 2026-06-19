@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { localePreferenceCookie, locales, type Locale } from "@/lib/i18n";
+import { useEffect } from "react";
+import { type Locale, localePreferenceCookie, locales } from "@/lib/i18n";
 
 type LanguageSwitcherProps = {
   locale: Locale;
   labels: Record<Locale, string>;
+  getHref?: (locale: Locale) => string;
+  onLocaleChange?: (locale: Locale) => void;
 };
 
 const cookieMaxAge = 60 * 60 * 24 * 365;
@@ -31,6 +33,8 @@ function getLocalizedPath(pathname: string, locale: Locale) {
 export default function LanguageSwitcher({
   locale,
   labels,
+  getHref,
+  onLocaleChange,
 }: LanguageSwitcherProps) {
   const pathname = usePathname();
 
@@ -46,11 +50,17 @@ export default function LanguageSwitcher({
       {locales.map((item) => (
         <Link
           key={item}
-          href={getLocalizedPath(pathname, item)}
+          href={getHref?.(item) ?? getLocalizedPath(pathname, item)}
           aria-current={item === locale ? "page" : undefined}
           aria-label={`Switch language to ${labels[item]}`}
           className="rounded-full px-2.5 py-1 text-black/60 transition-colors hover:text-black aria-[current=page]:bg-black aria-[current=page]:text-white aria-[current=page]:shadow-sm aria-[current=page]:ring-1 aria-[current=page]:ring-black/10 dark:text-white/65 dark:hover:text-white dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-black dark:aria-[current=page]:ring-white/20"
-          onClick={() => saveLocalePreference(item)}
+          onClick={(event) => {
+            saveLocalePreference(item);
+            if (onLocaleChange) {
+              event.preventDefault();
+              onLocaleChange(item);
+            }
+          }}
         >
           {labels[item]}
         </Link>

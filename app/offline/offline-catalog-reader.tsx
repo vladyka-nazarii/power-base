@@ -10,6 +10,7 @@ import {
   Heart,
   Search,
   SlidersHorizontal,
+  Wifi,
   WifiOff,
   Zap,
 } from "lucide-react";
@@ -24,7 +25,7 @@ import {
   useMemo,
   useState,
 } from "react";
-
+import LanguageSwitcher from "@/app/_components/language-switcher";
 import PowerBaseLogo, {
   PowerBaseLogoMark,
 } from "@/app/_components/powerbase-logo";
@@ -79,6 +80,7 @@ const copy = {
     source: "Source",
     specifications: "Specifications",
     back: "Back",
+    returnOnline: "Return online",
   },
   uk: {
     offline: "Офлайн-каталог",
@@ -97,6 +99,7 @@ const copy = {
     source: "Джерело",
     specifications: "Характеристики",
     back: "Назад",
+    returnOnline: "Повернутися онлайн",
   },
 } as const;
 
@@ -151,12 +154,29 @@ function formatPrice(value: number | null, locale: "en" | "uk") {
   }).format(value / 100);
 }
 
-function ReaderHeader({ locale, path }: { locale: "en" | "uk"; path: string }) {
-  const otherLocale = locale === "en" ? "uk" : "en";
-  const otherLocalePath =
+function ReaderHeader({
+  locale,
+  path,
+  online,
+}: {
+  locale: "en" | "uk";
+  path: string;
+  online: boolean;
+}) {
+  const navigate = useContext(OfflineNavigationContext);
+  const parsedRoute = parseOfflineRoute(path);
+  const onlinePath =
+    parsedRoute.kind === "home"
+      ? `/${parsedRoute.locale}`
+      : parsedRoute.kind === "category"
+        ? `/${parsedRoute.locale}/${parsedRoute.category}`
+        : parsedRoute.kind === "product"
+          ? `/${parsedRoute.locale}/${parsedRoute.category}/${parsedRoute.productSlug}`
+          : `/${locale}`;
+  const localizedPath = (nextLocale: "en" | "uk") =>
     path === `/${locale}`
-      ? `/${otherLocale}`
-      : path.replace(/^\/(en|uk)\//, `/${otherLocale}/`);
+      ? `/${nextLocale}`
+      : path.replace(/^\/(en|uk)\//, `/${nextLocale}/`);
   return (
     <header className="sticky top-0 z-20 flex min-h-14 items-center justify-between gap-4 border-b border-black/10 bg-white/90 px-5 backdrop-blur dark:border-white/10 dark:bg-black/85">
       <OfflineLink path={`/${locale}`} className="shrink-0">
@@ -177,16 +197,24 @@ function ReaderHeader({ locale, path }: { locale: "en" | "uk"; path: string }) {
         </ul>
       </nav>
       <div className="flex shrink-0 items-center gap-2 text-sm">
-        <span className="inline-flex items-center gap-2 text-zinc-500">
+        <span className="hidden items-center gap-2 text-zinc-500 sm:inline-flex">
           <WifiOff className="size-4" /> {copy[locale].offline}
         </span>
+        {online ? (
+          <a
+            href={onlinePath}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-black px-2.5 text-xs font-medium text-white transition hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          >
+            <Wifi className="size-3.5" /> {copy[locale].returnOnline}
+          </a>
+        ) : null}
         <ThemeSwitcher />
-        <OfflineLink
-          path={otherLocalePath}
-          className="rounded-md border border-black/10 px-2.5 py-1.5 font-medium dark:border-white/15"
-        >
-          {otherLocale.toUpperCase()}
-        </OfflineLink>
+        <LanguageSwitcher
+          locale={locale}
+          labels={getDictionary(locale).common.languages}
+          getHref={(nextLocale) => offlineHref(localizedPath(nextLocale))}
+          onLocaleChange={(nextLocale) => navigate(localizedPath(nextLocale))}
+        />
       </div>
     </header>
   );
@@ -663,6 +691,7 @@ export default function OfflineCatalogReader() {
   const [path, setPath] = useState(() => searchParams.get("path") ?? "/en");
   const route = useMemo(() => parseOfflineRoute(path), [path]);
   const [snapshot, setSnapshot] = useState<OfflineCatalogSnapshot | null>();
+  const [online, setOnline] = useState(false);
 
   const navigate = useCallback((nextPath: string) => {
     setPath(nextPath);
@@ -683,6 +712,17 @@ export default function OfflineCatalogReader() {
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    const updateConnection = () => setOnline(navigator.onLine);
+    updateConnection();
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
+    return () => {
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
+    };
   }, []);
 
   if (snapshot === undefined) {
@@ -739,7 +779,7 @@ export default function OfflineCatalogReader() {
   return (
     <OfflineNavigationContext.Provider value={navigate}>
       <div className="bg-background text-foreground mx-auto flex min-h-screen max-w-[1920px] flex-col">
-        <ReaderHeader locale={route.locale} path={path} />
+        <ReaderHeader locale={route.locale} path={path} online={online} />
         <OfflineBreadcrumbs route={route} product={breadcrumbProduct} />
         <div className="flex-1">{content}</div>
         <SiteFooter dictionary={getDictionary(route.locale)} />
