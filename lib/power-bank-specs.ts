@@ -1,11 +1,25 @@
 export const powerBankFilterDefinitions = [
   {
     id: "capacityWh",
-    name: "Capacity",
+    name: "Rated Energy",
     type: "number",
     unit: "Wh",
     description:
       "Real energy capacity in Watt-hours to accurately reflect stored energy.",
+  },
+  {
+    id: "usableEnergyWh",
+    name: "Real Usable Energy",
+    type: "number",
+    unit: "Wh",
+    description: "Measured energy delivered at the test voltage and load.",
+  },
+  {
+    id: "conversionEfficiencyPercent",
+    name: "Conversion Efficiency",
+    type: "number",
+    unit: "%",
+    description: "Measured usable output energy divided by stored energy.",
   },
   {
     id: "batteryChemistry",
@@ -16,7 +30,9 @@ export const powerBankFilterDefinitions = [
       "Li-ion",
       "Li-ion (18650)",
       "Li-ion (21700)",
+      "Silicon-Carbon (Si-C)",
       "LiFePO4 (LFP)",
+      "Semi-Solid State",
     ],
     description:
       "Type of battery cells used, affecting lifespan and form factor.",
@@ -47,10 +63,21 @@ export const powerBankFilterDefinitions = [
   },
   {
     id: "maxOutputPower",
-    name: "Max Output Power",
+    name: "Max Combined Output Power",
     type: "number",
     unit: "W",
     description: "Maximum combined wattage the power bank can deliver.",
+  },
+  {
+    id: "maxSinglePortOutputPower",
+    name: "Max Single-Port Output",
+    type: "number",
+    unit: "W",
+  },
+  {
+    id: "supports12vPdOutput",
+    name: "12V PD Output Support",
+    type: "boolean",
   },
   {
     id: "passthroughCharging",
@@ -66,6 +93,34 @@ export const powerBankFilterDefinitions = [
     unit: "Wh/kg",
     description:
       "Energy-to-weight ratio (Capacity in Wh divided by weight in kg).",
+  },
+  {
+    id: "volumetricDensity",
+    name: "Volumetric Density",
+    type: "number",
+    unit: "Wh/L",
+  },
+  {
+    id: "rechargeTimeMinutes",
+    name: "Full Recharge Time",
+    type: "number",
+    unit: "min",
+  },
+  {
+    id: "thermalThrottleMinutes",
+    name: "Sustained Max Output Before Thermal Throttling",
+    type: "number",
+    unit: "min",
+  },
+  {
+    id: "airlineSafe",
+    name: "Airline Safe (at or below 100Wh)",
+    type: "boolean",
+  },
+  {
+    id: "safetyCertifications",
+    name: "Safety Certifications",
+    type: "array",
   },
   {
     id: "dimensions",
@@ -123,7 +178,9 @@ export const powerBankChemistryOptions = [
   "Li-ion",
   "Li-ion (18650)",
   "Li-ion (21700)",
+  "Silicon-Carbon (Si-C)",
   "LiFePO4 (LFP)",
+  "Semi-Solid State",
 ] as const;
 
 export const powerBankProtocolOptions = [
@@ -158,6 +215,23 @@ export type PowerBankDisplayType = (typeof powerBankDisplayOptions)[number];
 export type PowerBankBuiltInCable =
   (typeof powerBankBuiltInCableOptions)[number];
 
+const powerBankOptionLabelsUk: Record<string, string> = {
+  "LED Indicators (Dots)": "Світлодіодні індикатори",
+  "Digital Display (%)": "Цифровий дисплей (%)",
+  "Smart Screen (TFT/OLED with V/A stats)":
+    "Розумний екран (TFT/OLED зі статистикою В/А)",
+  None: "Немає",
+  Lightning: "Lightning",
+  "Micro-USB": "Micro-USB",
+  Multiple: "Кілька",
+  "Silicon-Carbon (Si-C)": "Кремній-вуглецева (Si-C)",
+  "Semi-Solid State": "Напівтвердотільна",
+};
+
+export function localizePowerBankOption(value: string, locale: "en" | "uk") {
+  return locale === "uk" ? (powerBankOptionLabelsUk[value] ?? value) : value;
+}
+
 export type PowerBankDimensions = {
   length: number;
   width: number;
@@ -177,12 +251,21 @@ export type PowerBankSpecificationInput = {
 
 export type PowerBankSpecifications = {
   capacityWh?: number;
+  usableEnergyWh?: number;
+  conversionEfficiencyPercent?: number;
   batteryChemistry?: PowerBankChemistry;
   supportedOutputProtocols?: PowerBankProtocol[];
   maxInputPower?: number;
   maxOutputPower?: number;
+  maxSinglePortOutputPower?: number;
+  supports12vPdOutput?: boolean;
   passthroughCharging?: boolean;
   gravimetricDensity?: number;
+  volumetricDensity?: number;
+  rechargeTimeMinutes?: number;
+  thermalThrottleMinutes?: number;
+  airlineSafe?: boolean;
+  safetyCertifications?: string[];
   dimensions?: PowerBankDimensions;
   weight?: number;
   displayType?: PowerBankDisplayType;
@@ -218,6 +301,100 @@ function textBag(...values: unknown[]) {
     .join(" ");
 }
 
+function stringArray(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string");
+  }
+  return typeof value === "string" ? [value] : [];
+}
+
+function inferRechargeTimeMinutes(specifications: Record<string, unknown>) {
+  const explicit = firstNumber(specifications.rechargeTimeMinutes);
+  if (explicit !== undefined) return explicit;
+  const text = textBag(
+    specifications.sourceDescription,
+    specifications.descriptionText,
+    specifications.features,
+  );
+  const match = text.match(
+    /(?:fully recharge|full recharge|fully recharged|recharging)[^.!]{0,80}?(\d+(?:\.\d+)?)\s*(hours?|hrs?|minutes?|mins?)/i,
+  );
+  if (!match) return undefined;
+  const value = Number.parseFloat(match[1]);
+  return /hour|hr/i.test(match[2]) ? value * 60 : value;
+}
+
+function inferSafetyCertifications(specifications: Record<string, unknown>) {
+  const explicit = stringArray(specifications.safetyCertifications);
+  const text = textBag(
+    explicit,
+    specifications.certifications,
+    specifications.sourceDescription,
+    specifications.descriptionText,
+    specifications.features,
+  );
+  const known = ["UL 2056", "CCC", "CE", "FCC", "RoHS", "Qi", "Qi2", "MFi"];
+  return known.filter((certification) => {
+    const escaped = certification.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(
+      `\\b${escaped}(?:[- ]certified| certification)?\\b`,
+      "i",
+    ).test(text);
+  });
+}
+
+function supports12vOutput(specifications: Record<string, unknown>) {
+  const explicit = specifications.supports12vPdOutput;
+  if (typeof explicit === "boolean") return explicit;
+  const text = textBag(
+    specifications.outputParameters,
+    specifications.outputPorts,
+  );
+  return /(?:^|[,;\s])12V\s*[/x:]?\s*\d/i.test(text) ? true : undefined;
+}
+
+function inferMaxSinglePortOutputPower(
+  input: PowerBankSpecificationInput,
+  specifications: Record<string, unknown>,
+) {
+  const explicit = firstNumber(
+    specifications.singlePortMaxOutputW,
+    specifications.maxSinglePortOutputW,
+  );
+  if (explicit !== undefined) return explicit;
+
+  const outputProfiles = stringArray(specifications.outputParameters).concat(
+    stringArray(specifications.outputPorts),
+  );
+  const profilePowers = outputProfiles.flatMap((profile) => {
+    if (/\b(?:dual|total|combined)\b/i.test(profile)) return [];
+    return [
+      ...profile.matchAll(/(\d+(?:\.\d+)?)V\s*[/]?\s*(\d+(?:\.\d+)?)A/gi),
+    ].map((match) => Number.parseFloat(match[1]) * Number.parseFloat(match[2]));
+  });
+  if (profilePowers.length > 0) return Math.max(...profilePowers);
+
+  const text = textBag(
+    specifications.sourceDescription,
+    specifications.descriptionText,
+    specifications.features,
+  );
+  const statedSinglePort = text.match(
+    /(?:single(?:\s+USB-C)?\s+port|per port)[^.!]{0,80}?(\d+(?:\.\d+)?)\s*W/i,
+  );
+  if (statedSinglePort) return Number.parseFloat(statedSinglePort[1]);
+  const statedPerPort = text.match(/(\d+(?:\.\d+)?)\s*W\s+each/i);
+  if (statedPerPort) return Number.parseFloat(statedPerPort[1]);
+
+  const combinedOutputLanguage =
+    /\b(?:total output|combined output|multi-device|simultaneously|shared)\b/i.test(
+      text,
+    );
+  return combinedOutputLanguage
+    ? undefined
+    : firstNumber(specifications.maxOutputW, input.continuousPowerW);
+}
+
 function normalizeChemistry(
   chemistry: string | null | undefined,
   specifications: Record<string, unknown>,
@@ -226,6 +403,14 @@ function normalizeChemistry(
 
   if (text.includes("lifepo4") || text.includes("lfp")) {
     return "LiFePO4 (LFP)";
+  }
+
+  if (text.includes("silicon-carbon") || text.includes("silicon carbon")) {
+    return "Silicon-Carbon (Si-C)";
+  }
+
+  if (text.includes("semi-solid") || text.includes("semi solid")) {
+    return "Semi-Solid State";
   }
 
   if (
@@ -444,6 +629,10 @@ export function normalizePowerBankSpecifications(
     specifications.advertisedPowerW,
     specifications.singlePortMaxOutputW,
   );
+  const maxSinglePortOutputPower = inferMaxSinglePortOutputPower(
+    input,
+    specifications,
+  );
   const protocols = normalizeProtocols(
     input.communicationProtocols,
     specifications,
@@ -453,9 +642,30 @@ export function normalizePowerBankSpecifications(
     specifications.wirelessOutputW,
     specifications.iphoneWirelessOutputW,
   );
+  const dimensions = parseDimensionsMm(specifications.dimensionsMm);
+  const usableEnergyWh = firstNumber(specifications.usableEnergyWh);
+  const conversionEfficiencyPercent = firstNumber(
+    specifications.conversionEfficiencyPercent,
+    usableEnergyWh !== undefined && capacityWh !== undefined && capacityWh > 0
+      ? (usableEnergyWh / capacityWh) * 100
+      : undefined,
+  );
+  const rechargeTimeMinutes = inferRechargeTimeMinutes(specifications);
+  const thermalThrottleMinutes = firstNumber(
+    specifications.thermalThrottleMinutes,
+  );
+  const safetyCertifications = inferSafetyCertifications(specifications);
 
   return {
     ...(capacityWh !== undefined ? { capacityWh } : {}),
+    ...(usableEnergyWh !== undefined ? { usableEnergyWh } : {}),
+    ...(conversionEfficiencyPercent !== undefined
+      ? {
+          conversionEfficiencyPercent: Number(
+            conversionEfficiencyPercent.toFixed(1),
+          ),
+        }
+      : {}),
     ...(normalizeChemistry(input.chemistry, specifications)
       ? {
           batteryChemistry: normalizeChemistry(input.chemistry, specifications),
@@ -464,6 +674,12 @@ export function normalizePowerBankSpecifications(
     ...(protocols.length > 0 ? { supportedOutputProtocols: protocols } : {}),
     ...(maxInputPower !== undefined ? { maxInputPower } : {}),
     ...(maxOutputPower !== undefined ? { maxOutputPower } : {}),
+    ...(maxSinglePortOutputPower !== undefined
+      ? { maxSinglePortOutputPower }
+      : {}),
+    ...(supports12vOutput(specifications) !== undefined
+      ? { supports12vPdOutput: supports12vOutput(specifications) }
+      : {}),
     ...(inferPassthroughCharging(specifications) !== undefined
       ? { passthroughCharging: inferPassthroughCharging(specifications) }
       : {}),
@@ -472,9 +688,22 @@ export function normalizePowerBankSpecifications(
           gravimetricDensity: Number((capacityWh / (weight / 1000)).toFixed(1)),
         }
       : {}),
-    ...(parseDimensionsMm(specifications.dimensionsMm)
-      ? { dimensions: parseDimensionsMm(specifications.dimensionsMm) }
+    ...(dimensions ? { dimensions } : {}),
+    ...(capacityWh !== undefined && dimensions
+      ? {
+          volumetricDensity: Number(
+            (
+              capacityWh /
+              ((dimensions.length * dimensions.width * dimensions.thickness) /
+                1_000_000)
+            ).toFixed(1),
+          ),
+        }
       : {}),
+    ...(rechargeTimeMinutes !== undefined ? { rechargeTimeMinutes } : {}),
+    ...(thermalThrottleMinutes !== undefined ? { thermalThrottleMinutes } : {}),
+    ...(capacityWh !== undefined ? { airlineSafe: capacityWh <= 100 } : {}),
+    ...(safetyCertifications.length > 0 ? { safetyCertifications } : {}),
     ...(weight !== undefined ? { weight } : {}),
     ...(inferDisplayType(input.summary, specifications)
       ? { displayType: inferDisplayType(input.summary, specifications) }

@@ -8,12 +8,30 @@ export type NumberRangeFilterOption = {
 
 export const powerBankNumberFilterGroups = {
   capacityWh: {
-    title: "Capacity",
+    title: "Rated energy",
     param: "capacityWhRange",
     options: [
       { id: "lt-20", label: "< 20 Wh", max: 20 },
       { id: "20-50", label: "20-50 Wh", min: 20, max: 50 },
       { id: "gt-50", label: "> 50 Wh", min: 50 },
+    ],
+  },
+  usableEnergy: {
+    title: "Real usable energy",
+    param: "usableEnergyRange",
+    options: [
+      { id: "lt-20", label: "< 20 Wh", max: 20 },
+      { id: "20-50", label: "20-50 Wh", min: 20, max: 50 },
+      { id: "gt-50", label: "> 50 Wh", min: 50 },
+    ],
+  },
+  conversionEfficiency: {
+    title: "Conversion efficiency",
+    param: "conversionEfficiencyRange",
+    options: [
+      { id: "lt-75", label: "< 75%", max: 75 },
+      { id: "75-85", label: "75-85%", min: 75, max: 85 },
+      { id: "gt-85", label: "> 85%", min: 85 },
     ],
   },
   maxInputPower: {
@@ -26,21 +44,48 @@ export const powerBankNumberFilterGroups = {
     ],
   },
   maxOutputPower: {
-    title: "Output power",
-    param: "maxOutputPowerRange",
+    title: "Max single-port output",
+    param: "maxSinglePortOutputRange",
     options: [
       { id: "lt-20", label: "< 20 W", max: 20 },
       { id: "20-65", label: "20-65 W", min: 20, max: 65 },
       { id: "gt-65", label: "> 65 W", min: 65 },
     ],
   },
+  volumetricDensity: {
+    title: "Volumetric density",
+    param: "volumetricDensityRange",
+    options: [
+      { id: "lt-150", label: "< 150 Wh/L", max: 150 },
+      { id: "150-250", label: "150-250 Wh/L", min: 150, max: 250 },
+      { id: "gt-250", label: "> 250 Wh/L", min: 250 },
+    ],
+  },
   gravimetricDensity: {
-    title: "Density",
+    title: "Gravimetric density",
     param: "gravimetricDensityRange",
     options: [
       { id: "lt-150", label: "< 150 Wh/kg", max: 150 },
       { id: "150-200", label: "150-200 Wh/kg", min: 150, max: 200 },
       { id: "gt-200", label: "> 200 Wh/kg", min: 200 },
+    ],
+  },
+  rechargeTime: {
+    title: "Full recharge time",
+    param: "rechargeTimeRange",
+    options: [
+      { id: "lt-90", label: "< 1.5 h", max: 90 },
+      { id: "90-180", label: "1.5-3 h", min: 90, max: 180 },
+      { id: "gt-180", label: "> 3 h", min: 180 },
+    ],
+  },
+  thermalThrottle: {
+    title: "Sustained max output",
+    param: "thermalThrottleRange",
+    options: [
+      { id: "lt-15", label: "< 15 min", max: 15 },
+      { id: "15-60", label: "15-60 min", min: 15, max: 60 },
+      { id: "gt-60", label: "> 60 min", min: 60 },
     ],
   },
   weight: {
@@ -101,3 +146,49 @@ export const powerBankNumberFilterGroups = {
 } as const;
 
 export type PowerBankRangeKey = keyof typeof powerBankNumberFilterGroups;
+
+const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
+  capacityWh: "Номінальна енергія",
+  usableEnergy: "Реальна корисна енергія",
+  conversionEfficiency: "Ефективність перетворення",
+  maxInputPower: "Максимальна вхідна потужність",
+  maxOutputPower: "Максимальна потужність одного порту",
+  volumetricDensity: "Об'ємна щільність енергії",
+  gravimetricDensity: "Гравіметрична щільність енергії",
+  rechargeTime: "Час повного заряджання",
+  thermalThrottle: "Робота на максимальній потужності",
+  weight: "Вага",
+  price: "Ціна",
+  wirelessChargingMaxPower: "Бездротове заряджання",
+  dimensionLength: "Довжина",
+  dimensionWidth: "Ширина",
+  dimensionThickness: "Товщина",
+};
+
+function localizePowerBankRangeLabel(label: string) {
+  return label
+    .replace("None", "Немає")
+    .replace("1.5-3 h", "1,5-3 год")
+    .replace("< 1.5 h", "< 1,5 год")
+    .replace("> 3 h", "> 3 год")
+    .replace("15-60 min", "15-60 хв")
+    .replace("< 15 min", "< 15 хв")
+    .replace("> 60 min", "> 60 хв");
+}
+
+export function localizePowerBankNumberFilterGroup(
+  key: PowerBankRangeKey,
+  locale: "en" | "uk",
+) {
+  const group = powerBankNumberFilterGroups[key];
+  if (locale === "en") return group;
+
+  return {
+    ...group,
+    title: powerBankNumberFilterTitlesUk[key],
+    options: group.options.map((option) => ({
+      ...option,
+      label: localizePowerBankRangeLabel(option.label),
+    })),
+  };
+}

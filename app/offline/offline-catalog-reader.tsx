@@ -37,8 +37,8 @@ import ThemeSwitcher from "@/app/_components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import type { CatalogCategorySlug } from "@/lib/catalog";
 import {
+  localizePowerBankNumberFilterGroup,
   type PowerBankRangeKey,
-  powerBankNumberFilterGroups,
 } from "@/lib/catalog-filter-definitions";
 import { getDictionary } from "@/lib/i18n";
 import {
@@ -56,6 +56,7 @@ import {
   type OfflineCatalogFilters,
 } from "@/lib/offline/catalog-filters";
 import {
+  localizePowerBankOption,
   powerBankBuiltInCableOptions,
   powerBankChemistryOptions,
   powerBankDisplayOptions,
@@ -99,6 +100,9 @@ const copy = {
     width: "Width",
     thickness: "Thickness",
     passthroughCharging: "Passthrough charging",
+    supports12vPdOutput: "12V PD output support",
+    airlineSafe: "Airline safe (100Wh or less)",
+    safetyCertifications: "Safety certifications",
     minCapacity: "Minimum capacity (Wh)",
     minPower: "Minimum power (W)",
     sort: "Sort",
@@ -129,6 +133,9 @@ const copy = {
     width: "Ширина",
     thickness: "Товщина",
     passthroughCharging: "Наскрізне заряджання",
+    supports12vPdOutput: "Підтримка виходу PD 12 В",
+    airlineSafe: "Дозволено в літаку (до 100 Вт·год включно)",
+    safetyCertifications: "Сертифікати безпеки",
     minCapacity: "Мінімальна ємність (Вт·год)",
     minPower: "Мінімальна потужність (Вт)",
     sort: "Сортування",
@@ -630,7 +637,7 @@ function OfflineCheckboxGroup({
   className = "mt-6",
 }: {
   title: string;
-  options: Array<{ value: string; count?: number }>;
+  options: Array<{ value: string; label?: string; count?: number }>;
   selected: string[];
   onToggle: (value: string) => void;
   className?: string;
@@ -651,7 +658,7 @@ function OfflineCheckboxGroup({
               className="size-4 rounded border-black/20"
             />
             <span className="min-w-0 flex-1">
-              {option.value}
+              {option.label ?? option.value}
               {option.count !== undefined ? (
                 <span className="text-zinc-400"> ({option.count})</span>
               ) : null}
@@ -678,7 +685,7 @@ function OfflineRangeGroup({
   locale: "en" | "uk";
   onToggle: (value: string) => void;
 }) {
-  const group = powerBankNumberFilterGroups[rangeKey];
+  const group = localizePowerBankNumberFilterGroup(rangeKey, locale);
   const options = group.options.map((option) => {
     const testFilters = createOfflineCatalogFilters();
     testFilters.ranges[rangeKey] = [option.id];
@@ -736,6 +743,11 @@ function OfflineCategory({
       value,
       count: values.filter((item) => item === value).length,
     }));
+  const localizeOptions = <T extends { value: string }>(options: T[]) =>
+    options.map((option) => ({
+      ...option,
+      label: localizePowerBankOption(option.value, locale),
+    }));
   const manufacturers = countOptions(
     sourceProducts.map((item) => item.manufacturer),
   );
@@ -768,6 +780,18 @@ function OfflineCategory({
       specs.supportedOutputProtocols?.includes(value),
     ).length,
   }));
+  const safetyCertificationCounts = countOptions(
+    powerBankSpecs.flatMap((specs) => specs.safetyCertifications ?? []),
+  );
+  const passthroughChargingCount = powerBankSpecs.filter(
+    (specs) => specs.passthroughCharging === true,
+  ).length;
+  const supports12vPdOutputCount = powerBankSpecs.filter(
+    (specs) => specs.supports12vPdOutput === true,
+  ).length;
+  const airlineSafeCount = powerBankSpecs.filter(
+    (specs) => specs.airlineSafe === true,
+  ).length;
   const products = filterOfflineCatalogProducts(
     sourceProducts,
     filters,
@@ -782,7 +806,8 @@ function OfflineCategory({
       | "batteryChemistries"
       | "supportedOutputProtocols"
       | "displayTypes"
-      | "builtInCables",
+      | "builtInCables"
+      | "safetyCertifications",
     value: string,
   ) =>
     setFilters((current) => ({
@@ -840,9 +865,11 @@ function OfflineCategory({
           <>
             <OfflineCheckboxGroup
               title={ui.chemistry}
-              options={optionCounts(
-                powerBankSpecs.map((specs) => specs.batteryChemistry),
-                powerBankChemistryOptions,
+              options={localizeOptions(
+                optionCounts(
+                  powerBankSpecs.map((specs) => specs.batteryChemistry),
+                  powerBankChemistryOptions,
+                ),
               )}
               selected={filters.batteryChemistries}
               onToggle={(value) => toggleArray("batteryChemistries", value)}
@@ -857,29 +884,46 @@ function OfflineCategory({
             />
             <OfflineCheckboxGroup
               title={ui.displayType}
-              options={optionCounts(
-                powerBankSpecs.map((specs) => specs.displayType),
-                powerBankDisplayOptions,
+              options={localizeOptions(
+                optionCounts(
+                  powerBankSpecs.map((specs) => specs.displayType),
+                  powerBankDisplayOptions,
+                ),
               )}
               selected={filters.displayTypes}
               onToggle={(value) => toggleArray("displayTypes", value)}
             />
             <OfflineCheckboxGroup
               title={ui.builtInCable}
-              options={optionCounts(
-                powerBankSpecs.map((specs) => specs.builtInCable),
-                powerBankBuiltInCableOptions,
+              options={localizeOptions(
+                optionCounts(
+                  powerBankSpecs.map((specs) => specs.builtInCable),
+                  powerBankBuiltInCableOptions,
+                ),
               )}
               selected={filters.builtInCables}
               onToggle={(value) => toggleArray("builtInCables", value)}
             />
+            {safetyCertificationCounts.length > 0 ? (
+              <OfflineCheckboxGroup
+                title={ui.safetyCertifications}
+                options={safetyCertificationCounts}
+                selected={filters.safetyCertifications}
+                onToggle={(value) => toggleArray("safetyCertifications", value)}
+              />
+            ) : null}
             <div className="mt-6 grid gap-6">
               {(
                 [
                   "capacityWh",
+                  "usableEnergy",
+                  "conversionEfficiency",
                   "maxInputPower",
                   "maxOutputPower",
+                  "volumetricDensity",
                   "gravimetricDensity",
+                  "rechargeTime",
+                  "thermalThrottle",
                   "weight",
                   "price",
                   "wirelessChargingMaxPower",
@@ -888,7 +932,9 @@ function OfflineCategory({
                 <OfflineRangeGroup
                   key={rangeKey}
                   rangeKey={rangeKey}
-                  title={powerBankNumberFilterGroups[rangeKey].title}
+                  title={
+                    localizePowerBankNumberFilterGroup(rangeKey, locale).title
+                  }
                   filters={filters}
                   products={sourceProducts}
                   locale={locale}
@@ -933,6 +979,41 @@ function OfflineCategory({
                 className="size-4 rounded border-black/20"
               />
               {ui.passthroughCharging}
+              <span className="text-zinc-400">
+                ({passthroughChargingCount})
+              </span>
+            </label>
+            <label className="mt-3 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <input
+                type="checkbox"
+                checked={filters.supports12vPdOutput}
+                onChange={(event) =>
+                  setFilters((current) => ({
+                    ...current,
+                    supports12vPdOutput: event.target.checked,
+                  }))
+                }
+                className="size-4 rounded border-black/20"
+              />
+              {ui.supports12vPdOutput}
+              <span className="text-zinc-400">
+                ({supports12vPdOutputCount})
+              </span>
+            </label>
+            <label className="mt-3 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+              <input
+                type="checkbox"
+                checked={filters.airlineSafe}
+                onChange={(event) =>
+                  setFilters((current) => ({
+                    ...current,
+                    airlineSafe: event.target.checked,
+                  }))
+                }
+                className="size-4 rounded border-black/20"
+              />
+              {ui.airlineSafe}
+              <span className="text-zinc-400">({airlineSafeCount})</span>
             </label>
           </>
         ) : (

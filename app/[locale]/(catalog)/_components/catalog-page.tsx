@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
-import type { ReactNode } from "react";
 import {
   ArrowUpDown,
   ChevronLeft,
@@ -9,16 +6,19 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
-
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import FavoriteButton from "@/app/_components/favorite-button";
 import AutoSubmitForm from "@/app/[locale]/(catalog)/_components/auto-submit-form";
 import {
   CatalogCompareTray,
   CompareCheckbox,
 } from "@/app/[locale]/(catalog)/_components/catalog-compare";
-import FavoriteButton from "@/app/_components/favorite-button";
 import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters-link";
-import { cn } from "@/lib/utils";
 import {
+  type CatalogCategorySlug,
+  type CatalogFilters,
   catalogPageCopy,
   catalogUiCopy,
   formatPrice,
@@ -26,17 +26,21 @@ import {
   getCatalogPageData,
   getCatalogProductsBySlugs,
   powerBankNumberFilterGroups,
-  type CatalogCategorySlug,
-  type CatalogFilters,
 } from "@/lib/catalog";
-import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
-import { localizeHref, type Locale } from "@/lib/i18n";
 import {
+  localizePowerBankNumberFilterGroup,
+  type PowerBankRangeKey,
+} from "@/lib/catalog-filter-definitions";
+import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
+import { type Locale, localizeHref } from "@/lib/i18n";
+import {
+  localizePowerBankOption,
   powerBankBuiltInCableOptions,
   powerBankChemistryOptions,
   powerBankDisplayOptions,
   powerBankProtocolOptions,
 } from "@/lib/power-bank-specs";
+import { cn } from "@/lib/utils";
 
 type CatalogPageProps = {
   category: CatalogCategorySlug;
@@ -87,6 +91,12 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
+  filters.usableEnergyRanges.forEach((value) =>
+    add("usableEnergyRange", value),
+  );
+  filters.conversionEfficiencyRanges.forEach((value) =>
+    add("conversionEfficiencyRange", value),
+  );
   filters.batteryChemistries.forEach((value) => add("batteryChemistry", value));
   filters.supportedOutputProtocols.forEach((value) =>
     add("supportedOutputProtocols", value),
@@ -97,7 +107,21 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   );
   add("maxOutputPower", filters.maxOutputPower);
   filters.maxOutputPowerRanges.forEach((value) =>
-    add("maxOutputPowerRange", value),
+    add("maxSinglePortOutputRange", value),
+  );
+  filters.volumetricDensityRanges.forEach((value) =>
+    add("volumetricDensityRange", value),
+  );
+  filters.rechargeTimeRanges.forEach((value) =>
+    add("rechargeTimeRange", value),
+  );
+  filters.thermalThrottleRanges.forEach((value) =>
+    add("thermalThrottleRange", value),
+  );
+  add("supports12vPdOutput", filters.supports12vPdOutput ? "true" : undefined);
+  add("airlineSafe", filters.airlineSafe ? "true" : undefined);
+  filters.safetyCertifications.forEach((value) =>
+    add("safetyCertification", value),
   );
   add(
     "passthroughCharging",
@@ -148,6 +172,12 @@ function catalogSearchParams(filters: CatalogFilters, page: number) {
   add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
+  filters.usableEnergyRanges.forEach((value) =>
+    add("usableEnergyRange", value),
+  );
+  filters.conversionEfficiencyRanges.forEach((value) =>
+    add("conversionEfficiencyRange", value),
+  );
   filters.batteryChemistries.forEach((value) => add("batteryChemistry", value));
   filters.supportedOutputProtocols.forEach((value) =>
     add("supportedOutputProtocols", value),
@@ -158,7 +188,21 @@ function catalogSearchParams(filters: CatalogFilters, page: number) {
   );
   add("maxOutputPower", filters.maxOutputPower);
   filters.maxOutputPowerRanges.forEach((value) =>
-    add("maxOutputPowerRange", value),
+    add("maxSinglePortOutputRange", value),
+  );
+  filters.volumetricDensityRanges.forEach((value) =>
+    add("volumetricDensityRange", value),
+  );
+  filters.rechargeTimeRanges.forEach((value) =>
+    add("rechargeTimeRange", value),
+  );
+  filters.thermalThrottleRanges.forEach((value) =>
+    add("thermalThrottleRange", value),
+  );
+  add("supports12vPdOutput", filters.supports12vPdOutput ? "true" : undefined);
+  add("airlineSafe", filters.airlineSafe ? "true" : undefined);
+  filters.safetyCertifications.forEach((value) =>
+    add("safetyCertification", value),
   );
   add(
     "passthroughCharging",
@@ -418,12 +462,22 @@ function NumberRangeFilter({
 function PowerBankFilters({
   data,
   filters,
+  locale,
   ui,
 }: {
   data: CatalogData;
   filters: CatalogFilters;
+  locale: Locale;
   ui: (typeof catalogUiCopy)[Locale];
 }) {
+  const numberFilterGroups = Object.fromEntries(
+    (Object.keys(powerBankNumberFilterGroups) as PowerBankRangeKey[]).map(
+      (key) => [key, localizePowerBankNumberFilterGroup(key, locale)],
+    ),
+  ) as Record<
+    PowerBankRangeKey,
+    ReturnType<typeof localizePowerBankNumberFilterGroup>
+  >;
   const chemistryOptions =
     data.facets.powerBanks.batteryChemistries.length > 0
       ? data.facets.powerBanks.batteryChemistries
@@ -440,7 +494,9 @@ function PowerBankFilters({
     data.facets.powerBanks.builtInCables.length > 0
       ? data.facets.powerBanks.builtInCables
       : powerBankBuiltInCableOptions.map((value) => ({ value, count: 0 }));
-  const numberRangeOptions =
+  const safetyCertificationOptions =
+    data.facets.powerBanks.safetyCertifications;
+  const rawNumberRangeOptions =
     data.facets.powerBanks.numberRanges ??
     Object.fromEntries(
       Object.entries(powerBankNumberFilterGroups).map(([key, group]) => [
@@ -452,6 +508,18 @@ function PowerBankFilters({
         })),
       ]),
     );
+  const numberRangeOptions = Object.fromEntries(
+    (Object.keys(numberFilterGroups) as PowerBankRangeKey[]).map((key) => [
+      key,
+      rawNumberRangeOptions[key].map((option) => ({
+        ...option,
+        label:
+          numberFilterGroups[key].options.find(
+            (localizedOption) => localizedOption.id === option.value,
+          )?.label ?? option.label,
+      })),
+    ]),
+  ) as typeof rawNumberRangeOptions;
 
   return (
     <>
@@ -468,11 +536,34 @@ function PowerBankFilters({
               count={chemistry.count}
               checked={filters.batteryChemistries.includes(chemistry.value)}
             >
-              {chemistry.value}
+              {localizePowerBankOption(chemistry.value, locale)}
             </CheckboxOption>
           ))}
         </div>
       </fieldset>
+
+      {safetyCertificationOptions.length > 0 ? (
+        <fieldset className="mt-6">
+          <legend className="text-sm font-medium text-black dark:text-white">
+            {ui.safetyCertifications}
+          </legend>
+          <div className="mt-3 space-y-2">
+            {safetyCertificationOptions.map((certification) => (
+              <CheckboxOption
+                key={certification.value}
+                name="safetyCertification"
+                value={certification.value}
+                count={certification.count}
+                checked={filters.safetyCertifications.includes(
+                  certification.value,
+                )}
+              >
+                {certification.value}
+              </CheckboxOption>
+            ))}
+          </div>
+        </fieldset>
+      ) : null}
 
       <fieldset className="mt-6">
         <legend className="text-sm font-medium text-black dark:text-white">
@@ -508,7 +599,7 @@ function PowerBankFilters({
               count={displayType.count}
               checked={filters.displayTypes.includes(displayType.value)}
             >
-              {displayType.value}
+              {localizePowerBankOption(displayType.value, locale)}
             </CheckboxOption>
           ))}
         </div>
@@ -527,7 +618,7 @@ function PowerBankFilters({
               count={builtInCable.count}
               checked={filters.builtInCables.includes(builtInCable.value)}
             >
-              {builtInCable.value}
+              {localizePowerBankOption(builtInCable.value, locale)}
             </CheckboxOption>
           ))}
         </div>
@@ -535,39 +626,64 @@ function PowerBankFilters({
 
       <div className="mt-6 grid gap-6">
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.capacityWh}
+          {...numberFilterGroups.capacityWh}
           options={numberRangeOptions.capacityWh}
           selected={filters.capacityWhRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.maxInputPower}
+          {...numberFilterGroups.usableEnergy}
+          options={numberRangeOptions.usableEnergy}
+          selected={filters.usableEnergyRanges}
+        />
+        <NumberRangeFilter
+          {...numberFilterGroups.conversionEfficiency}
+          options={numberRangeOptions.conversionEfficiency}
+          selected={filters.conversionEfficiencyRanges}
+        />
+        <NumberRangeFilter
+          {...numberFilterGroups.maxInputPower}
           options={numberRangeOptions.maxInputPower}
           selected={filters.maxInputPowerRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.maxOutputPower}
+          {...numberFilterGroups.maxOutputPower}
           options={numberRangeOptions.maxOutputPower}
           selected={filters.maxOutputPowerRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.gravimetricDensity}
+          {...numberFilterGroups.volumetricDensity}
+          options={numberRangeOptions.volumetricDensity}
+          selected={filters.volumetricDensityRanges}
+        />
+        <NumberRangeFilter
+          {...numberFilterGroups.gravimetricDensity}
           options={numberRangeOptions.gravimetricDensity}
           selected={filters.gravimetricDensityRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.weight}
+          {...numberFilterGroups.weight}
           options={numberRangeOptions.weight}
           selected={filters.weightRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.price}
+          {...numberFilterGroups.price}
           options={numberRangeOptions.price}
           selected={filters.priceRanges}
         />
         <NumberRangeFilter
-          {...powerBankNumberFilterGroups.wirelessChargingMaxPower}
+          {...numberFilterGroups.wirelessChargingMaxPower}
           options={numberRangeOptions.wirelessChargingMaxPower}
           selected={filters.wirelessChargingMaxPowerRanges}
+        />
+        <NumberRangeFilter
+          {...numberFilterGroups.rechargeTime}
+          options={numberRangeOptions.rechargeTime}
+          selected={filters.rechargeTimeRanges}
+        />
+        <NumberRangeFilter
+          {...numberFilterGroups.thermalThrottle}
+          options={numberRangeOptions.thermalThrottle}
+          selected={filters.thermalThrottleRanges}
         />
       </div>
 
@@ -577,19 +693,19 @@ function PowerBankFilters({
         </legend>
         <div className="mt-3 grid gap-6">
           <NumberRangeFilter
-            {...powerBankNumberFilterGroups.dimensionLength}
+            {...numberFilterGroups.dimensionLength}
             title={ui.length}
             options={numberRangeOptions.dimensionLength}
             selected={filters.dimensionLengthRanges}
           />
           <NumberRangeFilter
-            {...powerBankNumberFilterGroups.dimensionWidth}
+            {...numberFilterGroups.dimensionWidth}
             title={ui.width}
             options={numberRangeOptions.dimensionWidth}
             selected={filters.dimensionWidthRanges}
           />
           <NumberRangeFilter
-            {...powerBankNumberFilterGroups.dimensionThickness}
+            {...numberFilterGroups.dimensionThickness}
             title={ui.thickness}
             options={numberRangeOptions.dimensionThickness}
             selected={filters.dimensionThicknessRanges}
@@ -606,6 +722,35 @@ function PowerBankFilters({
           className="size-4 rounded border-black/20"
         />
         {ui.passthroughCharging}
+        <span className="text-zinc-400">
+          ({data.facets.powerBanks.passthroughCharging})
+        </span>
+      </label>
+      <label className="mt-3 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <input
+          type="checkbox"
+          name="supports12vPdOutput"
+          value="true"
+          defaultChecked={filters.supports12vPdOutput}
+          className="size-4 rounded border-black/20"
+        />
+        {ui.supports12vPdOutput}
+        <span className="text-zinc-400">
+          ({data.facets.powerBanks.supports12vPdOutput})
+        </span>
+      </label>
+      <label className="mt-3 flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <input
+          type="checkbox"
+          name="airlineSafe"
+          value="true"
+          defaultChecked={filters.airlineSafe}
+          className="size-4 rounded border-black/20"
+        />
+        {ui.airlineSafe}
+        <span className="text-zinc-400">
+          ({data.facets.powerBanks.airlineSafe})
+        </span>
       </label>
     </>
   );
@@ -837,7 +982,12 @@ export default async function CatalogPage({
             </fieldset>
 
             {category === "power-banks" ? (
-              <PowerBankFilters data={data} filters={filters} ui={ui} />
+              <PowerBankFilters
+                data={data}
+                filters={filters}
+                locale={locale}
+                ui={ui}
+              />
             ) : (
               <>
                 <fieldset className="mt-6">
@@ -913,12 +1063,21 @@ export default async function CatalogPage({
               "minPowerW",
               "capacityWh",
               "capacityWhRange",
+              "usableEnergyRange",
+              "conversionEfficiencyRange",
               "batteryChemistry",
               "supportedOutputProtocols",
               "maxInputPower",
               "maxInputPowerRange",
               "maxOutputPower",
               "maxOutputPowerRange",
+              "maxSinglePortOutputRange",
+              "volumetricDensityRange",
+              "rechargeTimeRange",
+              "thermalThrottleRange",
+              "supports12vPdOutput",
+              "airlineSafe",
+              "safetyCertification",
               "passthroughCharging",
               "gravimetricDensity",
               "gravimetricDensityRange",

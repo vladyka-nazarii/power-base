@@ -27,6 +27,9 @@ export type OfflineCatalogFilters = {
   displayTypes: string[];
   builtInCables: string[];
   passthroughCharging: boolean;
+  supports12vPdOutput: boolean;
+  airlineSafe: boolean;
+  safetyCertifications: string[];
   ranges: Record<PowerBankRangeKey, string[]>;
   sort: OfflineSort;
 };
@@ -44,11 +47,19 @@ export function createOfflineCatalogFilters(): OfflineCatalogFilters {
     displayTypes: [],
     builtInCables: [],
     passthroughCharging: false,
+    supports12vPdOutput: false,
+    airlineSafe: false,
+    safetyCertifications: [],
     ranges: {
       capacityWh: [],
+      usableEnergy: [],
+      conversionEfficiency: [],
       maxInputPower: [],
       maxOutputPower: [],
+      volumetricDensity: [],
       gravimetricDensity: [],
+      rechargeTime: [],
+      thermalThrottle: [],
       weight: [],
       price: [],
       wirelessChargingMaxPower: [],
@@ -100,9 +111,14 @@ function matchesPowerBankFilters(
   const dimensions = specs.dimensions;
   const rangeValue: Record<PowerBankRangeKey, number | undefined> = {
     capacityWh: specs.capacityWh,
+    usableEnergy: specs.usableEnergyWh,
+    conversionEfficiency: specs.conversionEfficiencyPercent,
     maxInputPower: specs.maxInputPower,
-    maxOutputPower: specs.maxOutputPower,
+    maxOutputPower: specs.maxSinglePortOutputPower,
+    volumetricDensity: specs.volumetricDensity,
     gravimetricDensity: specs.gravimetricDensity,
+    rechargeTime: specs.rechargeTimeMinutes,
+    thermalThrottle: specs.thermalThrottleMinutes,
     weight: specs.weight,
     price: specs.price,
     wirelessChargingMaxPower: specs.wirelessChargingMaxPower,
@@ -126,6 +142,12 @@ function matchesPowerBankFilters(
       (specs.builtInCable !== undefined &&
         filters.builtInCables.includes(specs.builtInCable))) &&
     (!filters.passthroughCharging || specs.passthroughCharging === true) &&
+    (!filters.supports12vPdOutput || specs.supports12vPdOutput === true) &&
+    (!filters.airlineSafe || specs.airlineSafe === true) &&
+    (filters.safetyCertifications.length === 0 ||
+      filters.safetyCertifications.some((value) =>
+        specs.safetyCertifications?.includes(value),
+      )) &&
     (Object.keys(filters.ranges) as PowerBankRangeKey[]).every((key) =>
       matchesRange(
         rangeValue[key],

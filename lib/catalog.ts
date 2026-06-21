@@ -54,12 +54,20 @@ export type CatalogFilters = {
   minPowerW?: number;
   capacityWh?: number;
   capacityWhRanges: string[];
+  usableEnergyRanges: string[];
+  conversionEfficiencyRanges: string[];
   batteryChemistries: string[];
   supportedOutputProtocols: string[];
   maxInputPower?: number;
   maxInputPowerRanges: string[];
   maxOutputPower?: number;
   maxOutputPowerRanges: string[];
+  volumetricDensityRanges: string[];
+  rechargeTimeRanges: string[];
+  thermalThrottleRanges: string[];
+  supports12vPdOutput?: boolean;
+  airlineSafe?: boolean;
+  safetyCertifications: string[];
   passthroughCharging?: boolean;
   gravimetricDensity?: number;
   gravimetricDensityRanges: string[];
@@ -189,6 +197,9 @@ export const catalogUiCopy: Record<
     maxInputPower: string;
     maxOutputPower: string;
     passthroughCharging: string;
+    supports12vPdOutput: string;
+    airlineSafe: string;
+    safetyCertifications: string;
     minGravimetricDensity: string;
     maxDimensions: string;
     length: string;
@@ -226,6 +237,9 @@ export const catalogUiCopy: Record<
     maxInputPower: "Min input power (W)",
     maxOutputPower: "Min output power (W)",
     passthroughCharging: "Passthrough charging",
+    supports12vPdOutput: "12V PD output support",
+    airlineSafe: "Airline safe (100Wh or less)",
+    safetyCertifications: "Safety certifications",
     minGravimetricDensity: "Min density (Wh/kg)",
     maxDimensions: "Max dimensions (mm)",
     length: "Length",
@@ -266,22 +280,25 @@ export const catalogUiCopy: Record<
     manufacturer: "Виробник",
     nominalVoltage: "Номінальна напруга",
     chemistry: "Хімія",
-    minCapacity: "Мін. ємність (Wh)",
-    minPower: "Мін. потужність (W)",
-    maxInputPower: "Min input power (W)",
-    maxOutputPower: "Min output power (W)",
-    passthroughCharging: "Passthrough charging",
-    minGravimetricDensity: "Min density (Wh/kg)",
-    maxDimensions: "Max dimensions (mm)",
-    length: "Length",
-    width: "Width",
-    thickness: "Thickness",
-    maxWeight: "Max weight (g)",
-    displayType: "Display type",
-    maxPrice: "Max price (USD)",
-    outputProtocols: "Output protocols",
-    builtInCable: "Built-in cable",
-    minWirelessChargingPower: "Min wireless power (W)",
+    minCapacity: "Мін. ємність (Вт·год)",
+    minPower: "Мін. потужність (Вт)",
+    maxInputPower: "Мін. вхідна потужність (Вт)",
+    maxOutputPower: "Мін. вихідна потужність (Вт)",
+    passthroughCharging: "Наскрізне заряджання",
+    supports12vPdOutput: "Підтримка виходу PD 12 В",
+    airlineSafe: "Дозволено в літаку (до 100 Вт·год включно)",
+    safetyCertifications: "Сертифікати безпеки",
+    minGravimetricDensity: "Мін. щільність (Вт·год/кг)",
+    maxDimensions: "Максимальні розміри (мм)",
+    length: "Довжина",
+    width: "Ширина",
+    thickness: "Товщина",
+    maxWeight: "Максимальна вага (г)",
+    displayType: "Тип дисплея",
+    maxPrice: "Максимальна ціна (USD)",
+    outputProtocols: "Протоколи виходу",
+    builtInCable: "Вбудований кабель",
+    minWirelessChargingPower: "Мін. потужність бездротового заряджання (Вт)",
     matchingProducts: (count) => `${count} товарів знайдено`,
     productCount: (shown, total) => `${shown} з ${total} товарів`,
     sortOptions: {
@@ -569,6 +586,18 @@ function matchesPowerBankFilters(
         filters.capacityWhRanges,
         powerBankNumberFilterGroups.capacityWh.options,
       ),
+    exclude === "usableEnergyRange" ||
+      matchesNumberRangeFilter(
+        specifications.usableEnergyWh,
+        filters.usableEnergyRanges,
+        powerBankNumberFilterGroups.usableEnergy.options,
+      ),
+    exclude === "conversionEfficiencyRange" ||
+      matchesNumberRangeFilter(
+        specifications.conversionEfficiencyPercent,
+        filters.conversionEfficiencyRanges,
+        powerBankNumberFilterGroups.conversionEfficiency.options,
+      ),
     filters.capacityWh === undefined ||
       (specifications.capacityWh ?? 0) >= filters.capacityWh,
     exclude === "batteryChemistry" ||
@@ -590,13 +619,43 @@ function matchesPowerBankFilters(
       (specifications.maxInputPower ?? 0) >= filters.maxInputPower,
     exclude === "maxOutputPowerRange" ||
       matchesNumberRangeFilter(
-        specifications.maxOutputPower,
+        specifications.maxSinglePortOutputPower,
         filters.maxOutputPowerRanges,
         powerBankNumberFilterGroups.maxOutputPower.options,
       ),
+    exclude === "volumetricDensityRange" ||
+      matchesNumberRangeFilter(
+        specifications.volumetricDensity,
+        filters.volumetricDensityRanges,
+        powerBankNumberFilterGroups.volumetricDensity.options,
+      ),
+    exclude === "rechargeTimeRange" ||
+      matchesNumberRangeFilter(
+        specifications.rechargeTimeMinutes,
+        filters.rechargeTimeRanges,
+        powerBankNumberFilterGroups.rechargeTime.options,
+      ),
+    exclude === "thermalThrottleRange" ||
+      matchesNumberRangeFilter(
+        specifications.thermalThrottleMinutes,
+        filters.thermalThrottleRanges,
+        powerBankNumberFilterGroups.thermalThrottle.options,
+      ),
+    exclude === "supports12vPdOutput" ||
+      filters.supports12vPdOutput !== true ||
+      specifications.supports12vPdOutput === true,
+    exclude === "airlineSafe" ||
+      filters.airlineSafe !== true ||
+      specifications.airlineSafe === true,
+    exclude === "safetyCertification" ||
+      filters.safetyCertifications.length === 0 ||
+      filters.safetyCertifications.some((value) =>
+        specifications.safetyCertifications?.includes(value),
+      ),
     filters.maxOutputPower === undefined ||
       (specifications.maxOutputPower ?? 0) >= filters.maxOutputPower,
-    filters.passthroughCharging !== true ||
+    exclude === "passthroughCharging" ||
+      filters.passthroughCharging !== true ||
       specifications.passthroughCharging === true,
     exclude === "gravimetricDensityRange" ||
       matchesNumberRangeFilter(
@@ -1021,6 +1080,9 @@ async function getUncachedCatalogPageData(
     const powerBankBuiltInCableOptions = uniqueDefined(
       powerBankBaseSpecs.map((spec) => spec.builtInCable),
     );
+    const powerBankSafetyCertificationOptions = uniqueDefined(
+      powerBankBaseSpecs.flatMap((spec) => spec.safetyCertifications ?? []),
+    );
     const powerBankNumberRangeFacets =
       categorySlug === "power-banks"
         ? {
@@ -1029,6 +1091,24 @@ async function getUncachedCatalogPageData(
               searchableBaseRows,
               (row) => powerBankSpecs(row).capacityWh,
               (row) => matchesPowerBankFilters(row, filters, "capacityWhRange"),
+            ),
+            usableEnergy: countByNumberRangeOption(
+              powerBankNumberFilterGroups.usableEnergy.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).usableEnergyWh,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "usableEnergyRange"),
+            ),
+            conversionEfficiency: countByNumberRangeOption(
+              powerBankNumberFilterGroups.conversionEfficiency.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).conversionEfficiencyPercent,
+              (row) =>
+                matchesPowerBankFilters(
+                  row,
+                  filters,
+                  "conversionEfficiencyRange",
+                ),
             ),
             maxInputPower: countByNumberRangeOption(
               powerBankNumberFilterGroups.maxInputPower.options,
@@ -1040,9 +1120,30 @@ async function getUncachedCatalogPageData(
             maxOutputPower: countByNumberRangeOption(
               powerBankNumberFilterGroups.maxOutputPower.options,
               searchableBaseRows,
-              (row) => powerBankSpecs(row).maxOutputPower,
+              (row) => powerBankSpecs(row).maxSinglePortOutputPower,
               (row) =>
                 matchesPowerBankFilters(row, filters, "maxOutputPowerRange"),
+            ),
+            volumetricDensity: countByNumberRangeOption(
+              powerBankNumberFilterGroups.volumetricDensity.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).volumetricDensity,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "volumetricDensityRange"),
+            ),
+            rechargeTime: countByNumberRangeOption(
+              powerBankNumberFilterGroups.rechargeTime.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).rechargeTimeMinutes,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "rechargeTimeRange"),
+            ),
+            thermalThrottle: countByNumberRangeOption(
+              powerBankNumberFilterGroups.thermalThrottle.options,
+              searchableBaseRows,
+              (row) => powerBankSpecs(row).thermalThrottleMinutes,
+              (row) =>
+                matchesPowerBankFilters(row, filters, "thermalThrottleRange"),
             ),
             gravimetricDensity: countByNumberRangeOption(
               powerBankNumberFilterGroups.gravimetricDensity.options,
@@ -1169,6 +1270,29 @@ async function getUncachedCatalogPageData(
               powerBankSpecs(row).builtInCable === option &&
               matchesPowerBankFilters(row, filters, "builtInCable"),
           ),
+          safetyCertifications: countByOption(
+            powerBankSafetyCertificationOptions,
+            searchableBaseRows,
+            (row, option) =>
+              (powerBankSpecs(row).safetyCertifications?.includes(option) ??
+                false) &&
+              matchesPowerBankFilters(row, filters, "safetyCertification"),
+          ),
+          passthroughCharging: searchableBaseRows.filter(
+            (row) =>
+              powerBankSpecs(row).passthroughCharging === true &&
+              matchesPowerBankFilters(row, filters, "passthroughCharging"),
+          ).length,
+          supports12vPdOutput: searchableBaseRows.filter(
+            (row) =>
+              powerBankSpecs(row).supports12vPdOutput === true &&
+              matchesPowerBankFilters(row, filters, "supports12vPdOutput"),
+          ).length,
+          airlineSafe: searchableBaseRows.filter(
+            (row) =>
+              powerBankSpecs(row).airlineSafe === true &&
+              matchesPowerBankFilters(row, filters, "airlineSafe"),
+          ).length,
           numberRanges: powerBankNumberRangeFacets,
         },
       },
@@ -1192,6 +1316,10 @@ async function getUncachedCatalogPageData(
           supportedOutputProtocols: [],
           displayTypes: [],
           builtInCables: [],
+          safetyCertifications: [],
+          passthroughCharging: 0,
+          supports12vPdOutput: 0,
+          airlineSafe: 0,
           numberRanges: null,
         },
       },
@@ -1316,12 +1444,23 @@ export function parseCatalogFilters(
     minPowerW: numberValue("minPowerW"),
     capacityWh: numberValue("capacityWh") ?? numberValue("minCapacityWh"),
     capacityWhRanges: values("capacityWhRange"),
+    usableEnergyRanges: values("usableEnergyRange"),
+    conversionEfficiencyRanges: values("conversionEfficiencyRange"),
     batteryChemistries: values("batteryChemistry"),
     supportedOutputProtocols: values("supportedOutputProtocols"),
     maxInputPower: numberValue("maxInputPower"),
     maxInputPowerRanges: values("maxInputPowerRange"),
     maxOutputPower: numberValue("maxOutputPower") ?? numberValue("minPowerW"),
-    maxOutputPowerRanges: values("maxOutputPowerRange"),
+    maxOutputPowerRanges: [
+      ...values("maxSinglePortOutputRange"),
+      ...values("maxOutputPowerRange"),
+    ],
+    volumetricDensityRanges: values("volumetricDensityRange"),
+    rechargeTimeRanges: values("rechargeTimeRange"),
+    thermalThrottleRanges: values("thermalThrottleRange"),
+    supports12vPdOutput: values("supports12vPdOutput").includes("true"),
+    airlineSafe: values("airlineSafe").includes("true"),
+    safetyCertifications: values("safetyCertification"),
     passthroughCharging: values("passthroughCharging").includes("true"),
     gravimetricDensity: numberValue("gravimetricDensity"),
     gravimetricDensityRanges: values("gravimetricDensityRange"),

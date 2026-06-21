@@ -638,7 +638,7 @@ export const ankerPowerBankRows: AnkerPowerBankSeedRow[] = [
     priceCents: 8050,
     productCode: "A1289",
     nominalVoltageV: 5,
-    capacityWh: 89,
+    capacityWh: 86,
     continuousPowerW: 140,
     peakPowerW: 140,
     chemistry: "Lithium-ion",
@@ -657,7 +657,29 @@ export const ankerPowerBankRows: AnkerPowerBankSeedRow[] = [
       originalPriceEur: 157.79,
       typicalCapacityMah: 24000,
       estimatedEnergyWh: 89,
+      ratedEnergyWh: 86.4,
       maxOutputW: 140,
+      singlePortMaxOutputW: 140,
+      supports12vPdOutput: false,
+      outputParameters: [
+        "USB-C 1/2: 5V/3A, 9V/3A, 15V/3A, 20V/5A, 28V/5A (140W max)",
+        "USB-A: 5V/3A, 9V/2A, 12V/1.5A (18W max)",
+      ],
+      researchSources: [
+        {
+          label: "StorageReview Anker 737 Power Bank review",
+          url: "https://www.storagereview.com/review/anker-737-power-bank-review",
+          accessedAt: "2026-06-21",
+          notes:
+            "Reports 86.4Wh, USB-C PDOs without 12V, USB-A 12V/1.5A, and 140W maximum USB-C output.",
+        },
+        {
+          label: "ChargerLAB Anker 737 charging compatibility test",
+          url: "https://www.chargerlab.com/charging-compatibility-test-of-anker-140w-pd3-1-power-bank-737-power-bank/",
+          accessedAt: "2026-06-21",
+          notes: "Independent USB PD compatibility testing; no sustained thermal-runtime result published.",
+        },
+      ],
       sourceDescription: "Swift Power Anywhere: Benefit from fast charging with 140W Power Delivery 3.1 technology, ideal for keeping devices powered up during travel and commutes, perfect for professionals needing a reliable laptop power bank. Marathon Battery Life: With a 24,000mAh capacity, enjoy up to five full charges for an iPhone 13 or 1.3 charges for an iPad Pro, ensuring you stay connected and productive, making this a dependable Anker power bank for long-lasting use. Intelligent Charge Monitoring: The integrated digital display provides real-time charging information, allowing for precise power management and recharge planning on the go, making this a smart choice for a high-capacity Anker USB C power bank. What You Get: Anker 737 Power Bank (PowerCore 24K), welcome guide, 24-month stress-free warranty, and friendly customer service.",
       features: [
         "Swift Power Anywhere",
