@@ -26,6 +26,8 @@ import {
   type PowerBankSpecifications,
 } from "@/lib/power-bank-specs";
 
+export { formatPrice } from "@/lib/price-format";
+
 export const catalogCategorySlugs = [
   "power-banks",
   "power-stations",
@@ -1342,18 +1344,6 @@ export function parseCatalogFilters(
       : "recommended",
     page: parsedPage > 0 ? parsedPage : 1,
   };
-}
-
-export function formatPrice(priceCents: number | null, locale: Locale = "en") {
-  if (priceCents === null) {
-    return locale === "uk" ? "РЅ/Рґ" : "n/a";
-  }
-
-  return new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(priceCents / 100);
 }
 
 export function formatWeight(

@@ -37,7 +37,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Ultra-slim magnetic power bank with 15 W wireless charging, 22.5 W USB-C output, and two-device charging.",
     imagePath:
       "https://media.vladyka.dev/power-bank/xiaomi/39c0de98f9e4ab7d06e0660e3a34bd9a.png",
-    priceCents: null,
+    priceCents: 7964,
     productCode: "MDY-20-EB",
     nominalVoltageV: 5,
     capacityWh: 19,
@@ -93,7 +93,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Magnetic 10,000 mAh-class bank with an adjustable stand, integrated USB-C cable, display, and three-device charging.",
     imagePath:
       "https://media.vladyka.dev/power-bank/xiaomi/f857732c9d6f01ad11b20280c57783ea.png",
-    priceCents: null,
+    priceCents: 4999,
     productCode: "WPB1007Z",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -157,7 +157,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Fast 67 W USB-C power bank with integrated cable, 65 W self-charging, USB-A output, display, and pass-through charging.",
     imagePath:
       "https://media.vladyka.dev/power-bank/xiaomi/686a0afb4f10204d55178271808a738e.png",
-    priceCents: null,
+    priceCents: 4451,
     productCode: "PB1067",
     nominalVoltageV: 5,
     capacityWh: 39,
@@ -212,7 +212,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Higher-capacity 67 W power bank with integrated USB-C cable, USB-C and USB-A ports, and 65 W self-charging.",
     imagePath:
       "https://media.vladyka.dev/power-bank/xiaomi/78d1b5791d5ac17aee35cf143b53580d.png",
-    priceCents: null,
+    priceCents: 4128,
     productCode: "PB2067",
     nominalVoltageV: 5,
     capacityWh: 74,
@@ -262,7 +262,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Slim magnetic 5,000 mAh power bank with aluminium body, USB-C input/output, and up to 22.5 W wired output.",
     imagePath:
       "https://media.vladyka.dev/power-bank/xiaomi/daad9ee33362ca155392459e09c9b996.png",
-    priceCents: null,
+    priceCents: 3115,
     productCode: "WPB0507S",
     nominalVoltageV: 5,
     capacityWh: 19,
@@ -310,7 +310,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Magnetic 10,000 mAh-class power bank with integrated USB-C cable, 33 W wired output, 7.5 W wireless output, and dual USB-C charging.",
     imagePath:
       "https://i02.appmifile.com/962_operatorx_operatorx_opx/28/04/2025/f24a4499d06863897ff5fba58a39eeab.png",
-    priceCents: null,
+    priceCents: 3269,
     productCode: "WPB1007MI",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -363,7 +363,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "20,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W multi-port output.",
     imagePath:
       "https://i02.appmifile.com/914_operatorx_operatorx_opx/25/04/2025/677c16b0f8e1a8553c1657f16f4d6037.png",
-    priceCents: null,
+    priceCents: 2670,
     productCode: "PB2020MI",
     nominalVoltageV: 5,
     capacityWh: 74,
@@ -418,7 +418,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "High-output USB-C/USB-A power bank with 212 W max multi-port output and up to 140 W single-port USB-C output.",
     imagePath:
       "https://i02.appmifile.com/473_operatorx_operatorx_opx/26/02/2025/d1539e9f06cf8bb36a91e1cc61c888bc.png",
-    priceCents: null,
+    priceCents: 8904,
     productCode: "P03MI",
     nominalVoltageV: 5,
     capacityWh: 89,
@@ -473,7 +473,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "25,000 mAh-class HyperCharge power bank with 212 W max output, 89 Wh rated energy, and 90.8 Wh typical energy.",
     imagePath:
       "https://i02.appmifile.com/213_operatorx_operatorx_opx/26/02/2025/a0d26c9bb8a234d6b3cde4aced24c1db.png",
-    priceCents: null,
+    priceCents: 8904,
     productCode: "P03MI",
     nominalVoltageV: 5,
     capacityWh: 89,
@@ -524,7 +524,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Compact dual USB-C power bank with integrated cable, 165 W max dual-port output, and up to 90 W self-charging.",
     imagePath:
       "https://i02.appmifile.com/278_operatorx_operatorx_opx/10/01/2025/ea9ce14d10f12f60b9ee6f472bd84ed9.png",
-    priceCents: null,
+    priceCents: 4023,
     productCode: "PB1165MI",
     nominalVoltageV: 5,
     capacityWh: 36,
@@ -576,7 +576,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Compact 10,000 mAh-class power bank with integrated USB-C cable, 33 W max output, and two-device charging.",
     imagePath:
       "https://i02.appmifile.com/244_operatorx_operatorx_opx/10/01/2025/f3d54398c5f2c7a1e4e3140ab0154b73.png",
-    priceCents: null,
+    priceCents: 3269,
     productCode: "PB1033MI",
     nominalVoltageV: 5,
     capacityWh: 36,
@@ -632,7 +632,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Magnetic 5,000 mAh-class power bank with USB-C input/output and wireless magnetic charging for phones.",
     imagePath:
       "https://i02.appmifile.com/312_operatorx_operatorx_opx/20/11/2024/54b0f17b3578347ebe95b38db34fb111.png",
-    priceCents: null,
+    priceCents: 3304,
     productCode: "WPB0502MI",
     nominalVoltageV: 5,
     capacityWh: 18,
@@ -684,7 +684,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Ultra-slim 5,000 mAh-class power bank with USB-C input/output, 20 W max output, and 10 mm-class body.",
     imagePath:
       "https://i02.appmifile.com/758_operatorx_operatorx_opx/15/11/2024/deb170b6ea40d2f3eedbbac31eafab64.png",
-    priceCents: null,
+    priceCents: 2979,
     productCode: "PB0520MI",
     nominalVoltageV: 5,
     capacityWh: 19,
@@ -734,7 +734,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Lightweight 10,000 mAh-class power bank with 22.5 W max output, dual USB-A output, and USB-C input.",
     imagePath:
       "https://i02.appmifile.com/893_operatorx_operatorx_opx/15/10/2024/b5689c87df54d26aacf0b5df488ead2b.png",
-    priceCents: null,
+    priceCents: 1755,
     productCode: "PB100LZM",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -791,7 +791,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "20,000 mAh-class power bank with integrated USB-C cable, 33 W max output, USB-C/USB-A ports, and 30 W input.",
     imagePath:
       "https://i02.appmifile.com/79_operatorx_operatorx_opx/13/04/2025/0d012e501987fffd60b485f91a7f91d7.png",
-    priceCents: null,
+    priceCents: 3073,
     productCode: "PB2033MI",
     nominalVoltageV: 5,
     capacityWh: 74,
@@ -846,7 +846,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "High-capacity 30,000 mAh-class power bank with 18 W fast charging, USB-C/Micro-USB input, and dual USB-A output.",
     imagePath:
       "https://i02.appmifile.com/883_operatorx_operatorx_opx/30/07/2024/8d78ecb0ee81a0b009c98463492a0407.jpg",
-    priceCents: null,
+    priceCents: 3389,
     productCode: "PB3018ZM",
     nominalVoltageV: 5,
     capacityWh: 111,
@@ -895,7 +895,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "10,000 mAh-class power bank with integrated USB-C cable, USB-C and USB-A outputs, and 22.5 W max output.",
     imagePath:
       "https://i02.appmifile.com/670_operatorx_operatorx_opx/02/06/2026/04a07ae36ee548daea58c0bd511e9939.png",
-    priceCents: null,
+    priceCents: 1888,
     productCode: "PB1022MI",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -948,7 +948,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Qi2 magnetic 6,000 mAh-class power bank with 15 W wireless charging and USB-C wired input/output.",
     imagePath:
       "https://i02.appmifile.com/532_operatorx_operatorx_opx/30/07/2024/c875b3b2dca15897f703b22429440b51.png",
-    priceCents: null,
+    priceCents: 2957,
     productCode: "WPB0620MI",
     nominalVoltageV: 5,
     capacityWh: 22,
@@ -1000,7 +1000,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Pocket-format 10,000 mAh-class power bank with 33 W max output, USB-C input/output, and dual USB-A output.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1678936383.60097709.png",
-    priceCents: null,
+    priceCents: 3338,
     productCode: "PB1030ZM",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -1054,7 +1054,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "10,000 mAh-class wireless power bank with USB-C/Micro-USB input, USB-A output, and 10 W wireless charging.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872499.8469504.png",
-    priceCents: null,
+    priceCents: 2999,
     productCode: "WPB15ZM",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -1112,7 +1112,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "Ultra-compact 10,000 mAh-class power bank with 22.5 W max output, USB-C/Micro-USB input, and three-device charging.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872424.98064819.png",
-    priceCents: null,
+    priceCents: 2499,
     productCode: "PB1022ZM",
     nominalVoltageV: 5,
     capacityWh: 37,
@@ -1174,7 +1174,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "20,000 mAh-class laptop-capable power bank with 50 W USB-C output, 45 W input, and three-port charging.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666872404.25699306.png",
-    priceCents: null,
+    priceCents: 9351,
     productCode: "PB200SZM",
     nominalVoltageV: 5,
     capacityWh: 74,
@@ -1235,7 +1235,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "10,000 mAh-class wireless power bank with 10 W wireless output, 22.5 W wired fast charging, and pass-through charging.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666841240.21987017.png",
-    priceCents: null,
+    priceCents: 2999,
     productCode: "WPB15PDZM",
     nominalVoltageV: 5,
     capacityWh: 36,
@@ -1296,7 +1296,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "20,000 mAh-class Redmi fast-charge power bank with USB-C/Micro-USB input and dual USB-A output.",
     imagePath:
       "https://i01.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1666845794.21862206.png",
-    priceCents: null,
+    priceCents: 2499,
     productCode: "PB200LZM",
     nominalVoltageV: 5,
     capacityWh: 74,
@@ -1347,7 +1347,7 @@ export const xiaomiPowerBankRows: XiaomiPowerBankSeedRow[] = [
       "10,000 mAh-class aluminium power bank with 18 W fast charging, dual input, dual USB-A output, and low-current mode.",
     imagePath:
       "https://i01.appmifile.com/webfile/globalimg/products/pc/10000mAh-mi-18w-fast-charge-power-bank-3//index_0061.png",
-    priceCents: null,
+    priceCents: 1999,
     nominalVoltageV: 5,
     capacityWh: 37,
     continuousPowerW: 18,
