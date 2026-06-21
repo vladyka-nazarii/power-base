@@ -32,7 +32,7 @@ export const ankerPowerBankRows: AnkerPowerBankSeedRow[] = [
     model: "Anker MagGo Power Bank (10K, Slim)",
     slug: "anker-maggo-power-bank-10k-slim",
     summary: "Slimmest Power Yet: At just 0.58 x 2.78 x 4.09 inches thick, achieve maximum portability and power with our slimmest design to date. (Note: Based on internal comparisons with previous Anker models.) Ultra-Fast 15W Wir...",
-    summaryUk: "Slimmest Power Yet: At just 0.58 x 2.78 x 4.09 inches thick, achieve maximum portability and power with our slimmest design to date. (Note: Based on internal comparisons with previous Anker models.) Ultra-Fast 15W Wir...",
+    summaryUk: "Найтонша потужність: завдяки розмірам лише 0,58 × 2,78 × 4,09 дюйма ця найтонша модель Anker поєднує максимальну портативність і потужність. (Примітка: на основі внутрішнього порівняння з попередніми моделями Anker.) Надшвидке бездротове заряджання 15 Вт...",
     imagePath: "https://media.vladyka.dev/power-bank/anker/9b8504408075828b81e011543a86549e.webp",
     priceCents: 5438,
     productCode: "A1664",
@@ -44,7 +44,7 @@ export const ankerPowerBankRows: AnkerPowerBankSeedRow[] = [
     weightGrams: 405,
     warrantyYears: 2,
     sourceLabel: "Anker EU product page (A1664)",
-    sourceLabelUk: "Anker EU product page (A1664)",
+    sourceLabelUk: "Сторінка товару Anker EU (A1664)",
     sourceUrl: "https://www.anker.com/eu-en/products/a1664-maggo-10000mah-power-bank?variant=44551602307262&collections_power-banks&Sort_by=Recommended",
     specifications: {
       collectionListPosition: 1,

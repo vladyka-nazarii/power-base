@@ -216,6 +216,10 @@ export type PowerBankBuiltInCable =
   (typeof powerBankBuiltInCableOptions)[number];
 
 const powerBankOptionLabelsUk: Record<string, string> = {
+  "Li-Po": "Літій-полімерна (Li-Po)",
+  "Li-ion": "Літій-іонна (Li-ion)",
+  "Li-ion (18650)": "Літій-іонна (18650)",
+  "Li-ion (21700)": "Літій-іонна (21700)",
   "LED Indicators (Dots)": "Світлодіодні індикатори",
   "Digital Display (%)": "Цифровий дисплей (%)",
   "Smart Screen (TFT/OLED with V/A stats)":
@@ -230,6 +234,18 @@ const powerBankOptionLabelsUk: Record<string, string> = {
 
 export function localizePowerBankOption(value: string, locale: "en" | "uk") {
   return locale === "uk" ? (powerBankOptionLabelsUk[value] ?? value) : value;
+}
+
+const powerBankFeatureLabelsUk: Record<string, string> = {
+  "10,000mAh High-Capacity Power": "Висока ємність 10 000 мА·год",
+  "Ergonomic Design, Enhanced Portability":
+    "Ергономічний дизайн і покращена портативність",
+  "Slimmest Power Yet": "Найтонша потужна модель",
+  "Ultra-Fast 15W Wireless Charging": "Надшвидке бездротове заряджання 15 Вт",
+};
+
+export function localizePowerBankFeature(value: string, locale: "en" | "uk") {
+  return locale === "uk" ? (powerBankFeatureLabelsUk[value] ?? value) : value;
 }
 
 export type PowerBankDimensions = {

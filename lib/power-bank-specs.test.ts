@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
-import { normalizePowerBankSpecifications } from "@/lib/power-bank-specs";
+import {
+  localizePowerBankFeature,
+  normalizePowerBankSpecifications,
+} from "@/lib/power-bank-specs";
 
 describe("normalizePowerBankSpecifications", () => {
   test("derives density, airline eligibility, 12V support, and recharge time", () => {
@@ -49,5 +52,14 @@ describe("normalizePowerBankSpecifications", () => {
     });
 
     expect(specs.maxSinglePortOutputPower).toBeUndefined();
+  });
+
+  test("localizes known product feature tags without changing English", () => {
+    const feature = "Ultra-Fast 15W Wireless Charging";
+
+    expect(localizePowerBankFeature(feature, "uk")).toBe(
+      "Надшвидке бездротове заряджання 15 Вт",
+    );
+    expect(localizePowerBankFeature(feature, "en")).toBe(feature);
   });
 });

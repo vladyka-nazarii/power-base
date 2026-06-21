@@ -29,6 +29,49 @@ type StateEvent = CustomEvent<{
   category: CatalogCategorySlug;
   slugs: string[];
 }>;
+
+const compareCopy = {
+  en: {
+    capacity: "Capacity",
+    clear: "Clear",
+    close: "Close comparison",
+    compare: "Compare",
+    description: "Comparing products from this category only.",
+    dimensions: "Dimensions",
+    maxInput: "Max input",
+    maxOutput: "Max output",
+    notAvailable: "n/a",
+    price: "Price",
+    ratedCapacity: "Rated capacity",
+    remove: "Remove",
+    selected: (count: number) => `${count} selected for comparison`,
+    spec: "Spec",
+    title: "Product comparison",
+    warranty: "Warranty",
+    weight: "Weight",
+    yearShort: "yr",
+  },
+  uk: {
+    capacity: "Запас енергії",
+    clear: "Очистити",
+    close: "Закрити порівняння",
+    compare: "Порівняти",
+    description: "Порівнюються товари лише з цієї категорії.",
+    dimensions: "Розміри",
+    maxInput: "Макс. вхідна потужність",
+    maxOutput: "Макс. вихідна потужність",
+    notAvailable: "н/д",
+    price: "Ціна",
+    ratedCapacity: "Номінальна ємність",
+    remove: "Вилучити",
+    selected: (count: number) => `Обрано для порівняння: ${count}`,
+    spec: "Характеристика",
+    title: "Порівняння товарів",
+    warranty: "Гарантія",
+    weight: "Вага",
+    yearShort: "р.",
+  },
+} as const;
 type ProductSpecifications = {
   dimensions?: { length?: number; width?: number; thickness?: number };
   dimensionsMm?: string;
@@ -45,7 +88,9 @@ function storageKey(category: CatalogCategorySlug) {
   return `powerbase:compare:${category}:v1`;
 }
 
-function readStoredCompare(category: CatalogCategorySlug): StoredCompare | null {
+function readStoredCompare(
+  category: CatalogCategorySlug,
+): StoredCompare | null {
   try {
     const rawValue = window.localStorage.getItem(storageKey(category));
 
@@ -90,7 +135,7 @@ function specificationsFor(product: CompareProduct) {
 
 function formatPrice(priceCents: number | null, locale: Locale) {
   if (priceCents === null) {
-    return "n/a";
+    return compareCopy[locale].notAvailable;
   }
 
   return new Intl.NumberFormat(locale === "uk" ? "uk-UA" : "en-US", {
@@ -100,23 +145,32 @@ function formatPrice(priceCents: number | null, locale: Locale) {
   }).format(priceCents / 100);
 }
 
-function formatWeight(weightGrams: number | null) {
+function formatWeight(weightGrams: number | null, locale: Locale) {
   if (!weightGrams) {
-    return "n/a";
+    return compareCopy[locale].notAvailable;
   }
 
   return weightGrams >= 1000
-    ? `${(weightGrams / 1000).toLocaleString(undefined, {
-        maximumFractionDigits: 1,
-      })} kg`
-    : `${weightGrams} g`;
+    ? `${(weightGrams / 1000).toLocaleString(
+        locale === "uk" ? "uk-UA" : "en-US",
+        {
+          maximumFractionDigits: 1,
+        },
+      )} ${locale === "uk" ? "кг" : "kg"}`
+    : `${weightGrams} ${locale === "uk" ? "г" : "g"}`;
 }
 
-function formatNumber(value: number | null | undefined, unit: string) {
-  return value ? `${value.toLocaleString()} ${unit}` : "n/a";
+function formatNumber(
+  value: number | null | undefined,
+  unit: string,
+  locale: Locale,
+) {
+  return value
+    ? `${value.toLocaleString(locale === "uk" ? "uk-UA" : "en-US")} ${unit}`
+    : compareCopy[locale].notAvailable;
 }
 
-function formatDimensions(product: CompareProduct) {
+function formatDimensions(product: CompareProduct, locale: Locale) {
   const specifications = specificationsFor(product);
 
   if (specifications.dimensionsMm) {
@@ -126,7 +180,7 @@ function formatDimensions(product: CompareProduct) {
   const dimensions = specifications.dimensions;
 
   if (!dimensions?.length || !dimensions.width || !dimensions.thickness) {
-    return "n/a";
+    return compareCopy[locale].notAvailable;
   }
 
   return `${dimensions.length} x ${dimensions.width} x ${dimensions.thickness} mm`;
@@ -224,7 +278,9 @@ export function CompareCheckbox({
       />
       <Check className={cn("size-4", !selected && "opacity-0")} />
       <span>{label}</span>
-      <span className="sr-only">{selected ? selectedLabel : unselectedLabel}</span>
+      <span className="sr-only">
+        {selected ? selectedLabel : unselectedLabel}
+      </span>
     </label>
   );
 }
@@ -283,15 +339,19 @@ export function CatalogCompareTray({
 
   useEffect(() => {
     const onToggle = (event: Event) => {
-      const { category: eventCategory, product, selected } = (
-        event as ToggleEvent
-      ).detail;
+      const {
+        category: eventCategory,
+        product,
+        selected,
+      } = (event as ToggleEvent).detail;
 
       if (eventCategory !== category) {
         return;
       }
 
-      setProducts((currentProducts) => mergeProducts(currentProducts, [product]));
+      setProducts((currentProducts) =>
+        mergeProducts(currentProducts, [product]),
+      );
       setSelectedSlugs((currentSlugs) =>
         selected
           ? currentSlugs.includes(product.slug)
@@ -324,55 +384,67 @@ export function CatalogCompareTray({
     return null;
   }
 
+  const copy = compareCopy[locale];
   const rows = [
     {
-      label: "Price",
-      value: (product: CompareProduct) => formatPrice(product.priceCents, locale),
+      label: copy.price,
+      value: (product: CompareProduct) =>
+        formatPrice(product.priceCents, locale),
     },
     {
-      label: "Capacity",
+      label: copy.capacity,
       value: (product: CompareProduct) =>
         formatNumber(
           specificationsFor(product).ratedEnergyWh ?? product.capacityWh,
           "Wh",
+          locale,
         ),
     },
     {
-      label: "Rated capacity",
+      label: copy.ratedCapacity,
       value: (product: CompareProduct) =>
-        formatNumber(specificationsFor(product).ratedCapacityMah, "mAh"),
+        formatNumber(
+          specificationsFor(product).ratedCapacityMah,
+          locale === "uk" ? "мА·год" : "mAh",
+          locale,
+        ),
     },
     {
-      label: "Max output",
+      label: copy.maxOutput,
       value: (product: CompareProduct) =>
         formatNumber(
           specificationsFor(product).maxOutputPower ??
             specificationsFor(product).maxOutputW ??
             product.continuousPowerW,
           "W",
+          locale,
         ),
     },
     {
-      label: "Max input",
+      label: copy.maxInput,
       value: (product: CompareProduct) =>
         formatNumber(
           specificationsFor(product).maxInputPower ??
             specificationsFor(product).maxInputW,
           "W",
+          locale,
         ),
     },
     {
-      label: "Weight",
-      value: (product: CompareProduct) => formatWeight(product.weightGrams),
-    },
-    {
-      label: "Dimensions",
-      value: formatDimensions,
-    },
-    {
-      label: "Warranty",
+      label: copy.weight,
       value: (product: CompareProduct) =>
-        product.warrantyYears ? `${product.warrantyYears} yr` : "n/a",
+        formatWeight(product.weightGrams, locale),
+    },
+    {
+      label: copy.dimensions,
+      value: (product: CompareProduct) => formatDimensions(product, locale),
+    },
+    {
+      label: copy.warranty,
+      value: (product: CompareProduct) =>
+        product.warrantyYears
+          ? `${product.warrantyYears} ${copy.yearShort}`
+          : copy.notAvailable,
     },
   ];
 
@@ -382,7 +454,7 @@ export function CatalogCompareTray({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-black dark:text-white">
-              {selectedSlugs.length} selected for comparison
+              {copy.selected(selectedSlugs.length)}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {selectedProducts.slice(0, 4).map((product) => (
@@ -403,7 +475,7 @@ export function CatalogCompareTray({
                     }
                   >
                     <X className="size-3" aria-hidden="true" />
-                    <span className="sr-only">Remove</span>
+                    <span className="sr-only">{copy.remove}</span>
                   </button>
                 </span>
               ))}
@@ -415,11 +487,11 @@ export function CatalogCompareTray({
               variant="outline"
               onClick={() => setSelectedSlugs([])}
             >
-              Clear
+              {copy.clear}
             </Button>
             <Button type="button" onClick={() => setIsOpen(true)}>
               <GitCompareArrows aria-hidden="true" />
-              Compare
+              {copy.compare}
             </Button>
           </div>
         </div>
@@ -431,11 +503,9 @@ export function CatalogCompareTray({
             <div className="flex items-center justify-between gap-4 border-b border-black/10 p-4 dark:border-white/10">
               <div>
                 <h2 className="text-lg font-semibold text-black dark:text-white">
-                  Product comparison
+                  {copy.title}
                 </h2>
-                <p className="text-sm text-zinc-500">
-                  Comparing products from this category only.
-                </p>
+                <p className="text-sm text-zinc-500">{copy.description}</p>
               </div>
               <Button
                 type="button"
@@ -444,7 +514,7 @@ export function CatalogCompareTray({
                 onClick={() => setIsOpen(false)}
               >
                 <X aria-hidden="true" />
-                <span className="sr-only">Close comparison</span>
+                <span className="sr-only">{copy.close}</span>
               </Button>
             </div>
 
@@ -453,7 +523,7 @@ export function CatalogCompareTray({
                 <thead>
                   <tr>
                     <th className="sticky left-0 z-10 w-44 border-b border-black/10 bg-white p-3 text-zinc-500 dark:border-white/10 dark:bg-black">
-                      Spec
+                      {copy.spec}
                     </th>
                     {selectedProducts.map((product) => (
                       <th

@@ -1167,6 +1167,44 @@ const nkonBatteryRows: SeedEquipment[] = [
   },
 ];
 
+const equipmentTypeUk: Record<string, string> = {
+  batteries: "акумулятор",
+  inverters: "інвертор",
+  "power-banks": "павербанк",
+  "power-stations": "портативна електростанція",
+};
+
+function formatSpecificationUk(value: number) {
+  return value.toLocaleString("uk-UA").replaceAll("\u00a0", " ");
+}
+
+function localizeSeedSummary(row: SeedEquipment): SeedEquipment {
+  if (row.summaryUk !== row.summary) {
+    return row;
+  }
+
+  const equipmentType =
+    equipmentTypeUk[row.categorySlug] ?? "енергетичне обладнання";
+  const specifications = [
+    row.capacityWh
+      ? `запас енергії ${formatSpecificationUk(row.capacityWh)} Вт·год`
+      : null,
+    row.continuousPowerW
+      ? `номінальну потужність ${formatSpecificationUk(row.continuousPowerW)} Вт`
+      : null,
+    row.peakPowerW && row.peakPowerW !== row.continuousPowerW
+      ? `пікову потужність ${formatSpecificationUk(row.peakPowerW)} Вт`
+      : null,
+  ].filter((value): value is string => value !== null);
+  const specificationText =
+    specifications.length > 0 ? ` Має ${specifications.join(", ")}.` : "";
+
+  return {
+    ...row,
+    summaryUk: `${row.model} від ${row.manufacturer} — ${equipmentType}.${specificationText}`,
+  };
+}
+
 const seededEquipmentRows = [
   ...ankerPowerBankRows,
   ...ugreenPowerBankRows,
@@ -1191,7 +1229,9 @@ const seededEquipmentRows = [
   ...victronInverterRows,
   ...ecoFlowPowerStationRows,
   ...nkonBatteryRows,
-].map(mergePowerBankCompletion);
+]
+  .map(localizeSeedSummary)
+  .map(mergePowerBankCompletion);
 
 async function upsertCategories() {
   for (const row of categories) {

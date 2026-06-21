@@ -34,6 +34,7 @@ import {
 import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
 import { type Locale, localizeHref } from "@/lib/i18n";
 import {
+  localizePowerBankFeature,
   localizePowerBankOption,
   powerBankBuiltInCableOptions,
   powerBankChemistryOptions,
@@ -351,7 +352,7 @@ function CatalogPagination({
   );
 }
 
-function productDetailSpecs(product: CatalogProduct) {
+function productDetailSpecs(product: CatalogProduct, locale: Locale) {
   const specifications = product.specifications as ProductSpecifications | null;
 
   return [
@@ -364,7 +365,9 @@ function productDetailSpecs(product: CatalogProduct) {
       ? `${specifications.wirelessOutputW} W wireless`
       : null,
     specifications?.dimensionsMm,
-    ...(specifications?.features?.slice(0, 2) ?? []),
+    ...(specifications?.features
+      ?.slice(0, 2)
+      .map((feature) => localizePowerBankFeature(feature, locale)) ?? []),
   ].filter(Boolean);
 }
 
@@ -778,7 +781,7 @@ export function ProductCard({
     product.nominalVoltageV ? `${product.nominalVoltageV} V` : null,
     product.chemistryLabel,
   ].filter(Boolean);
-  const detailSpecs = productDetailSpecs(product);
+  const detailSpecs = productDetailSpecs(product, locale);
   const detailHref = localizeHref(
     locale,
     `/${product.categorySlug}/${product.slug}`,
