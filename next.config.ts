@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "media.vladyka.dev",
+        pathname: "/power-bank/**",
+      },
     ],
   },
   async headers() {
