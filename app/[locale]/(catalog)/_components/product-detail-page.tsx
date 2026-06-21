@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 
 import FavoriteButton from "@/app/_components/favorite-button";
+import ProductImageGallery from "@/app/[locale]/(catalog)/_components/product-image-gallery";
 import {
   formatPrice,
   formatWeight,
@@ -22,6 +22,7 @@ import {
 } from "@/lib/catalog";
 import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
 import { localizeHref, type Locale } from "@/lib/i18n";
+import { getProductImages } from "@/lib/product-images";
 
 type ProductDetailPageProps = {
   category: CatalogCategorySlug;
@@ -314,6 +315,11 @@ export default async function ProductDetailPage({
   );
   const favoriteEquipmentIds = await getFavoriteEquipmentIds(session?.user.id);
   const isFavorite = favoriteEquipmentIds.has(product.id);
+  const productAlt = `${product.manufacturer} ${product.model}`;
+  const productImages = getProductImages(
+    product.imagePath,
+    product.specifications as CatalogProductSpecifications | null,
+  );
 
   return (
     <div className="bg-background text-foreground">
@@ -328,16 +334,8 @@ export default async function ProductDetailPage({
           </Link>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)] 3xl:grid-cols-[420px_minmax(0,1fr)]">
-            <div className="relative flex aspect-[4/3] items-center justify-center rounded-lg border border-black/10 bg-zinc-50 p-8 dark:border-white/10 dark:bg-zinc-950">
-              <Image
-                src={product.imagePath}
-                alt={`${product.manufacturer} ${product.model}`}
-                width={520}
-                height={390}
-                priority
-                unoptimized
-                className="h-full w-full object-contain"
-              />
+            <div className="relative">
+              <ProductImageGallery alt={productAlt} images={productImages} />
               <FavoriteButton
                 equipmentId={product.id}
                 isFavorite={isFavorite}

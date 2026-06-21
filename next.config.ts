@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
         hostname: "media.vladyka.dev",
         pathname: "/power-bank/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+      },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+      },
     ],
   },
   async headers() {
