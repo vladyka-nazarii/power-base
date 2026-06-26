@@ -49,11 +49,11 @@ export default function ProductImageGallery({
 
   return (
     <>
-      <div>
+      <div className="min-w-0">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="group relative flex aspect-[4/3] w-full cursor-zoom-in items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-500 dark:border-white/10 dark:bg-zinc-950"
+          className="group relative flex aspect-[4/3] w-full min-w-0 cursor-zoom-in items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-500 dark:border-white/10 dark:bg-zinc-950"
           aria-label={`Open image gallery for ${alt}`}
         >
           <Image
@@ -63,7 +63,7 @@ export default function ProductImageGallery({
             height={390}
             priority
             unoptimized
-            className="h-full w-full object-contain transition group-hover:scale-[1.02]"
+            className="h-full w-full max-w-full object-contain transition group-hover:scale-[1.02]"
           />
           <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-md bg-black/70 px-2.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
             <Expand className="size-3.5" aria-hidden="true" />

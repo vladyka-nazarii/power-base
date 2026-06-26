@@ -334,7 +334,7 @@ export default async function ProductDetailPage({
           </Link>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)] 3xl:grid-cols-[420px_minmax(0,1fr)]">
-            <div className="relative">
+            <div className="relative min-w-0">
               <ProductImageGallery alt={productAlt} images={productImages} />
               <FavoriteButton
                 equipmentId={product.id}
