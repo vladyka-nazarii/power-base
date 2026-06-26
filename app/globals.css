@@ -168,3 +168,26 @@ html[data-theme-preference="dark"]
   color: var(--foreground);
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
+
+.product-thumbnail-strip {
+  scrollbar-color: color-mix(in oklch, var(--foreground), transparent 78%)
+    transparent;
+  scrollbar-width: thin;
+}
+
+.product-thumbnail-strip::-webkit-scrollbar {
+  height: 6px;
+}
+
+.product-thumbnail-strip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.product-thumbnail-strip::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklch, var(--foreground), transparent 82%);
+  border-radius: 999px;
+}
+
+.product-thumbnail-strip:hover::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklch, var(--foreground), transparent 68%);
+}

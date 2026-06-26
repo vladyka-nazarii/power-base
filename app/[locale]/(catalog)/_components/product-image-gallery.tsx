@@ -15,18 +15,34 @@ type ProductImageGalleryProps = {
   images: string[];
 };
 
+type CarouselSurface = "gallery" | "lightbox";
+type GestureIntent = "pending" | "horizontal" | "vertical";
+
 export default function ProductImageGallery({
   alt,
   images,
 }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+  const touchSurface = useRef<CarouselSurface | null>(null);
+  const gestureIntent = useRef<GestureIntent>("pending");
   const suppressOpen = useRef(false);
   const thumbnailRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const lightboxHistoryPushed = useRef(false);
   const hasMultipleImages = images.length > 1;
+
+  const setCarouselIndex = useCallback(
+    (index: number) => {
+      if (images.length === 0) return;
+
+      setActiveIndex((index + images.length) % images.length);
+    },
+    [images.length],
+  );
 
   const showPrevious = useCallback(() => {
     setActiveIndex((index) => (index - 1 + images.length) % images.length);
@@ -37,71 +53,80 @@ export default function ProductImageGallery({
   }, [images.length]);
 
   const handleTouchStart = useCallback(
-    (event: TouchEvent<HTMLButtonElement>) => {
+    (surface: CarouselSurface, event: TouchEvent<HTMLElement>) => {
       const touch = event.touches[0];
       if (!touch) return;
 
       touchStartX.current = touch.clientX;
       touchStartY.current = touch.clientY;
+      touchSurface.current = surface;
+      gestureIntent.current = "pending";
+      setDragOffset(0);
+      setIsDragging(hasMultipleImages);
       suppressOpen.current = false;
     },
-    [],
+    [hasMultipleImages],
+  );
+
+  const handleTouchMove = useCallback(
+    (surface: CarouselSurface, event: TouchEvent<HTMLElement>) => {
+      if (!hasMultipleImages || touchSurface.current !== surface) return;
+
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - touchStartX.current;
+      const deltaY = touch.clientY - touchStartY.current;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (gestureIntent.current === "pending" && Math.max(absX, absY) > 8) {
+        gestureIntent.current = absX > absY * 1.2 ? "horizontal" : "vertical";
+      }
+
+      if (gestureIntent.current !== "horizontal") return;
+
+      event.preventDefault();
+      suppressOpen.current = true;
+      setDragOffset(deltaX);
+    },
+    [hasMultipleImages],
   );
 
   const handleTouchEnd = useCallback(
-    (event: TouchEvent<HTMLButtonElement>) => {
-      if (!hasMultipleImages) return;
+    (surface: CarouselSurface, event: TouchEvent<HTMLElement>) => {
+      if (!hasMultipleImages || touchSurface.current !== surface) {
+        setIsDragging(false);
+        setDragOffset(0);
+        return;
+      }
 
       const touch = event.changedTouches[0];
       if (!touch) return;
 
       const deltaX = touch.clientX - touchStartX.current;
       const deltaY = touch.clientY - touchStartY.current;
+      const swipeThreshold = Math.max(
+        48,
+        event.currentTarget.getBoundingClientRect().width * 0.16,
+      );
       const isHorizontalSwipe =
-        Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
+        Math.abs(deltaX) > swipeThreshold &&
+        Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
 
-      if (!isHorizontalSwipe) return;
-
-      suppressOpen.current = true;
-      if (deltaX > 0) {
-        showPrevious();
-      } else {
-        showNext();
+      if (isHorizontalSwipe) {
+        suppressOpen.current = true;
+        if (deltaX > 0) {
+          showPrevious();
+        } else {
+          showNext();
+        }
       }
-    },
-    [hasMultipleImages, showNext, showPrevious],
-  );
 
-  const handleLightboxTouchStart = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      touchStartX.current = touch.clientX;
-      touchStartY.current = touch.clientY;
-    },
-    [],
-  );
-
-  const handleLightboxTouchEnd = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      if (!hasMultipleImages) return;
-
-      const touch = event.changedTouches[0];
-      if (!touch) return;
-
-      const deltaX = touch.clientX - touchStartX.current;
-      const deltaY = touch.clientY - touchStartY.current;
-      const isHorizontalSwipe =
-        Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
-
-      if (!isHorizontalSwipe) return;
-
-      if (deltaX > 0) {
-        showPrevious();
-      } else {
-        showNext();
-      }
+      touchSurface.current = null;
+      gestureIntent.current = "pending";
+      setIsDragging(false);
+      setDragOffset(0);
     },
     [hasMultipleImages, showNext, showPrevious],
   );
@@ -190,7 +215,56 @@ export default function ProductImageGallery({
     });
   }, [activeIndex, hasMultipleImages]);
 
-  const activeImage = images[activeIndex] ?? images[0];
+  useEffect(() => {
+    if (activeIndex >= images.length) {
+      setActiveIndex(0);
+    }
+  }, [activeIndex, images.length]);
+
+  const carouselTransform = `translate3d(calc(${-activeIndex * 100}% + ${dragOffset}px), 0, 0)`;
+
+  function renderCarouselImages(surface: CarouselSurface) {
+    const imagePadding = surface === "gallery" ? "p-8" : "p-6 sm:p-12";
+    const imageSizes =
+      surface === "gallery"
+        ? "(min-width: 1600px) 760px, (min-width: 1024px) 55vw, 100vw"
+        : "100vw";
+
+    return (
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className={`flex h-full ${
+            isDragging
+              ? ""
+              : "transition-transform duration-300 ease-out motion-reduce:transition-none"
+          }`}
+          style={{ transform: carouselTransform }}
+        >
+          {images.map((image, index) => (
+            <div
+              key={`${surface}-${image}`}
+              className={`relative h-full min-w-full shrink-0 ${imagePadding}`}
+              aria-hidden={activeIndex === index ? undefined : "true"}
+            >
+              <Image
+                src={image}
+                alt={
+                  activeIndex === index
+                    ? `${alt}, image ${index + 1} of ${images.length}`
+                    : ""
+                }
+                fill
+                priority={surface === "gallery" && index === 0}
+                sizes={imageSizes}
+                unoptimized
+                className="object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -199,20 +273,14 @@ export default function ProductImageGallery({
           <button
             type="button"
             onClick={openLightbox}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="group relative flex aspect-[4/3] w-full min-w-0 touch-pan-y cursor-zoom-in items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-zinc-50 p-8 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-500 dark:border-white/10 dark:bg-zinc-950"
+            onTouchStart={(event) => handleTouchStart("gallery", event)}
+            onTouchMove={(event) => handleTouchMove("gallery", event)}
+            onTouchEnd={(event) => handleTouchEnd("gallery", event)}
+            onTouchCancel={(event) => handleTouchEnd("gallery", event)}
+            className="group relative flex aspect-[4/3] w-full min-w-0 touch-pan-y cursor-zoom-in items-center justify-center overflow-hidden rounded-lg border border-black/10 bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-500 dark:border-white/10 dark:bg-zinc-950"
             aria-label={`Open image gallery for ${alt}`}
           >
-            <Image
-              src={activeImage}
-              alt={alt}
-              width={520}
-              height={390}
-              priority
-              unoptimized
-              className="h-full w-full max-w-full object-contain transition group-hover:scale-[1.02]"
-            />
+            {renderCarouselImages("gallery")}
             <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-md bg-black/70 px-2.5 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
               <Expand className="size-3.5" aria-hidden="true" />
               {activeIndex + 1}/{images.length}
@@ -243,7 +311,7 @@ export default function ProductImageGallery({
 
         {hasMultipleImages ? (
           <div
-            className="mt-3 flex gap-2 overflow-x-auto pb-1"
+            className="product-thumbnail-strip mt-3 flex gap-2 overflow-x-auto overscroll-x-contain rounded-md pb-2"
             aria-label="Product images"
             role="group"
           >
@@ -254,7 +322,7 @@ export default function ProductImageGallery({
                   thumbnailRefs.current[index] = element;
                 }}
                 type="button"
-                onClick={() => setActiveIndex(index)}
+                onClick={() => setCarouselIndex(index)}
                 className={`relative size-16 shrink-0 overflow-hidden rounded-md border bg-zinc-50 p-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-500 dark:bg-zinc-950 ${
                   activeIndex === index
                     ? "border-black dark:border-white"
@@ -328,17 +396,12 @@ export default function ProductImageGallery({
 
           <div
             className="relative m-6 flex-1 touch-pan-y sm:m-12"
-            onTouchStart={handleLightboxTouchStart}
-            onTouchEnd={handleLightboxTouchEnd}
+            onTouchStart={(event) => handleTouchStart("lightbox", event)}
+            onTouchMove={(event) => handleTouchMove("lightbox", event)}
+            onTouchEnd={(event) => handleTouchEnd("lightbox", event)}
+            onTouchCancel={(event) => handleTouchEnd("lightbox", event)}
           >
-            <Image
-              src={activeImage}
-              alt={`${alt}, image ${activeIndex + 1} of ${images.length}`}
-              fill
-              sizes="100vw"
-              unoptimized
-              className="object-contain"
-            />
+            {renderCarouselImages("lightbox")}
           </div>
           <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-white/80">
             {activeIndex + 1} / {images.length}

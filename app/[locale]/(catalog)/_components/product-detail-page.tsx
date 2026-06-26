@@ -333,7 +333,7 @@ export default async function ProductDetailPage({
             {copy.backToCatalog}
           </Link>
 
-          <div className="mt-6 grid gap-8 lg:grid-cols-[360px_minmax(0,1fr)] 3xl:grid-cols-[420px_minmax(0,1fr)]">
+          <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.85fr)] 3xl:grid-cols-[minmax(0,1.45fr)_minmax(360px,0.75fr)]">
             <div className="relative min-w-0">
               <ProductImageGallery alt={productAlt} images={productImages} />
               <FavoriteButton
