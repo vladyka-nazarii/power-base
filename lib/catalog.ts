@@ -887,7 +887,7 @@ function catalogPageCacheKey(
     .update(JSON.stringify(stableCacheValue({ filters, locale })))
     .digest("hex");
 
-  return `powerbase:catalog:v1:${categorySlug}:${locale}:${digest}`;
+  return `powerbase:catalog:v2:${categorySlug}:${locale}:${digest}`;
 }
 
 function stableCacheValue(value: unknown): unknown {

@@ -1,12 +1,12 @@
 import { count, eq } from "drizzle-orm";
 
+import powerBankMissingDataCompletion from "@/docs/POWER_BANK_MISSING_DATA_COMPLETION.json";
 import { db, postgresClient } from "@/lib/db";
 import { ankerPowerBankRows } from "@/lib/db/anker-power-bank-seed";
 import { baseusPowerBankRows } from "@/lib/db/baseus-power-bank-seed";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
 import { ugreenPowerBankRows } from "@/lib/db/ugreen-power-bank-seed";
 import { xiaomiPowerBankRows } from "@/lib/db/xiaomi-power-bank-seed";
-import powerBankMissingDataCompletion from "@/docs/POWER_BANK_MISSING_DATA_COMPLETION.json";
 import { mergePowerBankSpecifications } from "@/lib/power-bank-specs";
 
 const categories = [
@@ -941,6 +941,270 @@ const ecoFlowPowerStationRows: SeedEquipment[] = [
   },
 ];
 
+const bluettiPowerStationRows: SeedEquipment[] = [
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 200 (AC200PL)",
+    slug: "bluetti-premium-200-ac200pl",
+    summary:
+      "2,304 Wh LiFePO4 portable power station with 2,400 W AC output, Bluetooth app support, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Портативна електростанція Bluetti Premium 200 (AC200PL) з LiFePO4 акумулятором 2 304 Вт·год, потужністю 2 400 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/a/c/ac200pl-zt1.jpg",
+    priceCents: 93523,
+    productCode: "6970991294754",
+    nominalVoltageV: 230,
+    capacityWh: 2304,
+    continuousPowerW: 2400,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 28300,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-200-ac200pl-2-3kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 1,
+      sourceCurrency: "EUR",
+      priceEur: 819.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "OutOfStock",
+      gtin: "6970991294754",
+      capacityAh: 45,
+      dischargeCurrentA: 47,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 200 (AC200PL) — це надзвичайно потужна та універсальна електростанція з ємністю 2304Wh, ідеально підходить для тривалого автономного використання, великих кемпінгових систем або як повноцінне резервне джерело живлення для дому.",
+    },
+  },
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 30 V2",
+    slug: "bluetti-premium-30-v2",
+    summary:
+      "Compact 320 Wh LiFePO4 power station with 600 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Компактна портативна електростанція Bluetti Premium 30 V2 з LiFePO4 акумулятором 320 Вт·год, потужністю 600 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/b/l/bluetti-power-station-premium-v2-30-20250902-1.jpg",
+    priceCents: 18244,
+    productCode: "6978341874946",
+    nominalVoltageV: 230,
+    capacityWh: 320,
+    continuousPowerW: 600,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 4300,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-30-v2-0-6kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 2,
+      sourceCurrency: "EUR",
+      priceEur: 159.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "InStock",
+      gtin: "6978341874946",
+      capacityAh: 6,
+      dischargeCurrentA: 12,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 30 V2 — це компактна та портативна електростанція з ємністю 320Wh, ідеально підходить для кемпінгу, подорожей або як резервне джерело живлення вдома.",
+    },
+  },
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 150 (AC180P)",
+    slug: "bluetti-premium-150-ac180p",
+    summary:
+      "1,440 Wh LiFePO4 portable station with 1,800 W continuous output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Портативна електростанція Bluetti Premium 150 (AC180P) з LiFePO4 акумулятором 1 440 Вт·год, потужністю 1 800 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/2/0/202310025ac180_2000-2000px_-3_e694f5db-6dd0-45a4-b665-25280f760f5d.jpg",
+    priceCents: 54743,
+    productCode: "6970991292668",
+    nominalVoltageV: 230,
+    capacityWh: 1440,
+    continuousPowerW: 1800,
+    peakPowerW: 2700,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 17000,
+    lifecycleCycles: 3500,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-150-ac180p-1-44kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 3,
+      sourceCurrency: "EUR",
+      priceEur: 479.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "OutOfStock",
+      gtin: "6970991292668",
+      capacityAh: 28,
+      dischargeCurrentA: 35,
+      powerLiftingW: 2700,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 150 (AC180P) — це потужна портативна електростанція з ємністю 1440Wh та постійною потужністю 1800W.",
+    },
+  },
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 100 V2",
+    slug: "bluetti-premium-100-v2",
+    summary:
+      "1,024 Wh LiFePO4 portable station with 2,000 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Портативна електростанція Bluetti Premium 100 V2 з LiFePO4 акумулятором 1 024 Вт·год, потужністю 2 000 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/p/i/picture.jpg",
+    priceCents: 44478,
+    productCode: "6978341871792",
+    nominalVoltageV: 230,
+    capacityWh: 1024,
+    continuousPowerW: 2000,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 11500,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-100-v2-1-02kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 4,
+      sourceCurrency: "EUR",
+      priceEur: 389.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "InStock",
+      gtin: "6978341871792",
+      capacityAh: 20,
+      dischargeCurrentA: 39,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 100 V2 — це потужна та портативна електростанція з ємністю 1024Wh, ідеально підходить для тривалих кемпінгових поїздок, автономного використання або як надійне резервне джерело живлення вдома.",
+    },
+  },
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 80 (AC70P)",
+    slug: "bluetti-premium-80-ac70p",
+    summary:
+      "864 Wh LiFePO4 portable station with 1,000 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Портативна електростанція Bluetti Premium 80 (AC70P) з LiFePO4 акумулятором 864 Вт·год, потужністю 1 000 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/a/c/ac70p-zt1.jpg",
+    priceCents: 36493,
+    productCode: "6970991294235",
+    nominalVoltageV: 230,
+    capacityWh: 864,
+    continuousPowerW: 1000,
+    peakPowerW: 2000,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 10700,
+    lifecycleCycles: 3000,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-80-ac70p-0-86kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 5,
+      sourceCurrency: "EUR",
+      priceEur: 319.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "InStock",
+      gtin: "6970991294235",
+      capacityAh: 17,
+      dischargeCurrentA: 20,
+      powerLiftingW: 2000,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 80 (AC70P) — це компактна та потужна портативна електростанція з ємністю 864Wh і постійною потужністю 1000W.",
+    },
+  },
+  {
+    categorySlug: "power-stations",
+    manufacturer: "Bluetti",
+    model: "Premium 50 (AC50P)",
+    slug: "bluetti-premium-50-ac50p",
+    summary:
+      "504 Wh LiFePO4 portable station with 700 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
+    summaryUk:
+      "Портативна електростанція Bluetti Premium 50 (AC50P) з LiFePO4 акумулятором 504 Вт·год, потужністю 700 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
+    imagePath:
+      "https://www.nkon.nl/media/catalog/product/cache/7ec02836bb5d413c7e2ddcce89998e13/p/r/products-bluetti-ac50p-power-station-front-e1753784530465.jpg",
+    priceCents: 25658,
+    productCode: "6970991296536",
+    nominalVoltageV: 230,
+    capacityWh: 504,
+    continuousPowerW: 700,
+    peakPowerW: 1200,
+    chemistry: "LiFePO4",
+    communicationProtocols: "Bluetooth",
+    weightGrams: 6900,
+    lifecycleCycles: 3000,
+    sourceLabel: "NKON product page",
+    sourceLabelUk: "Сторінка товару NKON",
+    sourceUrl:
+      "https://www.nkon.nl/ua/bluetti-premium-50-ac50p-0-5kwh-power-station.html",
+    specifications: {
+      sourceCategoryUrl:
+        "https://www.nkon.nl/ua/thuisbatterij/powerstation-plug-in.html?brand=Bluetti",
+      collectionListPosition: 6,
+      sourceCurrency: "EUR",
+      priceEur: 224.95,
+      eurToUsdRate: 1.1406,
+      eurToUsdRateDate: "2026-06-29",
+      availability: "InStock",
+      gtin: "6970991296536",
+      capacityAh: 10,
+      dischargeCurrentA: 14,
+      powerLiftingW: 1200,
+      powerSourceUk: "12V, європейська вилка (220≈230 В)",
+      featuresUk: "Bluetooth, USB-A, USB-C, екран",
+      ipRating: "IP20",
+      descriptionUk:
+        "Bluetti Premium 50 (AC50P) — це компактна та універсальна портативна електростанція з ємністю 504Wh і постійною потужністю 700W.",
+    },
+  },
+];
+
 const nkonBatteryRows: SeedEquipment[] = [
   {
     categorySlug: "batteries",
@@ -1228,6 +1492,7 @@ const seededEquipmentRows = [
   }),
   ...victronInverterRows,
   ...ecoFlowPowerStationRows,
+  ...bluettiPowerStationRows,
   ...nkonBatteryRows,
 ]
   .map(localizeSeedSummary)

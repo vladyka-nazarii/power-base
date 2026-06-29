@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 
-// National Bank of Ukraine official USD rate for 2026-06-21.
-export const usdToUahRate = 44.9125;
+// National Bank of Ukraine official USD rate for 2026-06-29.
+export const usdToUahRate = 44.8596;
 
 export function formatPrice(priceCents: number | null, locale: Locale = "en") {
   if (priceCents === null) {
