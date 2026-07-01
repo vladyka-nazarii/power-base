@@ -39,7 +39,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -83,7 +83,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -131,7 +131,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -179,7 +179,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -236,7 +236,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable.",
@@ -278,7 +278,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -330,7 +330,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -374,7 +374,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -423,7 +423,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -463,7 +463,7 @@
     ],
     "missingReason": {
       "capacityWh": "Source page and seeded source data do not expose this field with enough specificity.",
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "maxOutputPower": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -510,7 +510,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -552,7 +552,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -598,7 +598,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -636,7 +636,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -688,7 +688,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "price": "Anker source did not expose a current verifiable price that can be represented in USD.",
@@ -723,7 +723,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -762,7 +762,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -799,7 +799,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -843,7 +843,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -886,7 +886,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -931,7 +931,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -974,7 +974,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1021,7 +1021,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1062,7 +1062,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1116,7 +1116,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1159,7 +1159,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1204,7 +1204,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1247,7 +1247,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1292,7 +1292,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1335,7 +1335,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1392,7 +1392,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1432,7 +1432,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1486,7 +1486,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1538,7 +1538,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "dimensions": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1588,7 +1588,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1640,7 +1640,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1690,7 +1690,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1743,7 +1743,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1797,7 +1797,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1849,7 +1849,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1897,7 +1897,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -1941,7 +1941,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -1987,7 +1987,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2033,7 +2033,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2080,7 +2080,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2138,7 +2138,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2188,7 +2188,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2233,7 +2233,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "maxInputPower": "Source page and seeded source data do not expose this field with enough specificity.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
@@ -2285,7 +2285,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD."
     }
   },
@@ -2336,7 +2336,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
       "wirelessChargingMaxPower": "Source does not explicitly state wireless charging support or an unsupported state."
     }
@@ -2375,7 +2375,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2417,7 +2417,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
@@ -2460,7 +2460,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2501,7 +2501,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2550,7 +2550,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "weight": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2601,7 +2601,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
       "weight": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2643,7 +2643,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2687,7 +2687,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2730,7 +2730,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
@@ -2771,7 +2771,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
@@ -2853,7 +2853,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "gravimetricDensity": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2939,7 +2939,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "passthroughCharging": "Source does not explicitly confirm support or lack of passthrough charging.",
       "displayType": "Source page and seeded source data do not expose this field with enough specificity.",
@@ -2983,7 +2983,7 @@
       }
     ],
     "missingReason": {
-      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.",
+      "batteryChemistry": "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.",
       "supportedOutputProtocols": "Source does not explicitly name one of the allowed output protocol labels.",
       "price": "Xiaomi source did not expose a current verifiable price that can be represented in USD.",
       "builtInCable": "Source does not explicitly confirm an integrated cable or no integrated cable."

@@ -38,7 +38,7 @@ Required schema for each product:
 {
   "slug": "existing-product-slug",
   "capacityWh": 0,
-  "batteryChemistry": "Li-Po | Li-ion (18650) | Li-ion (21700) | LiFePO4 (LFP) | null",
+  "batteryChemistry": "Li-Po | Li-ion (18650) | Li-ion (21700) | LiFePO4 | null",
   "supportedOutputProtocols": [
     "PD 3.0",
     "PD 3.1",

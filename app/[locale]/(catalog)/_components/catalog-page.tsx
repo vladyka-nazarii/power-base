@@ -26,9 +26,11 @@ import {
   getCatalogPageData,
   getCatalogProductsBySlugs,
   powerBankNumberFilterGroups,
+  powerStationCapacityFilterGroup,
 } from "@/lib/catalog";
 import {
   localizePowerBankNumberFilterGroup,
+  localizePowerStationCapacityFilterGroup,
   type PowerBankRangeKey,
 } from "@/lib/catalog-filter-definitions";
 import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
@@ -759,6 +761,43 @@ function PowerBankFilters({
   );
 }
 
+function PowerStationFilters({
+  data,
+  filters,
+  locale,
+}: {
+  data: CatalogData;
+  filters: CatalogFilters;
+  locale: Locale;
+}) {
+  const capacityFilterGroup = localizePowerStationCapacityFilterGroup(locale);
+  const capacityRangeFacets = data.facets.powerStationCapacityRanges ?? [];
+  const capacityOptions =
+    capacityRangeFacets.length > 0
+      ? capacityRangeFacets.map((option) => ({
+          ...option,
+          label:
+            capacityFilterGroup.options.find(
+              (localizedOption) => localizedOption.id === option.value,
+            )?.label ?? option.label,
+        }))
+      : powerStationCapacityFilterGroup.options.map((option) => ({
+          ...option,
+          value: option.id,
+          count: 0,
+        }));
+
+  return (
+    <div className="mt-6">
+      <NumberRangeFilter
+        {...capacityFilterGroup}
+        options={capacityOptions}
+        selected={filters.capacityWhRanges}
+      />
+    </div>
+  );
+}
+
 export function ProductCard({
   compareEnabled = false,
   compareSlugs = [],
@@ -993,6 +1032,14 @@ export default async function CatalogPage({
               />
             ) : (
               <>
+                {category === "power-stations" ? (
+                  <PowerStationFilters
+                    data={data}
+                    filters={filters}
+                    locale={locale}
+                  />
+                ) : null}
+
                 <fieldset className="mt-6">
                   <legend className="text-sm font-medium text-black dark:text-white">
                     {ui.nominalVoltage}
@@ -1043,11 +1090,13 @@ export default async function CatalogPage({
                 ) : null}
 
                 <div className="mt-6 grid gap-4">
-                  <NumberFilter
-                    label={ui.minCapacity}
-                    name="minCapacityWh"
-                    value={filters.minCapacityWh}
-                  />
+                  {category === "power-stations" ? null : (
+                    <NumberFilter
+                      label={ui.minCapacity}
+                      name="minCapacityWh"
+                      value={filters.minCapacityWh}
+                    />
+                  )}
                   <NumberFilter
                     label={ui.minPower}
                     name="minPowerW"

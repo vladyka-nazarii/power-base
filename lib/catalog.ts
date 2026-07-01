@@ -8,6 +8,7 @@ import {
   gte,
   ilike,
   inArray,
+  lt,
   or,
   type SQL,
   sql,
@@ -17,6 +18,7 @@ import { ensureRedisConnected } from "@/lib/cache/redis";
 import {
   type NumberRangeFilterOption,
   powerBankNumberFilterGroups,
+  powerStationCapacityFilterGroup,
 } from "@/lib/catalog-filter-definitions";
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
@@ -107,6 +109,7 @@ export type CatalogPagination = {
 
 export type { NumberRangeFilterOption } from "@/lib/catalog-filter-definitions";
 export { powerBankNumberFilterGroups } from "@/lib/catalog-filter-definitions";
+export { powerStationCapacityFilterGroup } from "@/lib/catalog-filter-definitions";
 
 export const catalogPageCopy: Record<
   Locale,
@@ -760,6 +763,72 @@ function countByNumberRangeOption(
   }));
 }
 
+function standardCatalogRangeCondition(
+  categorySlug: CatalogCategorySlug,
+  selectedIds: string[],
+) {
+  if (categorySlug !== "power-stations" || selectedIds.length === 0) {
+    return undefined;
+  }
+
+  const options: NumberRangeFilterOption[] =
+    powerStationCapacityFilterGroup.options.filter((option) =>
+      selectedIds.includes(option.id),
+    );
+
+  if (options.length === 0) {
+    return sql`false`;
+  }
+
+  return or(
+    ...options.map((option) => {
+      const conditions = compactConditions([
+        option.min === undefined
+          ? undefined
+          : gte(equipment.capacityWh, option.min),
+        option.max === undefined
+          ? undefined
+          : lt(equipment.capacityWh, option.max),
+      ]);
+
+      return and(...conditions);
+    }),
+  );
+}
+
+function matchesStandardCatalogFilters(
+  product: CatalogProductRow,
+  filters: CatalogFilters,
+  categorySlug: CatalogCategorySlug,
+  exclude: string | null = null,
+) {
+  return [
+    exclude === "manufacturer" ||
+      filters.manufacturers.length === 0 ||
+      filters.manufacturers.includes(product.manufacturer),
+    exclude === "voltage" ||
+      filters.voltages.length === 0 ||
+      (product.nominalVoltageV !== null &&
+        product.nominalVoltageV !== undefined &&
+        filters.voltages.includes(product.nominalVoltageV)),
+    exclude === "chemistry" ||
+      filters.chemistries.length === 0 ||
+      (product.chemistry !== null &&
+        filters.chemistries.includes(product.chemistry)),
+    filters.minCapacityWh === undefined ||
+      (product.capacityWh ?? 0) >= filters.minCapacityWh,
+    exclude === "capacityWhRange" ||
+      categorySlug !== "power-stations" ||
+      matchesNumberRangeFilter(
+        product.capacityWh ?? undefined,
+        filters.capacityWhRanges,
+        powerStationCapacityFilterGroup.options,
+      ),
+    filters.minPowerW === undefined ||
+      (product.continuousPowerW ?? 0) >= filters.minPowerW,
+  ].every(Boolean);
+}
+
 function filterRowsForSearch(
   rows: CatalogProductRow[],
   filters: CatalogFilters,
@@ -887,7 +956,7 @@ function catalogPageCacheKey(
     .update(JSON.stringify(stableCacheValue({ filters, locale })))
     .digest("hex");
 
-  return `powerbase:catalog:v2:${categorySlug}:${locale}:${digest}`;
+  return `powerbase:catalog:v3:${categorySlug}:${locale}:${digest}`;
 }
 
 function stableCacheValue(value: unknown): unknown {
@@ -992,6 +1061,7 @@ async function getUncachedCatalogPageData(
       categorySlug !== "power-banks" && filters.minCapacityWh
         ? gte(equipment.capacityWh, filters.minCapacityWh)
         : undefined,
+      standardCatalogRangeCondition(categorySlug, filters.capacityWhRanges),
       categorySlug !== "power-banks" && filters.minPowerW
         ? gte(equipment.continuousPowerW, filters.minPowerW)
         : undefined,
@@ -1066,8 +1136,30 @@ async function getUncachedCatalogPageData(
         : countByOption(
             manufacturerOptions,
             searchableBaseRows,
-            (row, option) => row.manufacturer === option,
+            (row, option) =>
+              row.manufacturer === option &&
+              matchesStandardCatalogFilters(
+                row,
+                filters,
+                categorySlug,
+                "manufacturer",
+              ),
           );
+    const powerStationCapacityRangeFacets =
+      categorySlug === "power-stations"
+        ? countByNumberRangeOption(
+            powerStationCapacityFilterGroup.options,
+            searchableBaseRows,
+            (row) => row.capacityWh ?? undefined,
+            (row) =>
+              matchesStandardCatalogFilters(
+                row,
+                filters,
+                categorySlug,
+                "capacityWhRange",
+              ),
+          )
+        : [];
     const powerBankChemistryOptions = uniqueDefined(
       powerBankBaseSpecs.map((spec) => spec.batteryChemistry),
     );
@@ -1240,6 +1332,7 @@ async function getUncachedCatalogPageData(
         ].map((value) => JSON.parse(value) as { value: string; label: string }),
         maxCapacityWh: capacities.length > 0 ? Math.max(...capacities) : null,
         maxPowerW: powers.length > 0 ? Math.max(...powers) : null,
+        powerStationCapacityRanges: powerStationCapacityRangeFacets,
         powerBanks: {
           batteryChemistries: countByOption(
             powerBankChemistryOptions,
@@ -1311,6 +1404,7 @@ async function getUncachedCatalogPageData(
         chemistries: [],
         maxCapacityWh: null,
         maxPowerW: null,
+        powerStationCapacityRanges: [],
         powerBanks: {
           batteryChemistries: [],
           supportedOutputProtocols: [],

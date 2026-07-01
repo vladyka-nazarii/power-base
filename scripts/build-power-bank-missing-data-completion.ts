@@ -98,7 +98,7 @@ function normalizeChemistry(row: SeedRow): PowerBankChemistry | null {
   ).toLowerCase();
 
   if (text.includes("lifepo4") || text.includes("lfp")) {
-    return "LiFePO4 (LFP)";
+    return "LiFePO4";
   }
 
   if (
@@ -435,7 +435,7 @@ function missingReason(field: (typeof fields)[number], row: SeedRow) {
 
   switch (field) {
     case "batteryChemistry":
-      return "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LFP confirmation.";
+      return "Source uses only generic lithium chemistry or omits cell format; allowed labels require Li-Po, 18650, 21700, or LiFePO4 confirmation.";
     case "supportedOutputProtocols":
       return "Source does not explicitly name one of the allowed output protocol labels.";
     case "passthroughCharging":

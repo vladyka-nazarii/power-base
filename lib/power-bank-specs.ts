@@ -31,7 +31,7 @@ export const powerBankFilterDefinitions = [
       "Li-ion (18650)",
       "Li-ion (21700)",
       "Silicon-Carbon (Si-C)",
-      "LiFePO4 (LFP)",
+      "LiFePO4",
       "Semi-Solid State",
     ],
     description:
@@ -179,7 +179,7 @@ export const powerBankChemistryOptions = [
   "Li-ion (18650)",
   "Li-ion (21700)",
   "Silicon-Carbon (Si-C)",
-  "LiFePO4 (LFP)",
+  "LiFePO4",
   "Semi-Solid State",
 ] as const;
 
@@ -418,7 +418,7 @@ function normalizeChemistry(
   const text = textBag(chemistry, specifications.batteryCells).toLowerCase();
 
   if (text.includes("lifepo4") || text.includes("lfp")) {
-    return "LiFePO4 (LFP)";
+    return "LiFePO4";
   }
 
   if (text.includes("silicon-carbon") || text.includes("silicon carbon")) {

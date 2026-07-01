@@ -29,7 +29,7 @@ const product = (overrides: Partial<OfflineCatalogProduct> = {}) => ({
   peakPowerW: null,
   maxPvVoltageV: null,
   maxChargeCurrentA: null,
-  chemistry: "LFP",
+  chemistry: "LiFePO4",
   communicationProtocols: null,
   weightGrams: 10000,
   warrantyYears: 5,
@@ -130,7 +130,7 @@ describe("filterOfflineCatalogProducts", () => {
     const filters = createOfflineCatalogFilters();
     filters.manufacturers = ["Acme"];
     filters.voltages = [48];
-    filters.chemistries = ["LFP"];
+    filters.chemistries = ["LiFePO4"];
     filters.minCapacityWh = "900";
     filters.minPowerW = "400";
 

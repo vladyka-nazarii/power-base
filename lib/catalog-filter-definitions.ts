@@ -147,6 +147,18 @@ export const powerBankNumberFilterGroups = {
 
 export type PowerBankRangeKey = keyof typeof powerBankNumberFilterGroups;
 
+export const powerStationCapacityFilterGroup = {
+  title: "Power station capacity, Wh",
+  param: "capacityWhRange",
+  options: [
+    { id: "lt-500", label: "Less than 500", max: 500 },
+    { id: "500-1000", label: "500 - 1000", min: 500, max: 1001 },
+    { id: "1001-2000", label: "1001 - 2000", min: 1001, max: 2001 },
+    { id: "2001-3000", label: "2001 - 3000", min: 2001, max: 3001 },
+    { id: "gt-3000", label: "More than 3000", min: 3001 },
+  ],
+} as const;
+
 const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
   capacityWh: "Номінальна енергія",
   usableEnergy: "Реальна корисна енергія",
@@ -190,5 +202,21 @@ export function localizePowerBankNumberFilterGroup(
       ...option,
       label: localizePowerBankRangeLabel(option.label),
     })),
+  };
+}
+
+export function localizePowerStationCapacityFilterGroup(locale: "en" | "uk") {
+  if (locale === "en") return powerStationCapacityFilterGroup;
+
+  return {
+    ...powerStationCapacityFilterGroup,
+    title: "Місткість зарядної станції, Вт·год",
+    options: [
+      { ...powerStationCapacityFilterGroup.options[0], label: "Менше 500" },
+      { ...powerStationCapacityFilterGroup.options[1] },
+      { ...powerStationCapacityFilterGroup.options[2] },
+      { ...powerStationCapacityFilterGroup.options[3] },
+      { ...powerStationCapacityFilterGroup.options[4], label: "Більше 3000" },
+    ],
   };
 }
