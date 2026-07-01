@@ -94,8 +94,6 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   filters.manufacturers.forEach((value) => add("manufacturer", value));
   filters.voltages.forEach((value) => add("voltage", value));
   filters.chemistries.forEach((value) => add("chemistry", value));
-  add("minCapacityWh", filters.minCapacityWh);
-  add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
   filters.continuousPowerRanges.forEach((value) =>
@@ -182,8 +180,6 @@ function catalogSearchParams(filters: CatalogFilters, page: number) {
   filters.manufacturers.forEach((value) => add("manufacturer", value));
   filters.voltages.forEach((value) => add("voltage", value));
   filters.chemistries.forEach((value) => add("chemistry", value));
-  add("minCapacityWh", filters.minCapacityWh);
-  add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
   filters.continuousPowerRanges.forEach((value) =>
@@ -419,32 +415,6 @@ function CheckboxOption({
           <span className="text-zinc-400"> ({count})</span>
         ) : null}
       </span>
-    </label>
-  );
-}
-
-function NumberFilter({
-  label,
-  name,
-  value,
-}: {
-  label: string;
-  name: string;
-  value?: number;
-}) {
-  return (
-    <label>
-      <span className="text-sm font-medium text-black dark:text-white">
-        {label}
-      </span>
-      <input
-        type="number"
-        min={0}
-        step="any"
-        name={name}
-        defaultValue={value}
-        className="mt-2 h-10 w-full rounded-md border border-black/10 bg-transparent px-3 text-sm outline-none dark:border-white/10"
-      />
     </label>
   );
 }
@@ -1207,22 +1177,6 @@ export default async function CatalogPage({
                   </fieldset>
                 ) : null}
 
-                <div className="mt-6 grid gap-4">
-                  {category === "power-stations" ? null : (
-                    <NumberFilter
-                      label={ui.minCapacity}
-                      name="minCapacityWh"
-                      value={filters.minCapacityWh}
-                    />
-                  )}
-                  {category === "power-stations" ? null : (
-                    <NumberFilter
-                      label={ui.minPower}
-                      name="minPowerW"
-                      value={filters.minPowerW}
-                    />
-                  )}
-                </div>
               </>
             )}
 
@@ -1231,8 +1185,6 @@ export default async function CatalogPage({
               "manufacturer",
               "voltage",
               "chemistry",
-              "minCapacityWh",
-              "minPowerW",
               "capacityWh",
               "capacityWhRange",
               "continuousPowerRange",

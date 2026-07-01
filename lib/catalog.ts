@@ -5,7 +5,6 @@ import {
   count,
   desc,
   eq,
-  gte,
   ilike,
   inArray,
   or,
@@ -52,8 +51,6 @@ export type CatalogFilters = {
   manufacturers: string[];
   voltages: number[];
   chemistries: string[];
-  minCapacityWh?: number;
-  minPowerW?: number;
   capacityWh?: number;
   capacityWhRanges: string[];
   continuousPowerRanges: string[];
@@ -202,8 +199,6 @@ export const catalogUiCopy: Record<
     manufacturer: string;
     nominalVoltage: string;
     chemistry: string;
-    minCapacity: string;
-    minPower: string;
     maxInputPower: string;
     maxOutputPower: string;
     passthroughCharging: string;
@@ -242,8 +237,6 @@ export const catalogUiCopy: Record<
     manufacturer: "Manufacturer",
     nominalVoltage: "Nominal voltage",
     chemistry: "Chemistry",
-    minCapacity: "Min capacity (Wh)",
-    minPower: "Min power (W)",
     maxInputPower: "Min input power (W)",
     maxOutputPower: "Min output power (W)",
     passthroughCharging: "Passthrough charging",
@@ -290,8 +283,6 @@ export const catalogUiCopy: Record<
     manufacturer: "Виробник",
     nominalVoltage: "Номінальна напруга",
     chemistry: "Хімія",
-    minCapacity: "Мін. ємність (Вт·год)",
-    minPower: "Мін. потужність (Вт)",
     maxInputPower: "Мін. вхідна потужність (Вт)",
     maxOutputPower: "Мін. вихідна потужність (Вт)",
     passthroughCharging: "Наскрізне заряджання",
@@ -847,8 +838,6 @@ function matchesStandardCatalogFilters(
       filters.chemistries.length === 0 ||
       (product.chemistry !== null &&
         filters.chemistries.includes(product.chemistry)),
-    filters.minCapacityWh === undefined ||
-      (product.capacityWh ?? 0) >= filters.minCapacityWh,
     exclude === "capacityWhRange" ||
       categorySlug !== "power-stations" ||
       matchesNumberRangeFilter(
@@ -877,8 +866,6 @@ function matchesStandardCatalogFilters(
         filters.pricePerKwhRanges,
         pricePerKwhFilterOptions(categorySlug),
       ),
-    filters.minPowerW === undefined ||
-      (product.continuousPowerW ?? 0) >= filters.minPowerW,
   ].every(Boolean);
 }
 
@@ -1111,9 +1098,6 @@ async function getUncachedCatalogPageData(
       categorySlug !== "power-banks" && filters.chemistries.length > 0
         ? inArray(equipment.chemistry, filters.chemistries)
         : undefined,
-      categorySlug !== "power-banks" && filters.minCapacityWh
-        ? gte(equipment.capacityWh, filters.minCapacityWh)
-        : undefined,
       standardCatalogRangeCondition(categorySlug, filters.capacityWhRanges),
       standardCatalogRangeCondition(
         categorySlug,
@@ -1134,9 +1118,6 @@ async function getUncachedCatalogPageData(
         sql<number>`(${equipment.priceCents}::double precision * 10 / nullif(${equipment.capacityWh}, 0))`,
         supportsPricePerKwhFilter(categorySlug),
       ),
-      categorySlug !== "power-banks" && filters.minPowerW
-        ? gte(equipment.continuousPowerW, filters.minPowerW)
-        : undefined,
     ]);
     const filteredProducts =
       categorySlug === "power-banks"
@@ -1650,9 +1631,7 @@ export function parseCatalogFilters(
     manufacturers: values("manufacturer"),
     voltages: numberValues("voltage"),
     chemistries: values("chemistry"),
-    minCapacityWh: numberValue("minCapacityWh"),
-    minPowerW: numberValue("minPowerW"),
-    capacityWh: numberValue("capacityWh") ?? numberValue("minCapacityWh"),
+    capacityWh: numberValue("capacityWh"),
     capacityWhRanges: values("capacityWhRange"),
     continuousPowerRanges: values("continuousPowerRange"),
     peakPowerRanges: values("peakPowerRange"),
@@ -1663,7 +1642,7 @@ export function parseCatalogFilters(
     supportedOutputProtocols: values("supportedOutputProtocols"),
     maxInputPower: numberValue("maxInputPower"),
     maxInputPowerRanges: values("maxInputPowerRange"),
-    maxOutputPower: numberValue("maxOutputPower") ?? numberValue("minPowerW"),
+    maxOutputPower: numberValue("maxOutputPower"),
     maxOutputPowerRanges: [
       ...values("maxSinglePortOutputRange"),
       ...values("maxOutputPowerRange"),
