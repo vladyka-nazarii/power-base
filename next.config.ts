@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "media.vladyka.dev",
+        pathname: "/power-station/**",
+      },
+      {
+        protocol: "https",
         hostname: "cdn.shopify.com",
       },
       {

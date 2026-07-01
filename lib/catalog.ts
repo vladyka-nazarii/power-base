@@ -18,7 +18,7 @@ import { ensureRedisConnected } from "@/lib/cache/redis";
 import {
   type NumberRangeFilterOption,
   powerBankNumberFilterGroups,
-  powerStationCapacityFilterGroup,
+  powerStationNumberFilterGroups,
 } from "@/lib/catalog-filter-definitions";
 import { db } from "@/lib/db";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
@@ -56,6 +56,9 @@ export type CatalogFilters = {
   minPowerW?: number;
   capacityWh?: number;
   capacityWhRanges: string[];
+  continuousPowerRanges: string[];
+  peakPowerRanges: string[];
+  pricePerKwhRanges: string[];
   usableEnergyRanges: string[];
   conversionEfficiencyRanges: string[];
   batteryChemistries: string[];
@@ -109,7 +112,10 @@ export type CatalogPagination = {
 
 export type { NumberRangeFilterOption } from "@/lib/catalog-filter-definitions";
 export { powerBankNumberFilterGroups } from "@/lib/catalog-filter-definitions";
-export { powerStationCapacityFilterGroup } from "@/lib/catalog-filter-definitions";
+export {
+  powerStationCapacityFilterGroup,
+  powerStationNumberFilterGroups,
+} from "@/lib/catalog-filter-definitions";
 
 export const catalogPageCopy: Record<
   Locale,
@@ -763,32 +769,46 @@ function countByNumberRangeOption(
   }));
 }
 
+function pricePerKwhUsd(product: CatalogProductRow) {
+  if (
+    product.priceCents === null ||
+    product.capacityWh === null ||
+    product.capacityWh <= 0
+  ) {
+    return undefined;
+  }
+
+  return (product.priceCents * 10) / product.capacityWh;
+}
+
 function standardCatalogRangeCondition(
   categorySlug: CatalogCategorySlug,
   selectedIds: string[],
+  options: readonly NumberRangeFilterOption[] = powerStationNumberFilterGroups
+    .capacityWh.options,
+  column:
+    | typeof equipment.capacityWh
+    | typeof equipment.continuousPowerW
+    | typeof equipment.peakPowerW
+    | SQL<number> = equipment.capacityWh,
 ) {
   if (categorySlug !== "power-stations" || selectedIds.length === 0) {
     return undefined;
   }
 
-  const options: NumberRangeFilterOption[] =
-    powerStationCapacityFilterGroup.options.filter((option) =>
-      selectedIds.includes(option.id),
-    );
+  const selectedOptions = options.filter((option) =>
+    selectedIds.includes(option.id),
+  );
 
-  if (options.length === 0) {
+  if (selectedOptions.length === 0) {
     return sql`false`;
   }
 
   return or(
-    ...options.map((option) => {
+    ...selectedOptions.map((option) => {
       const conditions = compactConditions([
-        option.min === undefined
-          ? undefined
-          : gte(equipment.capacityWh, option.min),
-        option.max === undefined
-          ? undefined
-          : lt(equipment.capacityWh, option.max),
+        option.min === undefined ? undefined : sql`${column} >= ${option.min}`,
+        option.max === undefined ? undefined : sql`${column} < ${option.max}`,
       ]);
 
       return and(...conditions);
@@ -822,7 +842,28 @@ function matchesStandardCatalogFilters(
       matchesNumberRangeFilter(
         product.capacityWh ?? undefined,
         filters.capacityWhRanges,
-        powerStationCapacityFilterGroup.options,
+        powerStationNumberFilterGroups.capacityWh.options,
+      ),
+    exclude === "continuousPowerRange" ||
+      categorySlug !== "power-stations" ||
+      matchesNumberRangeFilter(
+        product.continuousPowerW ?? undefined,
+        filters.continuousPowerRanges,
+        powerStationNumberFilterGroups.continuousPower.options,
+      ),
+    exclude === "peakPowerRange" ||
+      categorySlug !== "power-stations" ||
+      matchesNumberRangeFilter(
+        product.peakPowerW ?? undefined,
+        filters.peakPowerRanges,
+        powerStationNumberFilterGroups.peakPower.options,
+      ),
+    exclude === "pricePerKwhRange" ||
+      categorySlug !== "power-stations" ||
+      matchesNumberRangeFilter(
+        pricePerKwhUsd(product),
+        filters.pricePerKwhRanges,
+        powerStationNumberFilterGroups.pricePerKwh.options,
       ),
     filters.minPowerW === undefined ||
       (product.continuousPowerW ?? 0) >= filters.minPowerW,
@@ -1062,6 +1103,24 @@ async function getUncachedCatalogPageData(
         ? gte(equipment.capacityWh, filters.minCapacityWh)
         : undefined,
       standardCatalogRangeCondition(categorySlug, filters.capacityWhRanges),
+      standardCatalogRangeCondition(
+        categorySlug,
+        filters.continuousPowerRanges,
+        powerStationNumberFilterGroups.continuousPower.options,
+        equipment.continuousPowerW,
+      ),
+      standardCatalogRangeCondition(
+        categorySlug,
+        filters.peakPowerRanges,
+        powerStationNumberFilterGroups.peakPower.options,
+        equipment.peakPowerW,
+      ),
+      standardCatalogRangeCondition(
+        categorySlug,
+        filters.pricePerKwhRanges,
+        powerStationNumberFilterGroups.pricePerKwh.options,
+        sql<number>`(${equipment.priceCents}::double precision * 10 / nullif(${equipment.capacityWh}, 0))`,
+      ),
       categorySlug !== "power-banks" && filters.minPowerW
         ? gte(equipment.continuousPowerW, filters.minPowerW)
         : undefined,
@@ -1148,7 +1207,7 @@ async function getUncachedCatalogPageData(
     const powerStationCapacityRangeFacets =
       categorySlug === "power-stations"
         ? countByNumberRangeOption(
-            powerStationCapacityFilterGroup.options,
+            powerStationNumberFilterGroups.capacityWh.options,
             searchableBaseRows,
             (row) => row.capacityWh ?? undefined,
             (row) =>
@@ -1160,6 +1219,48 @@ async function getUncachedCatalogPageData(
               ),
           )
         : [];
+    const powerStationNumberRangeFacets =
+      categorySlug === "power-stations"
+        ? {
+            capacityWh: powerStationCapacityRangeFacets,
+            continuousPower: countByNumberRangeOption(
+              powerStationNumberFilterGroups.continuousPower.options,
+              searchableBaseRows,
+              (row) => row.continuousPowerW ?? undefined,
+              (row) =>
+                matchesStandardCatalogFilters(
+                  row,
+                  filters,
+                  categorySlug,
+                  "continuousPowerRange",
+                ),
+            ),
+            peakPower: countByNumberRangeOption(
+              powerStationNumberFilterGroups.peakPower.options,
+              searchableBaseRows,
+              (row) => row.peakPowerW ?? undefined,
+              (row) =>
+                matchesStandardCatalogFilters(
+                  row,
+                  filters,
+                  categorySlug,
+                  "peakPowerRange",
+                ),
+            ),
+            pricePerKwh: countByNumberRangeOption(
+              powerStationNumberFilterGroups.pricePerKwh.options,
+              searchableBaseRows,
+              pricePerKwhUsd,
+              (row) =>
+                matchesStandardCatalogFilters(
+                  row,
+                  filters,
+                  categorySlug,
+                  "pricePerKwhRange",
+                ),
+            ),
+          }
+        : null;
     const powerBankChemistryOptions = uniqueDefined(
       powerBankBaseSpecs.map((spec) => spec.batteryChemistry),
     );
@@ -1333,6 +1434,7 @@ async function getUncachedCatalogPageData(
         maxCapacityWh: capacities.length > 0 ? Math.max(...capacities) : null,
         maxPowerW: powers.length > 0 ? Math.max(...powers) : null,
         powerStationCapacityRanges: powerStationCapacityRangeFacets,
+        powerStationNumberRanges: powerStationNumberRangeFacets,
         powerBanks: {
           batteryChemistries: countByOption(
             powerBankChemistryOptions,
@@ -1405,6 +1507,7 @@ async function getUncachedCatalogPageData(
         maxCapacityWh: null,
         maxPowerW: null,
         powerStationCapacityRanges: [],
+        powerStationNumberRanges: null,
         powerBanks: {
           batteryChemistries: [],
           supportedOutputProtocols: [],
@@ -1538,6 +1641,9 @@ export function parseCatalogFilters(
     minPowerW: numberValue("minPowerW"),
     capacityWh: numberValue("capacityWh") ?? numberValue("minCapacityWh"),
     capacityWhRanges: values("capacityWhRange"),
+    continuousPowerRanges: values("continuousPowerRange"),
+    peakPowerRanges: values("peakPowerRange"),
+    pricePerKwhRanges: values("pricePerKwhRange"),
     usableEnergyRanges: values("usableEnergyRange"),
     conversionEfficiencyRanges: values("conversionEfficiencyRange"),
     batteryChemistries: values("batteryChemistry"),

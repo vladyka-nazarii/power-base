@@ -26,15 +26,17 @@ import {
   getCatalogPageData,
   getCatalogProductsBySlugs,
   powerBankNumberFilterGroups,
-  powerStationCapacityFilterGroup,
+  powerStationNumberFilterGroups,
 } from "@/lib/catalog";
 import {
   localizePowerBankNumberFilterGroup,
-  localizePowerStationCapacityFilterGroup,
+  localizePowerStationNumberFilterGroup,
   type PowerBankRangeKey,
+  type PowerStationRangeKey,
 } from "@/lib/catalog-filter-definitions";
 import { getCurrentSession, getFavoriteEquipmentIds } from "@/lib/favorites";
 import { type Locale, localizeHref } from "@/lib/i18n";
+import { usdToUahRate } from "@/lib/price-format";
 import {
   localizePowerBankFeature,
   localizePowerBankOption,
@@ -94,6 +96,13 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
+  filters.continuousPowerRanges.forEach((value) =>
+    add("continuousPowerRange", value),
+  );
+  filters.peakPowerRanges.forEach((value) => add("peakPowerRange", value));
+  filters.pricePerKwhRanges.forEach((value) =>
+    add("pricePerKwhRange", value),
+  );
   filters.usableEnergyRanges.forEach((value) =>
     add("usableEnergyRange", value),
   );
@@ -175,6 +184,13 @@ function catalogSearchParams(filters: CatalogFilters, page: number) {
   add("minPowerW", filters.minPowerW);
   add("capacityWh", filters.capacityWh);
   filters.capacityWhRanges.forEach((value) => add("capacityWhRange", value));
+  filters.continuousPowerRanges.forEach((value) =>
+    add("continuousPowerRange", value),
+  );
+  filters.peakPowerRanges.forEach((value) => add("peakPowerRange", value));
+  filters.pricePerKwhRanges.forEach((value) =>
+    add("pricePerKwhRange", value),
+  );
   filters.usableEnergyRanges.forEach((value) =>
     add("usableEnergyRange", value),
   );
@@ -770,32 +786,105 @@ function PowerStationFilters({
   filters: CatalogFilters;
   locale: Locale;
 }) {
-  const capacityFilterGroup = localizePowerStationCapacityFilterGroup(locale);
-  const capacityRangeFacets = data.facets.powerStationCapacityRanges ?? [];
-  const capacityOptions =
-    capacityRangeFacets.length > 0
-      ? capacityRangeFacets.map((option) => ({
-          ...option,
-          label:
-            capacityFilterGroup.options.find(
-              (localizedOption) => localizedOption.id === option.value,
-            )?.label ?? option.label,
-        }))
-      : powerStationCapacityFilterGroup.options.map((option) => ({
+  const numberFilterGroups = Object.fromEntries(
+    (
+      Object.keys(powerStationNumberFilterGroups) as PowerStationRangeKey[]
+    ).map((key) => [key, localizePowerStationNumberFilterGroup(key, locale)]),
+  ) as Record<
+    PowerStationRangeKey,
+    ReturnType<typeof localizePowerStationNumberFilterGroup>
+  >;
+  const rawNumberRangeOptions =
+    data.facets.powerStationNumberRanges ??
+    Object.fromEntries(
+      Object.entries(powerStationNumberFilterGroups).map(([key, group]) => [
+        key,
+        group.options.map((option) => ({
           ...option,
           value: option.id,
           count: 0,
-        }));
+        })),
+      ]),
+    );
+  const numberRangeOptions = Object.fromEntries(
+    (Object.keys(numberFilterGroups) as PowerStationRangeKey[]).map((key) => [
+      key,
+      rawNumberRangeOptions[key]
+        .filter((option) => {
+          const selectedValues =
+            key === "capacityWh"
+              ? filters.capacityWhRanges
+              : key === "continuousPower"
+                ? filters.continuousPowerRanges
+                : key === "peakPower"
+                  ? filters.peakPowerRanges
+                  : filters.pricePerKwhRanges;
+
+          return option.count > 0 || selectedValues.includes(option.value);
+        })
+        .map((option) => ({
+          ...option,
+          label:
+            numberFilterGroups[key].options.find(
+              (localizedOption) => localizedOption.id === option.value,
+            )?.label ?? option.label,
+        })),
+    ]),
+  ) as typeof rawNumberRangeOptions;
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 grid gap-6">
       <NumberRangeFilter
-        {...capacityFilterGroup}
-        options={capacityOptions}
+        {...numberFilterGroups.capacityWh}
+        options={numberRangeOptions.capacityWh}
         selected={filters.capacityWhRanges}
+      />
+      <NumberRangeFilter
+        {...numberFilterGroups.continuousPower}
+        options={numberRangeOptions.continuousPower}
+        selected={filters.continuousPowerRanges}
+      />
+      <NumberRangeFilter
+        {...numberFilterGroups.peakPower}
+        options={numberRangeOptions.peakPower}
+        selected={filters.peakPowerRanges}
+      />
+      <NumberRangeFilter
+        {...numberFilterGroups.pricePerKwh}
+        options={numberRangeOptions.pricePerKwh}
+        selected={filters.pricePerKwhRanges}
       />
     </div>
   );
+}
+
+function formatPricePerKwhBadge(product: CatalogProduct, locale: Locale) {
+  if (
+    product.categorySlug !== "power-stations" ||
+    product.priceCents === null ||
+    product.capacityWh === null ||
+    product.capacityWh <= 0
+  ) {
+    return null;
+  }
+
+  const usdPerKwh = (product.priceCents * 10) / product.capacityWh;
+
+  if (locale === "uk") {
+    const uahPerKwh = usdPerKwh * usdToUahRate;
+
+    return `${uahPerKwh.toLocaleString("uk-UA", {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    })} грн/кВт·год`;
+  }
+
+  return `${new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  }).format(usdPerKwh)}/kWh`;
 }
 
 export function ProductCard({
@@ -813,11 +902,15 @@ export function ProductCard({
   ui: (typeof catalogUiCopy)[Locale];
   isFavorite: boolean;
 }) {
+  const pricePerKwhBadge = formatPricePerKwhBadge(product, locale);
   const specs = [
     product.continuousPowerW
       ? `${product.continuousPowerW.toLocaleString()} W`
       : null,
-    product.nominalVoltageV ? `${product.nominalVoltageV} V` : null,
+    pricePerKwhBadge,
+    product.categorySlug === "power-stations" || !product.nominalVoltageV
+      ? null
+      : `${product.nominalVoltageV} V`,
     product.chemistryLabel,
   ].filter(Boolean);
   const detailSpecs = productDetailSpecs(product, locale);
@@ -1040,27 +1133,29 @@ export default async function CatalogPage({
                   />
                 ) : null}
 
-                <fieldset className="mt-6">
-                  <legend className="text-sm font-medium text-black dark:text-white">
-                    {ui.nominalVoltage}
-                  </legend>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {data.facets.voltages.map((voltage) => (
-                      <label key={voltage}>
-                        <input
-                          type="checkbox"
-                          name="voltage"
-                          value={voltage}
-                          defaultChecked={filters.voltages.includes(voltage)}
-                          className="peer sr-only"
-                        />
-                        <span className="inline-flex h-8 items-center rounded-md border border-black/10 px-3 text-sm text-zinc-600 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white dark:border-white/10 dark:text-zinc-400 dark:peer-checked:border-white dark:peer-checked:bg-white dark:peer-checked:text-black">
-                          {voltage} V
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
+                {category === "power-stations" ? null : (
+                  <fieldset className="mt-6">
+                    <legend className="text-sm font-medium text-black dark:text-white">
+                      {ui.nominalVoltage}
+                    </legend>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {data.facets.voltages.map((voltage) => (
+                        <label key={voltage}>
+                          <input
+                            type="checkbox"
+                            name="voltage"
+                            value={voltage}
+                            defaultChecked={filters.voltages.includes(voltage)}
+                            className="peer sr-only"
+                          />
+                          <span className="inline-flex h-8 items-center rounded-md border border-black/10 px-3 text-sm text-zinc-600 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white dark:border-white/10 dark:text-zinc-400 dark:peer-checked:border-white dark:peer-checked:bg-white dark:peer-checked:text-black">
+                            {voltage} V
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                )}
 
                 {data.facets.chemistries.length > 0 ? (
                   <fieldset className="mt-6">
@@ -1097,11 +1192,13 @@ export default async function CatalogPage({
                       value={filters.minCapacityWh}
                     />
                   )}
-                  <NumberFilter
-                    label={ui.minPower}
-                    name="minPowerW"
-                    value={filters.minPowerW}
-                  />
+                  {category === "power-stations" ? null : (
+                    <NumberFilter
+                      label={ui.minPower}
+                      name="minPowerW"
+                      value={filters.minPowerW}
+                    />
+                  )}
                 </div>
               </>
             )}
@@ -1115,6 +1212,9 @@ export default async function CatalogPage({
               "minPowerW",
               "capacityWh",
               "capacityWhRange",
+              "continuousPowerRange",
+              "peakPowerRange",
+              "pricePerKwhRange",
               "usableEnergyRange",
               "conversionEfficiencyRange",
               "batteryChemistry",

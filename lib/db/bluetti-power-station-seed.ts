@@ -55,7 +55,6 @@ const bluettiPremium30V2Images = [
 ] as const;
 
 const bluettiAc180PImages = [
-  "https://cdn.shopify.com/s/files/1/0566/6396/5893/files/202310025AC180_2000-2000px_-3_e694f5db-6dd0-45a4-b665-25280f760f5d.jpg?v=1705544452",
   "https://cdn.shopify.com/s/files/1/0566/6396/5893/files/AC180P-ZT4.png?v=1705630578",
   "https://cdn.shopify.com/s/files/1/0566/6396/5893/files/AC180P-ZT2.png?v=1705630578",
   "https://cdn.shopify.com/s/files/1/0566/6396/5893/files/AC180P-ZT3.png?v=1705630578",
@@ -92,7 +91,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "2,304 Wh LiFePO4 portable power station with 2,400 W AC output, Bluetooth app support, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Портативна електростанція Bluetti Premium 200 (AC200PL) з LiFePO4 акумулятором 2 304 Вт·год, потужністю 2 400 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiPremium200V2Images[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/044a381c9d488e0cc8c8e9bb745b1cb8.webp",
     priceCents: 93523,
     productCode: "6970991294754",
     nominalVoltageV: 230,
@@ -134,7 +133,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "Compact 320 Wh LiFePO4 power station with 600 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Компактна портативна електростанція Bluetti Premium 30 V2 з LiFePO4 акумулятором 320 Вт·год, потужністю 600 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiPremium30V2Images[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/4edf8449a4caedbb4785d718efeac1a3.webp",
     priceCents: 18244,
     productCode: "6978341874946",
     nominalVoltageV: 230,
@@ -176,7 +175,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "1,440 Wh LiFePO4 portable station with 1,800 W continuous output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Портативна електростанція Bluetti Premium 150 (AC180P) з LiFePO4 акумулятором 1 440 Вт·год, потужністю 1 800 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiAc180PImages[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/4269ab9120218c3dc5663b53dbc127d1.webp",
     priceCents: 54743,
     productCode: "6970991292668",
     nominalVoltageV: 230,
@@ -221,7 +220,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "1,024 Wh LiFePO4 portable station with 2,000 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Портативна електростанція Bluetti Premium 100 V2 з LiFePO4 акумулятором 1 024 Вт·год, потужністю 2 000 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiPremium100V2Images[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/f5085be7c697be9ffb147614be08472d.webp",
     priceCents: 44478,
     productCode: "6978341871792",
     nominalVoltageV: 230,
@@ -263,7 +262,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "864 Wh LiFePO4 portable station with 1,000 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Портативна електростанція Bluetti Premium 80 (AC70P) з LiFePO4 акумулятором 864 Вт·год, потужністю 1 000 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiAc70PImages[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/2dc3566fc29e8de7d57a44bf7332559c.webp",
     priceCents: 36493,
     productCode: "6970991294235",
     nominalVoltageV: 230,
@@ -308,7 +307,7 @@ export const bluettiPowerStationRows: BluettiPowerStationSeedRow[] = [
       "504 Wh LiFePO4 portable station with 700 W output, Bluetooth, USB-A, USB-C, 12 V output, and display.",
     summaryUk:
       "Портативна електростанція Bluetti Premium 50 (AC50P) з LiFePO4 акумулятором 504 Вт·год, потужністю 700 Вт, Bluetooth, USB-A, USB-C, 12 В виходом і дисплеєм.",
-    imagePath: bluettiAc50PImages[0],
+    imagePath: "https://media.vladyka.dev/power-station/bluetti/4fc0dda270712220ea344f73e701a691.webp",
     priceCents: 25658,
     productCode: "6970991296536",
     nominalVoltageV: 230,

@@ -1,3 +1,5 @@
+import { usdToUahRate } from "@/lib/price-format";
+
 export type NumberRangeFilterOption = {
   id: string;
   label: string;
@@ -159,6 +161,48 @@ export const powerStationCapacityFilterGroup = {
   ],
 } as const;
 
+export const powerStationNumberFilterGroups = {
+  capacityWh: powerStationCapacityFilterGroup,
+  continuousPower: {
+    title: "Output power (total), W",
+    param: "continuousPowerRange",
+    options: [
+      { id: "lte-600", label: "Up to 600", max: 601 },
+      { id: "601-1200", label: "600 - 1200", min: 601, max: 1201 },
+      { id: "1201-1800", label: "1201 - 1800", min: 1201, max: 1801 },
+      { id: "1801-2400", label: "1801 - 2400", min: 1801, max: 2401 },
+      { id: "gt-2400", label: "More than 2400", min: 2401 },
+    ],
+  },
+  peakPower: {
+    title: "Maximum device power, W",
+    param: "peakPowerRange",
+    options: [
+      { id: "lte-300", label: "300 and below", max: 301 },
+      { id: "301-500", label: "301 - 500", min: 301, max: 501 },
+      { id: "501-600", label: "501 - 600", min: 501, max: 601 },
+      { id: "601-1000", label: "601 - 1000", min: 601, max: 1001 },
+      { id: "1001-1200", label: "1001 - 1200", min: 1001, max: 1201 },
+      { id: "1201-1500", label: "1201 - 1500", min: 1201, max: 1501 },
+      { id: "1501-2000", label: "1501 - 2000", min: 1501, max: 2001 },
+      { id: "2001-2400", label: "2001 - 2400", min: 2001, max: 2401 },
+      { id: "gt-2400", label: "More than 2400", min: 2401 },
+    ],
+  },
+  pricePerKwh: {
+    title: "Price per 1 kWh capacity",
+    param: "pricePerKwhRange",
+    options: [
+      { id: "lte-500", label: "Up to $500/kWh", max: 501 },
+      { id: "501-700", label: "$501 - $700/kWh", min: 501, max: 701 },
+      { id: "701-900", label: "$701 - $900/kWh", min: 701, max: 901 },
+      { id: "gt-900", label: "More than $900/kWh", min: 901 },
+    ],
+  },
+} as const;
+
+export type PowerStationRangeKey = keyof typeof powerStationNumberFilterGroups;
+
 const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
   capacityWh: "Номінальна енергія",
   usableEnergy: "Реальна корисна енергія",
@@ -218,5 +262,61 @@ export function localizePowerStationCapacityFilterGroup(locale: "en" | "uk") {
       { ...powerStationCapacityFilterGroup.options[3] },
       { ...powerStationCapacityFilterGroup.options[4], label: "Більше 3000" },
     ],
+  };
+}
+
+export function localizePowerStationNumberFilterGroup(
+  key: PowerStationRangeKey,
+  locale: "en" | "uk",
+) {
+  const group = powerStationNumberFilterGroups[key];
+
+  if (key === "capacityWh") {
+    return localizePowerStationCapacityFilterGroup(locale);
+  }
+
+  if (locale === "en") return group;
+
+  if (key === "pricePerKwh") {
+    const formatUahPerKwh = (value: number) =>
+      `${Math.round(value * usdToUahRate).toLocaleString("uk-UA").replaceAll("\u00a0", " ")} грн/кВт·год`;
+
+    return {
+      ...group,
+      title: "Ціна за 1 кВт·год місткості",
+      options: [
+        {
+          ...group.options[0],
+          label: `До ${formatUahPerKwh(500)}`,
+        },
+        {
+          ...group.options[1],
+          label: `${formatUahPerKwh(501)} - ${formatUahPerKwh(700)}`,
+        },
+        {
+          ...group.options[2],
+          label: `${formatUahPerKwh(701)} - ${formatUahPerKwh(900)}`,
+        },
+        {
+          ...group.options[3],
+          label: `Більше ${formatUahPerKwh(900)}`,
+        },
+      ],
+    };
+  }
+
+  return {
+    ...group,
+    title:
+      key === "continuousPower"
+        ? "Вихідна потужність (загальна), Вт"
+        : "Максимальна потужність пристроїв, Вт",
+    options: group.options.map((option) => ({
+      ...option,
+      label: option.label
+        .replace("Up to", "До")
+        .replace("and below", "і менше")
+        .replace("More than", "Більше"),
+    })),
   };
 }

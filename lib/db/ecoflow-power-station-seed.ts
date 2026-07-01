@@ -36,7 +36,7 @@ export const ecoFlowPowerStationRows: EcoFlowPowerStationSeedRow[] = [
     summaryUk:
       "1,024 Wh LiFePO4 portable power station with 1,800 W AC output, 3,600 W surge, 500 W solar input, and 10 ms UPS switching.",
     imagePath:
-      "https://media.vladyka.dev/power-station/ecoflow/ecoflow-delta-3-classic-1024wh-portable-power-station-1218691755.webp",
+      "https://media.vladyka.dev/power-station/ecoflow/91e47962b656496454f3e7766423fb5d.webp",
     priceCents: 54900,
     productCode: "EFDELTA3C-EU-CBox-L",
     nominalVoltageV: 230,
@@ -90,7 +90,7 @@ export const ecoFlowPowerStationRows: EcoFlowPowerStationSeedRow[] = [
     summaryUk:
       "2,048 Wh LiFePO4 station with 3,000 W AC output, 6,000 W surge, 1,000 W solar charging, and expandable capacity up to 10 kWh.",
     imagePath:
-      "https://media.vladyka.dev/power-station/ecoflow/ecoflow-delta-3-max-series-portable-power-station-1197150547.webp",
+      "https://media.vladyka.dev/power-station/ecoflow/e2921cdfea8c5c51ad39788e90d8bfb9.webp",
     priceCents: 119900,
     productCode: "EFD3MP-EU-CBOX",
     nominalVoltageV: 230,
@@ -153,7 +153,7 @@ export const ecoFlowPowerStationRows: EcoFlowPowerStationSeedRow[] = [
     summaryUk:
       "Expandable 2,048 Wh LiFePO4 portable station with 2,400 W AC output, 4,800 W surge, dual 500 W solar inputs, and app control.",
     imagePath:
-      "https://media.vladyka.dev/power-station/ecoflow/ecoflow-delta-2-max-portable-power-station-51305159590231.webp",
+      "https://media.vladyka.dev/power-station/ecoflow/c85a5f6e93717b775eaf4fe1f0488692.webp",
     priceCents: 99900,
     productCode: "EFDELTA2Max-EU",
     nominalVoltageV: 230,
@@ -216,7 +216,7 @@ export const ecoFlowPowerStationRows: EcoFlowPowerStationSeedRow[] = [
     summaryUk:
       "1,024 Wh LiFePO4 station with 1,800 W AC output, 2,700 W surge, 500 W solar input, and Wi-Fi/Bluetooth control.",
     imagePath:
-      "https://media.vladyka.dev/power-station/ecoflow/ecoflow-delta-2-portable-power-station-52097645347159.webp",
+      "https://media.vladyka.dev/power-station/ecoflow/4de9e9fdf27ed20613adf0c4f8fac31d.webp",
     priceCents: 59900,
     productCode: "ZMR330-EU",
     nominalVoltageV: 230,
@@ -280,7 +280,7 @@ export const ecoFlowPowerStationRows: EcoFlowPowerStationSeedRow[] = [
     summaryUk:
       "1,024 Wh LiFePO4 station with 1,800 W AC output, 3,600 W surge, expandable capacity to 5 kWh, and 5-year warranty.",
     imagePath:
-      "https://media.vladyka.dev/power-station/ecoflow/ecoflow-delta-3-series-portable-power-station-60905350299991.webp",
+      "https://media.vladyka.dev/power-station/ecoflow/ca650cfaf58e4a57d887808c61fd19d2.webp",
     priceCents: 74900,
     productCode: "EFDELTA3-EU",
     nominalVoltageV: 230,
