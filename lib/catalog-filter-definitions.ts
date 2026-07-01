@@ -203,6 +203,17 @@ export const powerStationNumberFilterGroups = {
 
 export type PowerStationRangeKey = keyof typeof powerStationNumberFilterGroups;
 
+export const batteryPricePerKwhFilterGroup = {
+  title: "Price per 1 kWh capacity",
+  param: "pricePerKwhRange",
+  options: [
+    { id: "lte-60", label: "Up to $60/kWh", max: 61 },
+    { id: "61-80", label: "$61 - $80/kWh", min: 61, max: 81 },
+    { id: "81-100", label: "$81 - $100/kWh", min: 81, max: 101 },
+    { id: "gt-100", label: "More than $100/kWh", min: 101 },
+  ],
+} as const;
+
 const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
   capacityWh: "Номінальна енергія",
   usableEnergy: "Реальна корисна енергія",
@@ -318,5 +329,37 @@ export function localizePowerStationNumberFilterGroup(
         .replace("and below", "і менше")
         .replace("More than", "Більше"),
     })),
+  };
+}
+
+export function localizeBatteryPricePerKwhFilterGroup(locale: "en" | "uk") {
+  const group = batteryPricePerKwhFilterGroup;
+
+  if (locale === "en") return group;
+
+  const formatUahPerKwh = (value: number) =>
+    `${Math.round(value * usdToUahRate).toLocaleString("uk-UA").replaceAll("\u00a0", " ")} грн/кВт·год`;
+
+  return {
+    ...group,
+    title: "Ціна за 1 кВт·год місткості",
+    options: [
+      {
+        ...group.options[0],
+        label: `До ${formatUahPerKwh(60)}`,
+      },
+      {
+        ...group.options[1],
+        label: `${formatUahPerKwh(61)} - ${formatUahPerKwh(80)}`,
+      },
+      {
+        ...group.options[2],
+        label: `${formatUahPerKwh(81)} - ${formatUahPerKwh(100)}`,
+      },
+      {
+        ...group.options[3],
+        label: `Більше ${formatUahPerKwh(100)}`,
+      },
+    ],
   };
 }

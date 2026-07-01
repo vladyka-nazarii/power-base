@@ -25,10 +25,12 @@ import {
   formatWeight,
   getCatalogPageData,
   getCatalogProductsBySlugs,
+  batteryPricePerKwhFilterGroup,
   powerBankNumberFilterGroups,
   powerStationNumberFilterGroups,
 } from "@/lib/catalog";
 import {
+  localizeBatteryPricePerKwhFilterGroup,
   localizePowerBankNumberFilterGroup,
   localizePowerStationNumberFilterGroup,
   type PowerBankRangeKey,
@@ -778,10 +780,12 @@ function PowerBankFilters({
 }
 
 function PowerStationFilters({
+  category,
   data,
   filters,
   locale,
 }: {
+  category: CatalogCategorySlug;
   data: CatalogData;
   filters: CatalogFilters;
   locale: Locale;
@@ -794,10 +798,20 @@ function PowerStationFilters({
     PowerStationRangeKey,
     ReturnType<typeof localizePowerStationNumberFilterGroup>
   >;
+  const pricePerKwhFilterGroup =
+    category === "batteries"
+      ? localizeBatteryPricePerKwhFilterGroup(locale)
+      : numberFilterGroups.pricePerKwh;
   const rawNumberRangeOptions =
     data.facets.powerStationNumberRanges ??
     Object.fromEntries(
-      Object.entries(powerStationNumberFilterGroups).map(([key, group]) => [
+      Object.entries({
+        ...powerStationNumberFilterGroups,
+        pricePerKwh:
+          category === "batteries"
+            ? batteryPricePerKwhFilterGroup
+            : powerStationNumberFilterGroups.pricePerKwh,
+      }).map(([key, group]) => [
         key,
         group.options.map((option) => ({
           ...option,
@@ -825,7 +839,10 @@ function PowerStationFilters({
         .map((option) => ({
           ...option,
           label:
-            numberFilterGroups[key].options.find(
+            (key === "pricePerKwh"
+              ? pricePerKwhFilterGroup.options
+              : numberFilterGroups[key].options
+            ).find(
               (localizedOption) => localizedOption.id === option.value,
             )?.label ?? option.label,
         })),
@@ -834,23 +851,27 @@ function PowerStationFilters({
 
   return (
     <div className="mt-6 grid gap-6">
+      {category === "power-stations" ? (
+        <>
+          <NumberRangeFilter
+            {...numberFilterGroups.capacityWh}
+            options={numberRangeOptions.capacityWh}
+            selected={filters.capacityWhRanges}
+          />
+          <NumberRangeFilter
+            {...numberFilterGroups.continuousPower}
+            options={numberRangeOptions.continuousPower}
+            selected={filters.continuousPowerRanges}
+          />
+          <NumberRangeFilter
+            {...numberFilterGroups.peakPower}
+            options={numberRangeOptions.peakPower}
+            selected={filters.peakPowerRanges}
+          />
+        </>
+      ) : null}
       <NumberRangeFilter
-        {...numberFilterGroups.capacityWh}
-        options={numberRangeOptions.capacityWh}
-        selected={filters.capacityWhRanges}
-      />
-      <NumberRangeFilter
-        {...numberFilterGroups.continuousPower}
-        options={numberRangeOptions.continuousPower}
-        selected={filters.continuousPowerRanges}
-      />
-      <NumberRangeFilter
-        {...numberFilterGroups.peakPower}
-        options={numberRangeOptions.peakPower}
-        selected={filters.peakPowerRanges}
-      />
-      <NumberRangeFilter
-        {...numberFilterGroups.pricePerKwh}
+        {...pricePerKwhFilterGroup}
         options={numberRangeOptions.pricePerKwh}
         selected={filters.pricePerKwhRanges}
       />
@@ -860,7 +881,8 @@ function PowerStationFilters({
 
 function formatPricePerKwhBadge(product: CatalogProduct, locale: Locale) {
   if (
-    product.categorySlug !== "power-stations" ||
+    (product.categorySlug !== "power-stations" &&
+      product.categorySlug !== "batteries") ||
     product.priceCents === null ||
     product.capacityWh === null ||
     product.capacityWh <= 0
@@ -1125,8 +1147,9 @@ export default async function CatalogPage({
               />
             ) : (
               <>
-                {category === "power-stations" ? (
+                {category === "power-stations" || category === "batteries" ? (
                   <PowerStationFilters
+                    category={category}
                     data={data}
                     filters={filters}
                     locale={locale}

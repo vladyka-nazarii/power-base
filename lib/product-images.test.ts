@@ -19,6 +19,14 @@ describe("getProductImages", () => {
     ).toEqual(["/primary.webp", "/second.webp"]);
   });
 
+  test("reads additional images from seed specifications", () => {
+    expect(
+      getProductImages("/primary.webp", {
+        additionalImages: ["/second.webp", "/third.webp"],
+      }),
+    ).toEqual(["/primary.webp", "/second.webp", "/third.webp"]);
+  });
+
   test("falls back to the primary image", () => {
     expect(getProductImages("/primary.webp", null)).toEqual(["/primary.webp"]);
   });

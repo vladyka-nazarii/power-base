@@ -8,7 +8,6 @@ import {
   gte,
   ilike,
   inArray,
-  lt,
   or,
   type SQL,
   sql,
@@ -16,6 +15,7 @@ import {
 
 import { ensureRedisConnected } from "@/lib/cache/redis";
 import {
+  batteryPricePerKwhFilterGroup,
   type NumberRangeFilterOption,
   powerBankNumberFilterGroups,
   powerStationNumberFilterGroups,
@@ -113,6 +113,7 @@ export type CatalogPagination = {
 export type { NumberRangeFilterOption } from "@/lib/catalog-filter-definitions";
 export { powerBankNumberFilterGroups } from "@/lib/catalog-filter-definitions";
 export {
+  batteryPricePerKwhFilterGroup,
   powerStationCapacityFilterGroup,
   powerStationNumberFilterGroups,
 } from "@/lib/catalog-filter-definitions";
@@ -781,6 +782,16 @@ function pricePerKwhUsd(product: CatalogProductRow) {
   return (product.priceCents * 10) / product.capacityWh;
 }
 
+function supportsPricePerKwhFilter(categorySlug: CatalogCategorySlug) {
+  return categorySlug === "power-stations" || categorySlug === "batteries";
+}
+
+function pricePerKwhFilterOptions(categorySlug: CatalogCategorySlug) {
+  return categorySlug === "batteries"
+    ? batteryPricePerKwhFilterGroup.options
+    : powerStationNumberFilterGroups.pricePerKwh.options;
+}
+
 function standardCatalogRangeCondition(
   categorySlug: CatalogCategorySlug,
   selectedIds: string[],
@@ -791,8 +802,9 @@ function standardCatalogRangeCondition(
     | typeof equipment.continuousPowerW
     | typeof equipment.peakPowerW
     | SQL<number> = equipment.capacityWh,
+  enabled = categorySlug === "power-stations",
 ) {
-  if (categorySlug !== "power-stations" || selectedIds.length === 0) {
+  if (!enabled || selectedIds.length === 0) {
     return undefined;
   }
 
@@ -859,11 +871,11 @@ function matchesStandardCatalogFilters(
         powerStationNumberFilterGroups.peakPower.options,
       ),
     exclude === "pricePerKwhRange" ||
-      categorySlug !== "power-stations" ||
+      !supportsPricePerKwhFilter(categorySlug) ||
       matchesNumberRangeFilter(
         pricePerKwhUsd(product),
         filters.pricePerKwhRanges,
-        powerStationNumberFilterGroups.pricePerKwh.options,
+        pricePerKwhFilterOptions(categorySlug),
       ),
     filters.minPowerW === undefined ||
       (product.continuousPowerW ?? 0) >= filters.minPowerW,
@@ -997,7 +1009,7 @@ function catalogPageCacheKey(
     .update(JSON.stringify(stableCacheValue({ filters, locale })))
     .digest("hex");
 
-  return `powerbase:catalog:v3:${categorySlug}:${locale}:${digest}`;
+  return `powerbase:catalog:v4:${categorySlug}:${locale}:${digest}`;
 }
 
 function stableCacheValue(value: unknown): unknown {
@@ -1118,8 +1130,9 @@ async function getUncachedCatalogPageData(
       standardCatalogRangeCondition(
         categorySlug,
         filters.pricePerKwhRanges,
-        powerStationNumberFilterGroups.pricePerKwh.options,
+        pricePerKwhFilterOptions(categorySlug),
         sql<number>`(${equipment.priceCents}::double precision * 10 / nullif(${equipment.capacityWh}, 0))`,
+        supportsPricePerKwhFilter(categorySlug),
       ),
       categorySlug !== "power-banks" && filters.minPowerW
         ? gte(equipment.continuousPowerW, filters.minPowerW)
@@ -1220,7 +1233,7 @@ async function getUncachedCatalogPageData(
           )
         : [];
     const powerStationNumberRangeFacets =
-      categorySlug === "power-stations"
+      categorySlug === "power-stations" || categorySlug === "batteries"
         ? {
             capacityWh: powerStationCapacityRangeFacets,
             continuousPower: countByNumberRangeOption(
@@ -1248,7 +1261,7 @@ async function getUncachedCatalogPageData(
                 ),
             ),
             pricePerKwh: countByNumberRangeOption(
-              powerStationNumberFilterGroups.pricePerKwh.options,
+              pricePerKwhFilterOptions(categorySlug),
               searchableBaseRows,
               pricePerKwhUsd,
               (row) =>

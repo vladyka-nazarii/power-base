@@ -4,10 +4,15 @@ import powerBankMissingDataCompletion from "@/docs/POWER_BANK_MISSING_DATA_COMPL
 import { db, postgresClient } from "@/lib/db";
 import { ankerPowerBankRows } from "@/lib/db/anker-power-bank-seed";
 import { ankerPowerStationRows } from "@/lib/db/anker-power-station-seed";
+import { bakBatteryRows } from "@/lib/db/bak-battery-seed";
 import { baseusPowerBankRows } from "@/lib/db/baseus-power-bank-seed";
 import { bluettiPowerStationRows } from "@/lib/db/bluetti-power-station-seed";
+import { cbakBatteryRows } from "@/lib/db/cbak-battery-seed";
 import { ecoFlowPowerStationRows } from "@/lib/db/ecoflow-power-station-seed";
+import { envisionBatteryRows } from "@/lib/db/envision-battery-seed";
+import { eveBatteryRows } from "@/lib/db/eve-battery-seed";
 import { equipment, equipmentCategories, manufacturers } from "@/lib/db/schema";
+import { tenpowerBatteryRows } from "@/lib/db/tenpower-battery-seed";
 import { ugreenPowerBankRows } from "@/lib/db/ugreen-power-bank-seed";
 import { xiaomiPowerBankRows } from "@/lib/db/xiaomi-power-bank-seed";
 import { mergePowerBankSpecifications } from "@/lib/power-bank-specs";
@@ -62,6 +67,10 @@ const manufacturerRows = [
   { name: "Xiaomi", country: "China" },
   { name: "Unbranded", country: null },
   { name: "EVE", country: "China" },
+  { name: "CBAK", country: "China" },
+  { name: "Tenpower", country: "China" },
+  { name: "Envision AESC", country: "China" },
+  { name: "BAK", country: "China" },
   { name: "REPT", country: "China" },
   { name: "UGREEN", country: "China" },
   { name: "Baseus", country: "China" },
@@ -266,69 +275,6 @@ const equipmentRows: SeedEquipment[] = [
     warrantyYears: 3,
     sourceLabel: "Mock installation guide",
     sourceLabelUk: "Тестовий посібник з монтажу",
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "Pylontech",
-    model: "US5000",
-    slug: "pylontech-us5000",
-    summary: "Rack-mounted LiFePO4 battery module for expandable 48 V storage.",
-    summaryUk:
-      "Стійковий LiFePO4 акумуляторний модуль для розширюваного сховища 48 В.",
-    imagePath: "/catalog/battery.svg",
-    priceCents: 154900,
-    nominalVoltageV: 48,
-    capacityWh: 4800,
-    maxChargeCurrentA: 80,
-    chemistry: "LiFePO4",
-    communicationProtocols: "CAN, RS485",
-    weightGrams: 41000,
-    warrantyYears: 10,
-    lifecycleCycles: 6000,
-    sourceLabel: "Mock datasheet",
-    sourceLabelUk: "Тестовий даташит",
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "Renogy",
-    model: "Core 12V 200Ah",
-    slug: "renogy-core-12v-200ah",
-    summary:
-      "Drop-in LiFePO4 battery for RVs, boats, and small backup systems.",
-    summaryUk:
-      "LiFePO4 акумулятор для прямої заміни у кемперах, човнах і малих резервних системах.",
-    imagePath: "/catalog/battery.svg",
-    priceCents: 79900,
-    nominalVoltageV: 12,
-    capacityWh: 2560,
-    maxChargeCurrentA: 100,
-    chemistry: "LiFePO4",
-    communicationProtocols: "Bluetooth",
-    weightGrams: 26300,
-    warrantyYears: 5,
-    lifecycleCycles: 4000,
-    sourceLabel: "Mock product sheet",
-    sourceLabelUk: "Тестова специфікація продукту",
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "Victron Energy",
-    model: "SuperPack 25.6V 100Ah",
-    slug: "victron-superpack-25v-100ah",
-    summary: "Protected LiFePO4 module for compact low-voltage systems.",
-    summaryUk: "Захищений LiFePO4 модуль для компактних низьковольтних систем.",
-    imagePath: "/catalog/battery.svg",
-    priceCents: 132500,
-    nominalVoltageV: 24,
-    capacityWh: 2560,
-    maxChargeCurrentA: 100,
-    chemistry: "LiFePO4",
-    communicationProtocols: "BMS port",
-    weightGrams: 28000,
-    warrantyYears: 3,
-    lifecycleCycles: 2500,
-    sourceLabel: "Mock manual",
-    sourceLabelUk: "Тестова інструкція",
   },
 ];
 
@@ -565,232 +511,6 @@ const victronInverterRows: SeedEquipment[] = [
   },
 ];
 
-const nkonBatteryRows: SeedEquipment[] = [
-  {
-    categorySlug: "batteries",
-    manufacturer: "Unbranded",
-    model: "51.2V 5kWh 16S 100Ah LiFePO4 Battery Pack - Used",
-    slug: "nkon-51-2v-5kwh-16s-100ah-lifepo4-battery-pack-used",
-    summary:
-      "Used 16S LiFePO4 battery pack from NKON with 51.2 V nominal voltage, 100 Ah capacity, M8 terminals, and 80 A discharge rating.",
-    summaryUk:
-      "Used 16S LiFePO4 battery pack from NKON with 51.2 V nominal voltage, 100 Ah capacity, M8 terminals, and 80 A discharge rating.",
-    imagePath:
-      "https://www.nkon.nl/media/catalog/product/cache/d7e8d6be31dedc3e13513f59c64d138b/b/7/b71035b9-9c61-4f32-a230-dbce0def661d.jpeg",
-    priceCents: 26495,
-    productCode: "NKON-5566",
-    nominalVoltageV: 51,
-    capacityWh: 5120,
-    chemistry: "LiFePO4",
-    weightGrams: 51000,
-    sourceLabel: "NKON product page",
-    sourceLabelUk: "NKON product page",
-    sourceUrl:
-      "https://www.nkon.nl/novat/5wh-16s-100ah-51-2v-lifepo4-prismatic-battery-in-case.html",
-    specifications: {
-      listPosition: 1,
-      nkonProductId: 5566,
-      priceEur: 264.95,
-      oldPriceEur: 289.95,
-      stockStatus: "Out of stock",
-      eanGtin: "6097331978928",
-      batteryVersion: "Used",
-      grade: "Unknown",
-      nominalVoltageV: 51.2,
-      seriesCells: 16,
-      capacityAh: 100,
-      dischargeCurrentA: 80,
-      terminalType: "M8",
-      dimensionsMm: "460 x 750 x 300",
-      heightMm: 460,
-      widthMm: 750,
-      thicknessMm: 300,
-      yearOfProduction: 2020,
-      sourceCategoryUrl:
-        "https://www.nkon.nl/novat/rechargeable/lifepo4.html?product_list_order=price&product_list_dir=desc",
-      additionalImages: [
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/i/m/img_2425.jpg",
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/w/h/whatsapp_image_2024-11-22_at_09.42.04_2_.jpeg",
-      ],
-    },
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "Unbranded",
-    model:
-      "48V 4.7kWh 15S 100Ah LiFePO4 Battery Pack - Used (16S with one broken cell)",
-    slug: "nkon-48v-4-7kwh-15s-100ah-lifepo4-battery-pack-used",
-    summary:
-      "Used LiFePO4 battery pack from NKON listed as a 48 V, 15S, 100 Ah pack; the source notes it was originally 16S with one broken cell.",
-    summaryUk:
-      "Used LiFePO4 battery pack from NKON listed as a 48 V, 15S, 100 Ah pack; the source notes it was originally 16S with one broken cell.",
-    imagePath:
-      "https://www.nkon.nl/media/catalog/product/cache/d7e8d6be31dedc3e13513f59c64d138b/b/7/b71035b9-9c61-4f32-a230-dbce0def661d_1.jpeg",
-    priceCents: 17995,
-    productCode: "NKON-5600",
-    nominalVoltageV: 48,
-    capacityWh: 4800,
-    chemistry: "LiFePO4",
-    weightGrams: 51000,
-    sourceLabel: "NKON product page",
-    sourceLabelUk: "NKON product page",
-    sourceUrl:
-      "https://www.nkon.nl/novat/48v-4-7kwh-15s-100ah-lifepo4-battery-pack-gebruikt-16s-maar-een-cel-is-kapot.html",
-    specifications: {
-      listPosition: 2,
-      nkonProductId: 5600,
-      priceEur: 179.95,
-      stockStatus: "Out of stock",
-      eanGtin: "6097325994972",
-      batteryVersion: "Used",
-      grade: "Unknown",
-      nominalVoltageV: 48,
-      listedEnergyKwh: 4.7,
-      seriesCells: 15,
-      originalSeriesCells: 16,
-      sourceConditionNote: "16S only one cell is broken",
-      capacityAh: 100,
-      dischargeCurrentA: 80,
-      terminalType: "M8",
-      dimensionsMm: "0 x 0 x 0",
-      sourceCategoryUrl:
-        "https://www.nkon.nl/novat/rechargeable/lifepo4.html?product_list_order=price&product_list_dir=desc",
-      additionalImages: [
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/i/m/img_2425_1.jpg",
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/w/h/whatsapp_image_2024-10-18_at_10.30.04_1.jpeg",
-      ],
-    },
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "EVE",
-    model: "MB56 Prismatic 628Ah LiFePO4 3.2V Single Stud - Grade A",
-    slug: "nkon-eve-mb56-prismatic-628ah-lifepo4-3-2v-grade-a-single-stud",
-    summary:
-      "Grade A EVE MB56 prismatic LiFePO4 cell from NKON with 628 Ah capacity, 3.2 V nominal voltage, busbars, and M8 terminal.",
-    summaryUk:
-      "Grade A EVE MB56 prismatic LiFePO4 cell from NKON with 628 Ah capacity, 3.2 V nominal voltage, busbars, and M8 terminal.",
-    imagePath:
-      "https://www.nkon.nl/media/catalog/product/cache/d7e8d6be31dedc3e13513f59c64d138b/i/m/image_template_nkon3336_0011_layer_61.jpg",
-    priceCents: 11900,
-    productCode: "NKON-5847",
-    nominalVoltageV: 3,
-    capacityWh: 2010,
-    chemistry: "LiFePO4",
-    weightGrams: 11500,
-    sourceLabel: "NKON product page",
-    sourceLabelUk: "NKON product page",
-    sourceUrl:
-      "https://www.nkon.nl/novat/eve-mb56-prismatic-628ah-lifepo4-3-2v-grade-a-single-stud-2.html",
-    specifications: {
-      listPosition: 3,
-      nkonProductId: 5847,
-      priceEur: 119,
-      stockStatus: "Out of stock",
-      eanGtin: "6097335184127",
-      grade: "A",
-      model: "MB56",
-      nominalVoltageV: 3.2,
-      capacityAh: 628,
-      dischargeCurrentA: 314,
-      included: "Busbars",
-      terminalType: "M8",
-      dimensionsMm: "205.1 x 352.3 x 71.7",
-      heightMm: 205.1,
-      widthMm: 352.3,
-      thicknessMm: 71.7,
-      sourceCategoryUrl:
-        "https://www.nkon.nl/novat/rechargeable/lifepo4.html?product_list_order=price&product_list_dir=desc",
-      additionalImages: [
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/i/m/image_template_nkon3336_0008_layer_64.jpg",
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/i/m/image_template_nkon3336_0010_layer_62.jpg",
-      ],
-    },
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "EVE",
-    model: "MB56 Prismatic 628Ah LiFePO4 3.2V Single Stud - Grade A-",
-    slug: "nkon-eve-mb56-prismatic-628ah-lifepo4-3-2v-grade-a-minus-single-stud",
-    summary:
-      "Grade A- EVE MB56 prismatic LiFePO4 cell from NKON with 628 Ah capacity, 3.2 V nominal voltage, busbars, and M8 terminal.",
-    summaryUk:
-      "Grade A- EVE MB56 prismatic LiFePO4 cell from NKON with 628 Ah capacity, 3.2 V nominal voltage, busbars, and M8 terminal.",
-    imagePath:
-      "https://www.nkon.nl/media/catalog/product/cache/d7e8d6be31dedc3e13513f59c64d138b/m/b/mb56_3_.jpg",
-    priceCents: 10995,
-    productCode: "NKON-5846",
-    nominalVoltageV: 3,
-    capacityWh: 2010,
-    chemistry: "LiFePO4",
-    weightGrams: 11500,
-    sourceLabel: "NKON product page",
-    sourceLabelUk: "NKON product page",
-    sourceUrl:
-      "https://www.nkon.nl/novat/eve-mb56-prismatic-628ah-lifepo4-3-2v-grade-a-single-stud.html",
-    specifications: {
-      listPosition: 4,
-      nkonProductId: 5846,
-      priceEur: 109.95,
-      stockStatus: "In stock",
-      eanGtin: "6097335184127",
-      grade: "A-",
-      model: "MB56",
-      nominalVoltageV: 3.2,
-      capacityAh: 628,
-      dischargeCurrentA: 314,
-      included: "Busbars",
-      terminalType: "M8",
-      dimensionsMm: "205.1 x 352.3 x 71.7",
-      heightMm: 205.1,
-      widthMm: 352.3,
-      thicknessMm: 71.7,
-      sourceCategoryUrl:
-        "https://www.nkon.nl/novat/rechargeable/lifepo4.html?product_list_order=price&product_list_dir=desc",
-      additionalImages: [
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/_/_/__20260309191347.jpg",
-        "https://www.nkon.nl/media/catalog/product/cache/634f00c0cac7a25d9ea011187773489b/w/h/whatsapp_image_2025-09-03_at_10.11.57_1.jpeg",
-      ],
-    },
-  },
-  {
-    categorySlug: "batteries",
-    manufacturer: "REPT",
-    model: "7x CB3914895EA 50Ah LiFePO4 3.2V - Grade A",
-    slug: "nkon-7x-rept-cb3914895ea-50ah-lifepo4-3-2v-grade-a",
-    summary:
-      "NKON listing for seven REPT CB3914895EA Grade A LiFePO4 cells, each rated at 50 Ah and 3.2 V.",
-    summaryUk:
-      "NKON listing for seven REPT CB3914895EA Grade A LiFePO4 cells, each rated at 50 Ah and 3.2 V.",
-    imagePath:
-      "https://www.nkon.nl/media/catalog/product/cache/d7e8d6be31dedc3e13513f59c64d138b/i/m/image_template_nkon3334_0016_layer_153_2.jpg",
-    priceCents: 9000,
-    productCode: "NKON-5728",
-    nominalVoltageV: 3,
-    capacityWh: 1120,
-    chemistry: "LiFePO4",
-    weightGrams: 8050,
-    sourceLabel: "NKON product page",
-    sourceLabelUk: "NKON product page",
-    sourceUrl:
-      "https://www.nkon.nl/novat/1x-rept-battero-72174l4-280ah-prismatic-280ah-lifepo4-3-2v-grade-a.html",
-    specifications: {
-      listPosition: 5,
-      nkonProductId: 5728,
-      priceEur: 90,
-      stockStatus: "Out of stock",
-      cellCount: 7,
-      cellModel: "CB3914895EA",
-      grade: "A",
-      nominalVoltageV: 3.2,
-      cellCapacityAh: 50,
-      estimatedPackEnergyWh: 1120,
-      sourceCategoryUrl:
-        "https://www.nkon.nl/novat/rechargeable/lifepo4.html?product_list_order=price&product_list_dir=desc",
-    },
-  },
-];
-
 const equipmentTypeUk: Record<string, string> = {
   batteries: "акумулятор",
   inverters: "інвертор",
@@ -854,7 +574,11 @@ const seededEquipmentRows = [
   ...ankerPowerStationRows,
   ...bluettiPowerStationRows,
   ...ecoFlowPowerStationRows,
-  ...nkonBatteryRows,
+  ...cbakBatteryRows,
+  ...eveBatteryRows,
+  ...tenpowerBatteryRows,
+  ...envisionBatteryRows,
+  ...bakBatteryRows,
 ]
   .map(localizeSeedSummary)
   .map(mergePowerBankCompletion);

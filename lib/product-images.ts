@@ -19,10 +19,16 @@ export function getProductImages(
   primaryImage: string,
   specifications: Record<string, unknown> | null,
 ) {
-  const gallery = specifications?.productImages ?? specifications?.allImages;
-  const galleryImages = Array.isArray(gallery)
-    ? gallery.map(imageUrl).filter((url): url is string => Boolean(url))
-    : [];
+  const galleries = [
+    specifications?.productImages,
+    specifications?.allImages,
+    specifications?.additionalImages,
+  ];
+  const galleryImages = galleries.flatMap((gallery) =>
+    Array.isArray(gallery)
+      ? gallery.map(imageUrl).filter((url): url is string => Boolean(url))
+      : [],
+  );
 
   return [...new Set([primaryImage, ...galleryImages])];
 }
