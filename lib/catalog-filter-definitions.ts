@@ -55,12 +55,12 @@ export const powerBankNumberFilterGroups = {
     ],
   },
   volumetricDensity: {
-    title: "Volumetric density",
+    title: "Volumetric density, Wh/L",
     param: "volumetricDensityRange",
     options: [
-      { id: "lt-150", label: "< 150 Wh/L", max: 150 },
-      { id: "150-250", label: "150-250 Wh/L", min: 150, max: 250 },
-      { id: "gt-250", label: "> 250 Wh/L", min: 250 },
+      { id: "lt-150", label: "Up to 150", max: 150 },
+      { id: "150-250", label: "150 - 250", min: 150, max: 250 },
+      { id: "gt-250", label: "More than 250", min: 250 },
     ],
   },
   gravimetricDensity: {
@@ -190,13 +190,13 @@ export const powerStationNumberFilterGroups = {
     ],
   },
   pricePerKwh: {
-    title: "Price per 1 kWh capacity",
+    title: "Price per 1 kWh capacity, USD/kWh",
     param: "pricePerKwhRange",
     options: [
-      { id: "lte-500", label: "Up to $500/kWh", max: 501 },
-      { id: "501-700", label: "$501 - $700/kWh", min: 501, max: 701 },
-      { id: "701-900", label: "$701 - $900/kWh", min: 701, max: 901 },
-      { id: "gt-900", label: "More than $900/kWh", min: 901 },
+      { id: "lte-500", label: "Up to 500", max: 501 },
+      { id: "501-700", label: "501 - 700", min: 501, max: 701 },
+      { id: "701-900", label: "701 - 900", min: 701, max: 901 },
+      { id: "gt-900", label: "More than 900", min: 901 },
     ],
   },
 } as const;
@@ -204,13 +204,34 @@ export const powerStationNumberFilterGroups = {
 export type PowerStationRangeKey = keyof typeof powerStationNumberFilterGroups;
 
 export const batteryPricePerKwhFilterGroup = {
-  title: "Price per 1 kWh capacity",
+  title: "Price per 1 kWh capacity, USD/kWh",
   param: "pricePerKwhRange",
   options: [
-    { id: "lte-60", label: "Up to $60/kWh", max: 61 },
-    { id: "61-80", label: "$61 - $80/kWh", min: 61, max: 81 },
-    { id: "81-100", label: "$81 - $100/kWh", min: 81, max: 101 },
-    { id: "gt-100", label: "More than $100/kWh", min: 101 },
+    { id: "lte-60", label: "Up to 60", max: 61 },
+    { id: "61-80", label: "61 - 80", min: 61, max: 81 },
+    { id: "81-100", label: "81 - 100", min: 81, max: 101 },
+    { id: "gt-100", label: "More than 100", min: 101 },
+  ],
+} as const;
+
+export const batteryVolumetricDensityFilterGroup = {
+  title: "Volumetric energy density, Wh/L",
+  param: "volumetricDensityRange",
+  options: [
+    { id: "lt-350", label: "Up to 350", max: 350 },
+    { id: "350-400", label: "350 - 400", min: 350, max: 400 },
+    { id: "gt-400", label: "More than 400", min: 400 },
+  ],
+} as const;
+
+export const batteryMassEnergyDensityFilterGroup = {
+  title: "Mass energy density, Wh/kg",
+  param: "massEnergyDensityRange",
+  options: [
+    { id: "lt-150", label: "Up to 150", max: 150 },
+    { id: "150-170", label: "150 - 170", min: 150, max: 170 },
+    { id: "170-200", label: "170 - 200", min: 170, max: 200 },
+    { id: "gt-200", label: "More than 200", min: 200 },
   ],
 } as const;
 
@@ -220,7 +241,7 @@ const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
   conversionEfficiency: "Ефективність перетворення",
   maxInputPower: "Максимальна вхідна потужність",
   maxOutputPower: "Максимальна потужність одного порту",
-  volumetricDensity: "Об'ємна щільність енергії",
+  volumetricDensity: "Об'ємна щільність енергії, Вт·год/л",
   gravimetricDensity: "Гравіметрична щільність енергії",
   rechargeTime: "Час повного заряджання",
   thermalThrottle: "Робота на максимальній потужності",
@@ -235,6 +256,8 @@ const powerBankNumberFilterTitlesUk: Record<PowerBankRangeKey, string> = {
 function localizePowerBankRangeLabel(label: string) {
   return label
     .replace("None", "Немає")
+    .replace("Up to", "До")
+    .replace("More than", "Більше")
     .replace("1.5-3 h", "1,5-3 год")
     .replace("< 1.5 h", "< 1,5 год")
     .replace("> 3 h", "> 3 год")
@@ -290,11 +313,13 @@ export function localizePowerStationNumberFilterGroup(
 
   if (key === "pricePerKwh") {
     const formatUahPerKwh = (value: number) =>
-      `${Math.round(value * usdToUahRate).toLocaleString("uk-UA").replaceAll("\u00a0", " ")} грн/кВт·год`;
+      Math.round(value * usdToUahRate)
+        .toLocaleString("uk-UA")
+        .replaceAll("\u00a0", " ");
 
     return {
       ...group,
-      title: "Ціна за 1 кВт·год місткості",
+      title: "Ціна за 1 кВт·год місткості, грн/кВт·год",
       options: [
         {
           ...group.options[0],
@@ -338,11 +363,13 @@ export function localizeBatteryPricePerKwhFilterGroup(locale: "en" | "uk") {
   if (locale === "en") return group;
 
   const formatUahPerKwh = (value: number) =>
-    `${Math.round(value * usdToUahRate).toLocaleString("uk-UA").replaceAll("\u00a0", " ")} грн/кВт·год`;
+    Math.round(value * usdToUahRate)
+      .toLocaleString("uk-UA")
+      .replaceAll("\u00a0", " ");
 
   return {
     ...group,
-    title: "Ціна за 1 кВт·год місткості",
+    title: "Ціна за 1 кВт·год місткості, грн/кВт·год",
     options: [
       {
         ...group.options[0],
@@ -361,5 +388,43 @@ export function localizeBatteryPricePerKwhFilterGroup(locale: "en" | "uk") {
         label: `Більше ${formatUahPerKwh(100)}`,
       },
     ],
+  };
+}
+
+export function localizeBatteryVolumetricDensityFilterGroup(
+  locale: "en" | "uk",
+) {
+  const group = batteryVolumetricDensityFilterGroup;
+
+  if (locale === "en") return group;
+
+  return {
+    ...group,
+    title: "Об'ємна щільність енергії, Вт·год/л",
+    options: group.options.map((option) => ({
+      ...option,
+      label: option.label
+        .replace("Up to", "До")
+        .replace("More than", "Більше"),
+    })),
+  };
+}
+
+export function localizeBatteryMassEnergyDensityFilterGroup(
+  locale: "en" | "uk",
+) {
+  const group = batteryMassEnergyDensityFilterGroup;
+
+  if (locale === "en") return group;
+
+  return {
+    ...group,
+    title: "Масова щільність енергії, Вт·год/кг",
+    options: group.options.map((option) => ({
+      ...option,
+      label: option.label
+        .replace("Up to", "До")
+        .replace("More than", "Більше"),
+    })),
   };
 }

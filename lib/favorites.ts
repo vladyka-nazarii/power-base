@@ -10,6 +10,7 @@ import {
   userFavorites,
 } from "@/lib/db/schema";
 import type { Locale } from "@/lib/i18n";
+import { stockStatusFromSpecifications } from "@/lib/stock-status";
 
 export async function getCurrentSession() {
   try {
@@ -120,7 +121,10 @@ export async function getFavoriteCatalogProducts({
       .orderBy(desc(userFavorites.createdAt));
 
     return {
-      products,
+      products: products.map((product) => ({
+        ...product,
+        stockStatus: stockStatusFromSpecifications(product.specifications),
+      })),
       unavailable: false,
     };
   } catch (error) {

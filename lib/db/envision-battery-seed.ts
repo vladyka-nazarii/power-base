@@ -67,7 +67,7 @@ export const envisionBatteryRows: EnvisionBatterySeedRow[] = [
       protection: "None",
       cycleLifeTo70Percent: 6000,
       priceEur: 46.95,
-      stockStatus: "In stock",
+      stockStatus: "Out of stock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/e/n/envision_ess_72173207_1_1.jpg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/e/n/envision_ess_72173207_-_3_1_1.jpg",

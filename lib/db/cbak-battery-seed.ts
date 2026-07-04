@@ -37,7 +37,7 @@ export const cbakBatteryRows: CbakBatterySeedRow[] = [
       "CBAK 32140FS cylindrical LiFePO4 cell from NKON with 15 Ah capacity, 3.2 V nominal voltage, and 15 A discharge rating.",
     imagePath:
       "https://media.vladyka.dev/battery/cbak/fcc932c0dfb9ccd71dc5eb5c4c7293f4.webp",
-    priceCents: 525,
+    priceCents: 439,
     nominalVoltageV: 3,
     capacityWh: 48,
     chemistry: "LiFePO4",
@@ -65,8 +65,8 @@ export const cbakBatteryRows: CbakBatterySeedRow[] = [
       weightGramsDetailed: 305,
       standardCycles: 2500,
       fastChargeCycles: 3000,
-      priceEur: 5.25,
-      stockStatus: "In stock",
+      priceEur: 3.85,
+      stockStatus: "OutOfStock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon30_0068_layer_29.jpg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon30_0067_layer_30.jpg",
@@ -87,7 +87,7 @@ export const cbakBatteryRows: CbakBatterySeedRow[] = [
       "CBAK 40130FS cylindrical LiFePO4 cell from NKON with 20 Ah capacity, 3.2 V nominal voltage, and 10 A discharge rating.",
     imagePath:
       "https://media.vladyka.dev/battery/cbak/64a8f07db678416fbe9da611778ddb3e.webp",
-    priceCents: 595,
+    priceCents: 587,
     nominalVoltageV: 3,
     capacityWh: 64,
     chemistry: "LiFePO4",
@@ -113,8 +113,8 @@ export const cbakBatteryRows: CbakBatterySeedRow[] = [
       thicknessMm: 40.5,
       standardCycles: 3500,
       fastChargeCycles: 2800,
-      priceEur: 5.95,
-      stockStatus: "Available for preorder",
+      priceEur: 5.15,
+      stockStatus: "OutOfStock",
       expectedAvailabilityDate: "2026-03-28",
       additionalImages: [],
       sourceProductUrl:
@@ -132,7 +132,7 @@ export const cbakBatteryRows: CbakBatterySeedRow[] = [
       "CBAK 40135FS cylindrical LiFePO4 cell from NKON with 20 Ah capacity, 3.2 V nominal voltage, and 60 A discharge rating.",
     imagePath:
       "https://media.vladyka.dev/battery/cbak/38c3d7a80066019d79560b6afe756126.webp",
-    priceCents: 515,
+    priceCents: 587,
     nominalVoltageV: 3,
     capacityWh: 64,
     chemistry: "LiFePO4",

@@ -14,7 +14,9 @@ import {
 
 import { ensureRedisConnected } from "@/lib/cache/redis";
 import {
+  batteryMassEnergyDensityFilterGroup,
   batteryPricePerKwhFilterGroup,
+  batteryVolumetricDensityFilterGroup,
   type NumberRangeFilterOption,
   powerBankNumberFilterGroups,
   powerStationNumberFilterGroups,
@@ -26,6 +28,10 @@ import {
   normalizePowerBankSpecifications,
   type PowerBankSpecifications,
 } from "@/lib/power-bank-specs";
+import {
+  stockStatusFromSpecifications,
+  type StockStatus,
+} from "@/lib/stock-status";
 
 export { formatPrice } from "@/lib/price-format";
 
@@ -65,6 +71,7 @@ export type CatalogFilters = {
   maxOutputPower?: number;
   maxOutputPowerRanges: string[];
   volumetricDensityRanges: string[];
+  massEnergyDensityRanges: string[];
   rechargeTimeRanges: string[];
   thermalThrottleRanges: string[];
   supports12vPdOutput?: boolean;
@@ -108,9 +115,11 @@ export type CatalogPagination = {
 };
 
 export type { NumberRangeFilterOption } from "@/lib/catalog-filter-definitions";
-export { powerBankNumberFilterGroups } from "@/lib/catalog-filter-definitions";
 export {
+  batteryMassEnergyDensityFilterGroup,
   batteryPricePerKwhFilterGroup,
+  batteryVolumetricDensityFilterGroup,
+  powerBankNumberFilterGroups,
   powerStationCapacityFilterGroup,
   powerStationNumberFilterGroups,
 } from "@/lib/catalog-filter-definitions";
@@ -224,9 +233,13 @@ export const catalogUiCopy: Record<
     offlineDescription: string;
     emptyDescription: string;
     weight: string;
+    volume: string;
     warranty: string;
     yearShort: string;
     notAvailable: string;
+    inStock: string;
+    outOfStock: string;
+    preorder: string;
   }
 > = {
   en: {
@@ -271,9 +284,13 @@ export const catalogUiCopy: Record<
     emptyDescription:
       "Try a broader capacity, voltage, chemistry, or manufacturer selection.",
     weight: "Weight",
+    volume: "Volume",
     warranty: "Warranty",
     yearShort: "yr",
     notAvailable: "n/a",
+    inStock: "In stock",
+    outOfStock: "Out of stock",
+    preorder: "Available for preorder",
   },
   uk: {
     filters: "Фільтри",
@@ -317,9 +334,13 @@ export const catalogUiCopy: Record<
     emptyDescription:
       "Спробуйте ширший діапазон ємності, напруги, хімії або виробників.",
     weight: "Вага",
+    volume: "Об'єм",
     warranty: "Гарантія",
     yearShort: "р.",
     notAvailable: "н/д",
+    inStock: "В наявності",
+    outOfStock: "Немає в наявності",
+    preorder: "Доступно для передзамовлення",
   },
 };
 
@@ -526,6 +547,7 @@ type CatalogProductRow = {
   categoryName?: string | null;
   categorySlug?: string | null;
   specifications: unknown;
+  stockStatus?: StockStatus;
 };
 
 type CountedFacet = {
@@ -783,6 +805,256 @@ function pricePerKwhFilterOptions(categorySlug: CatalogCategorySlug) {
     : powerStationNumberFilterGroups.pricePerKwh.options;
 }
 
+export function physicalVolumeLiters(product: CatalogProductRow) {
+  const specifications = productSpecifications(product);
+  const explicitVolume = numberSpec(
+    specifications,
+    "volumeLiters",
+    "volumeL",
+    "physicalVolumeLiters",
+  );
+
+  if (explicitVolume !== undefined && explicitVolume > 0) {
+    return explicitVolume;
+  }
+
+  const dimensions = dimensionsMmFromSpecifications(specifications);
+
+  if (!dimensions) {
+    return undefined;
+  }
+
+  const volumeMm3 =
+    dimensions.diameter !== undefined
+      ? Math.PI * (dimensions.diameter / 2) ** 2 * dimensions.height
+      : dimensions.height * dimensions.width * dimensions.thickness;
+  const volumeLiters = volumeMm3 / 1_000_000;
+
+  return volumeLiters > 0 ? volumeLiters : undefined;
+}
+
+export function batteryVolumetricDensityWhPerL(product: CatalogProductRow) {
+  if (product.capacityWh === null || product.capacityWh <= 0) {
+    return undefined;
+  }
+
+  const specifications = productSpecifications(product);
+  const explicitDensity = numberSpec(
+    specifications,
+    "volumetricDensity",
+    "volumetricDensityWhPerL",
+    "energyDensityWhPerL",
+  );
+
+  if (explicitDensity !== undefined) {
+    return explicitDensity;
+  }
+
+  const volumeLiters = physicalVolumeLiters(product);
+
+  if (volumeLiters === undefined) {
+    return undefined;
+  }
+
+  return product.capacityWh / volumeLiters;
+}
+
+export function batteryMassEnergyDensityWhPerKg(product: CatalogProductRow) {
+  if (product.capacityWh === null || product.capacityWh <= 0) {
+    return undefined;
+  }
+
+  const specifications = productSpecifications(product);
+  const explicitDensity = numberSpec(
+    specifications,
+    "massEnergyDensity",
+    "massEnergyDensityWhPerKg",
+    "gravimetricDensity",
+    "gravimetricDensityWhPerKg",
+    "energyDensityWhPerKg",
+  );
+
+  if (explicitDensity !== undefined) {
+    return explicitDensity;
+  }
+
+  if (product.weightGrams === null || product.weightGrams <= 0) {
+    return undefined;
+  }
+
+  return product.capacityWh / (product.weightGrams / 1000);
+}
+
+function productSpecifications(product: CatalogProductRow) {
+  return product.specifications &&
+    typeof product.specifications === "object" &&
+    !Array.isArray(product.specifications)
+    ? (product.specifications as Record<string, unknown>)
+    : null;
+}
+
+function dimensionsMmFromSpecifications(
+  specifications: Record<string, unknown> | null,
+) {
+  const dimensions =
+    specifications?.dimensions &&
+    typeof specifications.dimensions === "object" &&
+    !Array.isArray(specifications.dimensions)
+      ? (specifications.dimensions as Record<string, unknown>)
+      : null;
+  const heightMm =
+    numberSpec(specifications, "heightMm") ??
+    numberSpec(dimensions, "height", "heightMm");
+  const widthMm =
+    numberSpec(specifications, "widthMm") ??
+    numberSpec(dimensions, "width", "widthMm");
+  const thicknessMm =
+    numberSpec(specifications, "thicknessMm") ??
+    numberSpec(dimensions, "thickness", "thicknessMm");
+  const diameterMm =
+    numberSpec(specifications, "diameterMm") ??
+    numberSpec(dimensions, "diameter", "diameterMm");
+  const lengthMm =
+    numberSpec(specifications, "lengthMm") ??
+    numberSpec(dimensions, "length", "lengthMm");
+
+  if (heightMm !== undefined && diameterMm !== undefined) {
+    return { height: heightMm, diameter: diameterMm };
+  }
+
+  if (
+    heightMm !== undefined &&
+    widthMm !== undefined &&
+    thicknessMm !== undefined
+  ) {
+    return { height: heightMm, width: widthMm, thickness: thicknessMm };
+  }
+
+  if (
+    lengthMm !== undefined &&
+    widthMm !== undefined &&
+    thicknessMm !== undefined
+  ) {
+    return { height: lengthMm, width: widthMm, thickness: thicknessMm };
+  }
+
+  return parseDimensionsMmString(specifications?.dimensionsMm);
+}
+
+function parseDimensionsMmString(value: unknown) {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const values = value
+    .match(/\d+(?:[.,]\d+)?/g)
+    ?.map((part) => Number.parseFloat(part.replace(",", ".")))
+    .filter((part) => Number.isFinite(part));
+
+  if (!values || values.length < 3) {
+    return undefined;
+  }
+
+  return {
+    height: values[0],
+    width: values[1],
+    thickness: values[2],
+  };
+}
+
+function numberSpec(
+  specifications: Record<string, unknown> | null,
+  ...keys: string[]
+) {
+  for (const key of keys) {
+    const value = specifications?.[key];
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value;
+    }
+
+    if (typeof value === "string") {
+      const parsed = Number.parseFloat(value);
+
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function batteryVolumetricDensitySql() {
+  const specifications = equipment.specifications;
+  const explicitDensity = sql<number>`coalesce(
+    nullif(${specifications}->>'volumetricDensity', '')::double precision,
+    nullif(${specifications}->>'volumetricDensityWhPerL', '')::double precision,
+    nullif(${specifications}->>'energyDensityWhPerL', '')::double precision
+  )`;
+  const heightMm = sql<number>`nullif(${specifications}->>'heightMm', '')::double precision`;
+  const widthMm = sql<number>`nullif(${specifications}->>'widthMm', '')::double precision`;
+  const thicknessMm = sql<number>`nullif(${specifications}->>'thicknessMm', '')::double precision`;
+  const diameterMm = sql<number>`nullif(${specifications}->>'diameterMm', '')::double precision`;
+
+  return sql<number>`coalesce(
+    ${explicitDensity},
+    case
+      when ${heightMm} is not null and ${diameterMm} is not null and ${equipment.capacityWh} is not null
+        then ${equipment.capacityWh}::double precision / nullif((pi() * power(${diameterMm} / 2, 2) * ${heightMm}) / 1000000, 0)
+      when ${heightMm} is not null and ${widthMm} is not null and ${thicknessMm} is not null and ${equipment.capacityWh} is not null
+        then ${equipment.capacityWh}::double precision / nullif((${heightMm} * ${widthMm} * ${thicknessMm}) / 1000000, 0)
+      else null
+    end
+  )`;
+}
+
+function batteryMassEnergyDensitySql() {
+  const specifications = equipment.specifications;
+  const explicitDensity = sql<number>`coalesce(
+    nullif(${specifications}->>'massEnergyDensity', '')::double precision,
+    nullif(${specifications}->>'massEnergyDensityWhPerKg', '')::double precision,
+    nullif(${specifications}->>'gravimetricDensity', '')::double precision,
+    nullif(${specifications}->>'gravimetricDensityWhPerKg', '')::double precision,
+    nullif(${specifications}->>'energyDensityWhPerKg', '')::double precision
+  )`;
+
+  return sql<number>`coalesce(
+    ${explicitDensity},
+    case
+      when ${equipment.weightGrams} is not null and ${equipment.weightGrams} > 0 and ${equipment.capacityWh} is not null
+        then ${equipment.capacityWh}::double precision / nullif(${equipment.weightGrams}::double precision / 1000, 0)
+      else null
+    end
+  )`;
+}
+
+function catalogNominalVoltageSql() {
+  return sql<number | null>`case
+    when ${equipmentCategories.slug} = 'batteries'
+      then coalesce(
+        nullif(${equipment.specifications}->>'nominalVoltageV', '')::double precision,
+        ${equipment.nominalVoltageV}::double precision
+      )
+    else ${equipment.nominalVoltageV}::double precision
+  end`;
+}
+
+function catalogVoltageCondition(
+  categorySlug: CatalogCategorySlug,
+  voltages: number[],
+) {
+  if (categorySlug === "power-banks" || voltages.length === 0) {
+    return undefined;
+  }
+
+  const voltageExpression = catalogNominalVoltageSql();
+
+  return or(
+    ...voltages.map((voltage) => sql`${voltageExpression} = ${voltage}`),
+  );
+}
+
 function standardCatalogRangeCondition(
   categorySlug: CatalogCategorySlug,
   selectedIds: string[],
@@ -865,6 +1137,20 @@ function matchesStandardCatalogFilters(
         pricePerKwhUsd(product),
         filters.pricePerKwhRanges,
         pricePerKwhFilterOptions(categorySlug),
+      ),
+    exclude === "volumetricDensityRange" ||
+      categorySlug !== "batteries" ||
+      matchesNumberRangeFilter(
+        batteryVolumetricDensityWhPerL(product),
+        filters.volumetricDensityRanges,
+        batteryVolumetricDensityFilterGroup.options,
+      ),
+    exclude === "massEnergyDensityRange" ||
+      categorySlug !== "batteries" ||
+      matchesNumberRangeFilter(
+        batteryMassEnergyDensityWhPerKg(product),
+        filters.massEnergyDensityRanges,
+        batteryMassEnergyDensityFilterGroup.options,
       ),
   ].every(Boolean);
 }
@@ -975,11 +1261,13 @@ export async function getCatalogProductsBySlugs({
       );
     const order = new Map(uniqueSlugs.map((slug, index) => [slug, index]));
 
-    return rows.sort(
-      (left, right) =>
-        (order.get(left.slug) ?? Number.MAX_SAFE_INTEGER) -
-        (order.get(right.slug) ?? Number.MAX_SAFE_INTEGER),
-    );
+    return rows
+      .sort(
+        (left, right) =>
+          (order.get(left.slug) ?? Number.MAX_SAFE_INTEGER) -
+          (order.get(right.slug) ?? Number.MAX_SAFE_INTEGER),
+      )
+      .map(withStockStatus);
   } catch (error) {
     console.error("Catalog compare products read failed", error);
 
@@ -996,7 +1284,7 @@ function catalogPageCacheKey(
     .update(JSON.stringify(stableCacheValue({ filters, locale })))
     .digest("hex");
 
-  return `powerbase:catalog:v4:${categorySlug}:${locale}:${digest}`;
+  return `powerbase:catalog:v7:${categorySlug}:${locale}:${digest}`;
 }
 
 function stableCacheValue(value: unknown): unknown {
@@ -1038,7 +1326,7 @@ function catalogSelection(locale: Locale) {
     imagePath: equipment.imagePath,
     priceCents: equipment.priceCents,
     productCode: equipment.productCode,
-    nominalVoltageV: equipment.nominalVoltageV,
+    nominalVoltageV: catalogNominalVoltageSql(),
     capacityWh: equipment.capacityWh,
     continuousPowerW: equipment.continuousPowerW,
     peakPowerW: equipment.peakPowerW,
@@ -1056,6 +1344,13 @@ function catalogSelection(locale: Locale) {
     manufacturer: manufacturers.name,
     categoryName: localizedCategoryName,
     categorySlug: equipmentCategories.slug,
+  };
+}
+
+function withStockStatus<T extends CatalogProductRow>(product: T) {
+  return {
+    ...product,
+    stockStatus: stockStatusFromSpecifications(product.specifications),
   };
 }
 
@@ -1092,9 +1387,7 @@ async function getUncachedCatalogPageData(
       filters.manufacturers.length > 0
         ? inArray(manufacturers.name, filters.manufacturers)
         : undefined,
-      categorySlug !== "power-banks" && filters.voltages.length > 0
-        ? inArray(equipment.nominalVoltageV, filters.voltages)
-        : undefined,
+      catalogVoltageCondition(categorySlug, filters.voltages),
       categorySlug !== "power-banks" && filters.chemistries.length > 0
         ? inArray(equipment.chemistry, filters.chemistries)
         : undefined,
@@ -1117,6 +1410,20 @@ async function getUncachedCatalogPageData(
         pricePerKwhFilterOptions(categorySlug),
         sql<number>`(${equipment.priceCents}::double precision * 10 / nullif(${equipment.capacityWh}, 0))`,
         supportsPricePerKwhFilter(categorySlug),
+      ),
+      standardCatalogRangeCondition(
+        categorySlug,
+        filters.volumetricDensityRanges,
+        batteryVolumetricDensityFilterGroup.options,
+        batteryVolumetricDensitySql(),
+        categorySlug === "batteries",
+      ),
+      standardCatalogRangeCondition(
+        categorySlug,
+        filters.massEnergyDensityRanges,
+        batteryMassEnergyDensityFilterGroup.options,
+        batteryMassEnergyDensitySql(),
+        categorySlug === "batteries",
       ),
     ]);
     const filteredProducts =
@@ -1171,6 +1478,7 @@ async function getUncachedCatalogPageData(
             .orderBy(sortExpression(filters.sort), asc(equipment.id))
             .limit(pagination.pageSize)
             .offset((pagination.page - 1) * pagination.pageSize);
+    const productsWithStockStatus = products.map(withStockStatus);
     const powerBankBaseSpecs =
       categorySlug === "power-banks" ? baseRows.map(powerBankSpecs) : [];
     const searchableBaseRows = filterRowsForSearch(baseRows, filters);
@@ -1251,6 +1559,30 @@ async function getUncachedCatalogPageData(
                   filters,
                   categorySlug,
                   "pricePerKwhRange",
+                ),
+            ),
+            volumetricDensity: countByNumberRangeOption(
+              batteryVolumetricDensityFilterGroup.options,
+              searchableBaseRows,
+              batteryVolumetricDensityWhPerL,
+              (row) =>
+                matchesStandardCatalogFilters(
+                  row,
+                  filters,
+                  categorySlug,
+                  "volumetricDensityRange",
+                ),
+            ),
+            massEnergyDensity: countByNumberRangeOption(
+              batteryMassEnergyDensityFilterGroup.options,
+              searchableBaseRows,
+              batteryMassEnergyDensityWhPerKg,
+              (row) =>
+                matchesStandardCatalogFilters(
+                  row,
+                  filters,
+                  categorySlug,
+                  "massEnergyDensityRange",
                 ),
             ),
           }
@@ -1394,7 +1726,7 @@ async function getUncachedCatalogPageData(
       .filter((value): value is number => value !== null);
 
     return {
-      products,
+      products: productsWithStockStatus,
       totalProducts,
       pagination,
       unavailable: false,
@@ -1648,6 +1980,7 @@ export function parseCatalogFilters(
       ...values("maxOutputPowerRange"),
     ],
     volumetricDensityRanges: values("volumetricDensityRange"),
+    massEnergyDensityRanges: values("massEnergyDensityRange"),
     rechargeTimeRanges: values("rechargeTimeRange"),
     thermalThrottleRanges: values("thermalThrottleRange"),
     supports12vPdOutput: values("supports12vPdOutput").includes("true"),

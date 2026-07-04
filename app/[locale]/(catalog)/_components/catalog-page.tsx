@@ -19,18 +19,25 @@ import ResetFiltersLink from "@/app/[locale]/(catalog)/_components/reset-filters
 import {
   type CatalogCategorySlug,
   type CatalogFilters,
+  batteryMassEnergyDensityFilterGroup,
+  batteryMassEnergyDensityWhPerKg,
+  batteryVolumetricDensityWhPerL,
   catalogPageCopy,
   catalogUiCopy,
   formatPrice,
   formatWeight,
   getCatalogPageData,
   getCatalogProductsBySlugs,
+  physicalVolumeLiters,
   batteryPricePerKwhFilterGroup,
+  batteryVolumetricDensityFilterGroup,
   powerBankNumberFilterGroups,
   powerStationNumberFilterGroups,
 } from "@/lib/catalog";
 import {
+  localizeBatteryMassEnergyDensityFilterGroup,
   localizeBatteryPricePerKwhFilterGroup,
+  localizeBatteryVolumetricDensityFilterGroup,
   localizePowerBankNumberFilterGroup,
   localizePowerStationNumberFilterGroup,
   type PowerBankRangeKey,
@@ -124,6 +131,9 @@ function hiddenFilterInputs(filters: CatalogFilters, exclude: string[] = []) {
   filters.volumetricDensityRanges.forEach((value) =>
     add("volumetricDensityRange", value),
   );
+  filters.massEnergyDensityRanges.forEach((value) =>
+    add("massEnergyDensityRange", value),
+  );
   filters.rechargeTimeRanges.forEach((value) =>
     add("rechargeTimeRange", value),
   );
@@ -209,6 +219,9 @@ function catalogSearchParams(filters: CatalogFilters, page: number) {
   );
   filters.volumetricDensityRanges.forEach((value) =>
     add("volumetricDensityRange", value),
+  );
+  filters.massEnergyDensityRanges.forEach((value) =>
+    add("massEnergyDensityRange", value),
   );
   filters.rechargeTimeRanges.forEach((value) =>
     add("rechargeTimeRange", value),
@@ -772,26 +785,43 @@ function PowerStationFilters({
     category === "batteries"
       ? localizeBatteryPricePerKwhFilterGroup(locale)
       : numberFilterGroups.pricePerKwh;
+  const volumetricDensityFilterGroup =
+    localizeBatteryVolumetricDensityFilterGroup(locale);
+  const massEnergyDensityFilterGroup =
+    localizeBatteryMassEnergyDensityFilterGroup(locale);
+  type NumberRangeOptionRows = Array<{
+    count?: number;
+    label: string;
+    value: string;
+  }>;
   const rawNumberRangeOptions =
-    data.facets.powerStationNumberRanges ??
-    Object.fromEntries(
-      Object.entries({
-        ...powerStationNumberFilterGroups,
-        pricePerKwh:
-          category === "batteries"
-            ? batteryPricePerKwhFilterGroup
-            : powerStationNumberFilterGroups.pricePerKwh,
-      }).map(([key, group]) => [
-        key,
-        group.options.map((option) => ({
-          ...option,
-          value: option.id,
-          count: 0,
-        })),
-      ]),
-    );
+    (data.facets.powerStationNumberRanges ??
+      Object.fromEntries(
+        Object.entries({
+          ...powerStationNumberFilterGroups,
+          pricePerKwh:
+            category === "batteries"
+              ? batteryPricePerKwhFilterGroup
+              : powerStationNumberFilterGroups.pricePerKwh,
+          volumetricDensity: batteryVolumetricDensityFilterGroup,
+          massEnergyDensity: batteryMassEnergyDensityFilterGroup,
+        }).map(([key, group]) => [
+          key,
+          group.options.map((option) => ({
+            ...option,
+            value: option.id,
+            count: 0,
+          })),
+        ]),
+      )) as Record<string, NumberRangeOptionRows>;
+  const standardRangeKeys = [
+    ...(Object.keys(numberFilterGroups) as PowerStationRangeKey[]),
+    ...(category === "batteries"
+      ? (["volumetricDensity", "massEnergyDensity"] as const)
+      : []),
+  ];
   const numberRangeOptions = Object.fromEntries(
-    (Object.keys(numberFilterGroups) as PowerStationRangeKey[]).map((key) => [
+    standardRangeKeys.map((key) => [
       key,
       rawNumberRangeOptions[key]
         .filter((option) => {
@@ -800,24 +830,34 @@ function PowerStationFilters({
               ? filters.capacityWhRanges
               : key === "continuousPower"
                 ? filters.continuousPowerRanges
-                : key === "peakPower"
-                  ? filters.peakPowerRanges
-                  : filters.pricePerKwhRanges;
+              : key === "peakPower"
+                ? filters.peakPowerRanges
+              : key === "volumetricDensity"
+                ? filters.volumetricDensityRanges
+                : key === "massEnergyDensity"
+                  ? filters.massEnergyDensityRanges
+                : filters.pricePerKwhRanges;
 
-          return option.count > 0 || selectedValues.includes(option.value);
+          return (
+            (option.count ?? 0) > 0 || selectedValues.includes(option.value)
+          );
         })
         .map((option) => ({
           ...option,
           label:
             (key === "pricePerKwh"
               ? pricePerKwhFilterGroup.options
-              : numberFilterGroups[key].options
+              : key === "volumetricDensity"
+                ? volumetricDensityFilterGroup.options
+                : key === "massEnergyDensity"
+                  ? massEnergyDensityFilterGroup.options
+                : numberFilterGroups[key].options
             ).find(
               (localizedOption) => localizedOption.id === option.value,
             )?.label ?? option.label,
         })),
     ]),
-  ) as typeof rawNumberRangeOptions;
+  ) as Record<string, NumberRangeOptionRows>;
 
   return (
     <div className="mt-6 grid gap-6">
@@ -845,6 +885,20 @@ function PowerStationFilters({
         options={numberRangeOptions.pricePerKwh}
         selected={filters.pricePerKwhRanges}
       />
+      {category === "batteries" ? (
+        <>
+          <NumberRangeFilter
+            {...volumetricDensityFilterGroup}
+            options={numberRangeOptions.volumetricDensity}
+            selected={filters.volumetricDensityRanges}
+          />
+          <NumberRangeFilter
+            {...massEnergyDensityFilterGroup}
+            options={numberRangeOptions.massEnergyDensity}
+            selected={filters.massEnergyDensityRanges}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
@@ -879,6 +933,56 @@ function formatPricePerKwhBadge(product: CatalogProduct, locale: Locale) {
   }).format(usdPerKwh)}/kWh`;
 }
 
+function formatBatteryVolumetricDensityBadge(
+  product: CatalogProduct,
+  locale: Locale,
+) {
+  if (product.categorySlug !== "batteries") {
+    return null;
+  }
+
+  const densityWhPerL = batteryVolumetricDensityWhPerL(product);
+
+  if (densityWhPerL === undefined) {
+    return null;
+  }
+
+  return `${densityWhPerL.toLocaleString(locale === "uk" ? "uk-UA" : "en-US", {
+    maximumFractionDigits: 0,
+  })} Wh/L`;
+}
+
+function formatBatteryMassEnergyDensityBadge(
+  product: CatalogProduct,
+  locale: Locale,
+) {
+  if (product.categorySlug !== "batteries") {
+    return null;
+  }
+
+  const densityWhPerKg = batteryMassEnergyDensityWhPerKg(product);
+
+  if (densityWhPerKg === undefined) {
+    return null;
+  }
+
+  return `${densityWhPerKg.toLocaleString(locale === "uk" ? "uk-UA" : "en-US", {
+    maximumFractionDigits: 0,
+  })} Wh/kg`;
+}
+
+function formatVolume(product: CatalogProduct, locale: Locale) {
+  const volumeLiters = physicalVolumeLiters(product);
+
+  if (volumeLiters === undefined) {
+    return locale === "uk" ? "н/д" : "n/a";
+  }
+
+  return `${volumeLiters.toLocaleString(locale === "uk" ? "uk-UA" : "en-US", {
+    maximumFractionDigits: volumeLiters < 1 ? 2 : 1,
+  })} L`;
+}
+
 export function ProductCard({
   compareEnabled = false,
   compareSlugs = [],
@@ -895,12 +999,24 @@ export function ProductCard({
   isFavorite: boolean;
 }) {
   const pricePerKwhBadge = formatPricePerKwhBadge(product, locale);
+  const volumetricDensityBadge = formatBatteryVolumetricDensityBadge(
+    product,
+    locale,
+  );
+  const massEnergyDensityBadge = formatBatteryMassEnergyDensityBadge(
+    product,
+    locale,
+  );
   const specs = [
     product.continuousPowerW
       ? `${product.continuousPowerW.toLocaleString()} W`
       : null,
     pricePerKwhBadge,
-    product.categorySlug === "power-stations" || !product.nominalVoltageV
+    volumetricDensityBadge,
+    massEnergyDensityBadge,
+    product.categorySlug === "power-stations" ||
+      product.categorySlug === "batteries" ||
+      !product.nominalVoltageV
       ? null
       : `${product.nominalVoltageV} V`,
     product.chemistryLabel,
@@ -910,6 +1026,12 @@ export function ProductCard({
     locale,
     `/${product.categorySlug}/${product.slug}`,
   );
+  const stockLabel =
+    product.stockStatus === "in-stock"
+      ? ui.inStock
+      : product.stockStatus === "preorder"
+        ? ui.preorder
+        : ui.outOfStock;
 
   return (
     <article className="group overflow-hidden rounded-lg border border-black/10 bg-white transition hover:-translate-y-0.5 hover:border-black/20 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-black dark:hover:border-white/20 dark:hover:shadow-white/5">
@@ -927,6 +1049,20 @@ export function ProductCard({
             className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]"
           />
         </Link>
+        <span
+          className={cn(
+            "absolute right-3 bottom-3 z-10 rounded-md border px-2.5 py-1 text-xs font-semibold shadow-sm backdrop-blur-sm",
+            product.stockStatus === "in-stock" &&
+              "border-black/10 bg-white/90 text-black dark:border-white/15 dark:bg-zinc-950/90 dark:text-white",
+            product.stockStatus === "preorder" &&
+              "border-black/15 bg-zinc-100/90 text-zinc-900 dark:border-white/15 dark:bg-zinc-800/90 dark:text-zinc-100",
+            product.stockStatus !== "in-stock" &&
+              product.stockStatus !== "preorder" &&
+              "border-black/10 bg-zinc-900/85 text-white dark:border-white/10 dark:bg-zinc-100/85 dark:text-zinc-950",
+          )}
+        >
+          {stockLabel}
+        </span>
         <FavoriteButton
           equipmentId={product.id}
           isFavorite={isFavorite}
@@ -985,11 +1121,9 @@ export function ProductCard({
             </dd>
           </div>
           <div>
-            <dt className="text-zinc-500">{ui.warranty}</dt>
+            <dt className="text-zinc-500">{ui.volume}</dt>
             <dd className="mt-1 font-medium text-black dark:text-white">
-              {product.warrantyYears
-                ? `${product.warrantyYears} ${ui.yearShort}`
-                : ui.notAvailable}
+              {formatVolume(product, locale)}
             </dd>
           </div>
         </dl>

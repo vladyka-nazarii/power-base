@@ -66,7 +66,7 @@ export const eveBatteryRows: EveBatterySeedRow[] = [
       recommendedCompressionN: "3000-7000",
       cycleLifeTo70Percent: 8000,
       priceEur: 109.95,
-      stockStatus: "In stock",
+      stockStatus: "Out of stock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/w/h/whatsapp_image_2025-09-03_at_10.11.57_1.jpeg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/t/h/thumbnail_mb56_2__1.jpg",
@@ -179,7 +179,7 @@ export const eveBatteryRows: EveBatterySeedRow[] = [
       compressionKg: "280-320",
       cycleLifeTo80Percent: 4000,
       priceEur: 79.5,
-      stockStatus: "Out of stock",
+      stockStatus: "In stock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/e/v/eve_lf304_-_3_5.jpg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/e/v/eve_lf304_5.jpg",
@@ -337,7 +337,7 @@ export const eveBatteryRows: EveBatterySeedRow[] = [
       compressionKg: "280-320",
       cycleLifeTo80Percent: 8000,
       priceEur: 60.99,
-      stockStatus: "In stock",
+      stockStatus: "Out of stock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon333_0052_layer_175.jpg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon333_0051_layer_176.jpg",
@@ -387,7 +387,7 @@ export const eveBatteryRows: EveBatterySeedRow[] = [
       compressionKg: "280-320",
       cycleLifeTo80Percent: 4000,
       priceEur: 57,
-      stockStatus: "In stock",
+      stockStatus: "Out of stock",
       additionalImages: [
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon3336_0012_layer_60.jpg",
         "https://www.nkon.nl/media/catalog/product/cache/571f095c3039c972605f32eb058cc7dc/i/m/image_template_nkon3336_0013_layer_59.jpg",
